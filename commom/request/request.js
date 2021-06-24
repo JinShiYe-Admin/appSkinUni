@@ -20,8 +20,8 @@ function post(url,data,callback,title) {
 	 	platform_code: personal.platform_code,
 	 	unit_code: personal.unit_code,
 	 	index_code: personal.index_code,
-	 	...data,
 	 	access_token: personal.access_token,
+		...data,
 	 })
 	 Vue.prototype.showLoading(title||'')//在最开始显示一个加载框
 	 console.log(url,JSON.stringify(signData));
@@ -42,7 +42,12 @@ function post(url,data,callback,title) {
 			}else{
 				console.log(res);
 				uni.hideLoading()
-				showToast('网络请求失败')
+				console.log(process.env.NODE_ENV);
+				if(process.env.NODE_ENV==="development"){//开发环境，提示具体信息，生产环境，提示其他信息
+					showToast(res.data.Message)
+				}else{
+					showToast('网络请求失败')
+				}
 			}
 	 	},
 	 	fail: (e) => {//接口调用失败的回调函数

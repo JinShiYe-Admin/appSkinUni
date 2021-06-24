@@ -75,6 +75,21 @@ function getPersonal(){
 function removePersonal(){
 	uni.removeStorageSync(Vue.prototype.personal);
 }
+
+//设置登录用户的菜单信息
+function setMenu(data){
+	uni.setStorageSync(Vue.prototype.meunList,JSON.stringify(data))
+}
+//获取登录用户的菜单信息
+function getMenu(){
+	const _value=uni.getStorageSync(Vue.prototype.meunList)
+	if(_value){return JSON.parse(_value)}else{return {}}
+}
+//清除登录用户的菜单信息
+function removeMenu(){
+	uni.removeStorageSync(Vue.prototype.meunList);
+}
+
 //清除本地所有storage缓存
 function clearStorage(){
 	try {
@@ -107,6 +122,9 @@ module.exports = {
 	setPersonal:setPersonal,
 	getPersonal:getPersonal,
 	removePersonal:removePersonal,
+	setMenu:setMenu,
+	getMenu:getMenu,
+	removeMenu:removeMenu,
 	clearStorage:clearStorage,
 	getDeviceId:getDeviceId,
 	getBroswerId:getBroswerId,

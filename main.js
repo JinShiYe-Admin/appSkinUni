@@ -85,6 +85,7 @@ Vue.prototype.hideLoading=()=>{setTimeout(()=>{if(Vue.prototype.requestTask.size
 // #endif
 
 Vue.prototype.personal="PERSONAL"//登录用户信息存入storage时key的名称
+Vue.prototype.meunList="MENULIST"//登录用户菜单信息存入storage时key的名称
 Vue.prototype.request={post:post,get:get} //引入全局请求
 
 Vue.config.productionTip = false //不知道啥用
