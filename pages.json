@@ -1,16 +1,37 @@
+//欲练此功，必先自宫：https://uniapp.dcloud.io/collocation/pages
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+		    "path" : "pages/test/index",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "index"
+		    }
+		    
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
 		}
-	],
+		
+    ],
+	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		//"navigationStyle":"custom",//屏蔽原生导航栏，使用自定义导航栏NavBar https://uniapp.dcloud.io/collocation/pages?id=customnav   https://ask.dcloud.net.cn/article/34921
+		"pageOrientation": "portrait",
+		"navigationBarTitleText": "教宝校园",
+		"navigationBarTextStyle": "white",
+		"navigationBarBackgroundColor": "#00CFBD",
+		"backgroundColor": "#F8F8F8",//窗口的背景色 微信小程序、百度小程序、字节跳动小程序
+		"backgroundColorTop": "#F4F5F6",//顶部窗口的背景色（bounce回弹区域） 仅 iOS 平台
+		"backgroundColorBottom": "#F4F5F6",//底部窗口的背景色（bounce回弹区域） 仅 iOS 平台
+		"h5": {//设置编译到 H5 平台的特定样式  H5
+			"maxWidth": 1190,//单位px，当浏览器可见区域宽度大于maxWidth时，两侧留白，当小于等于maxWidth时，页面铺满；不同页面支持配置不同的maxWidth；maxWidth = leftWindow(可选)+page(页面主体)+rightWindow(可选)   
+			"navigationBarTextStyle": "white",//导航栏标题颜色及状态栏前景颜色，仅支持 black/white	
+			"navigationBarBackgroundColor": "#00CFBD"
+		}
 	}
+	//"tabBar": {}//官网文档说明：“tabBar 中的 list 是一个数组，只能配置最少2个、最多5个 tab，tab 按数组的顺序排序”，故不使用此种方案实现APP底部tab栏，将在home页自定义实现tab栏
 }
