@@ -5,8 +5,14 @@
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
+	"networkTimeout":{/*全局网络请求超时时间*/
+		"request":3000,/*uni.request 的超时时间，单位毫秒。*/
+		"connectSocket":6000,/*uni.connectSocket 的超时时间，单位毫秒。*/
+		"uploadFile":6000,/*uni.uploadFile 的超时时间，单位毫秒。*/
+		"downloadFile":6000/*uni.downloadFile 的超时时间，单位毫秒。*/
+	},
     /* 5+App特有相关 */
-    "app-plus" : {
+    "app-plus" : { 
         "usingComponents" : true,
         "nvueStyleCompiler" : "uni-app",
         "compilerVersion" : 3,

@@ -5,11 +5,11 @@ import Vue from 'vue'
 import moment from 'moment'
 
 /**
- * 获取当前时间 
+ * 获取指定格式的时间 
  * formart:为格式化时间戳需要的格式('YYYY-MM-DD HH:mm:ss')，如果不传，默认返回时间戳
  */
-function now(formart){
-	return moment().format(formart)
+function getDate(formart){
+	return formart?moment().format(formart):moment().valueOf()
 }
 
 /**
@@ -118,7 +118,7 @@ function getBroswerId(){
 module.exports = {
 	getDptTree: getDptTree,
 	unique: unique,
-	now: now,
+	getDate: getDate,
 	setPersonal:setPersonal,
 	getPersonal:getPersonal,
 	removePersonal:removePersonal,

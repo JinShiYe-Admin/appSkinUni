@@ -74,7 +74,7 @@ Vue.prototype.SECRETKEY ='jsy309';//sign签名时需要的盐
 Vue.prototype.globaData=COMMON; //参数对象 用于存全局公共参数
 
 Vue.prototype.requestTask=new Map();//用于储存页面请求栈
-Vue.prototype.showLoading=requestTitle=>uni.showLoading({title:requestTitle||'加载中...',mask:true})//显示加载框
+Vue.prototype.showLoading=(requestTitle='加载中...')=>uni.showLoading({title:String(requestTitle),mask:true})//显示加载框
 Vue.prototype.hideLoading=()=>{setTimeout(()=>{if(Vue.prototype.requestTask.size===0){uni.hideLoading()}},100)}//关闭加载框
 
  //#ifdef H5

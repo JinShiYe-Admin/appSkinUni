@@ -1,6 +1,7 @@
  /**
-  * 如果业务是嵌套的请求，那么在最后一个嵌套请求结束后关闭这个加载框 其他请求地方不需要写
+  * 如果业务是嵌套的请求，那么在最后一个嵌套请求结束后关闭这个加载框 
   * 如果期间某个接口出现错误，会立即关闭加载框
+  * this.showLoading() ---------------loading begin		
   * this.post(url,data,()=>{
 		this.post(url,data,()=>{
 			this.post(url,data,()=>{
@@ -8,7 +9,7 @@
 					this.post(url,data,()=>{
 						this.post(url,data,()=>{
 							this.post(url,data,()=>{
-								this.hideLoading()						 
+								this.hideLoading()	---------------loading end					 
 							})						 
 						})						 
 					})						 
@@ -18,14 +19,15 @@
 	})
   */
  /**
-  * 如果业务是嵌套的并行请求，那么在最后一层嵌套的多个请求结束后关闭加载框，不需要关心其中一个请求结束后加载框关闭的情况，框架会自动在最后一个请求得到返回后值才会关闭加载框
+  * 如果业务是嵌套的并行请求，那么在最后一层嵌套的多个请求结束后关闭加载框
   * 如果期间某个接口出现错误，会立即关闭加载框
+  *  this.showLoading() ---------------loading begin		
   *  this.post(url,data,()=>{
 	  this.post(url,data,()=>{
-		  this.post(urlA,data,()=>{  this.hideLoading()  })
-		  this.post(urlB,data,()=>{  this.hideLoading()  })
-		  this.post(urlC,data,()=>{  this.hideLoading()  })
-		  this.post(urlD,data,()=>{  this.hideLoading()  })
+		  this.post(urlA,data,()=>{  this.hideLoading()  }) ---------------loading end	
+		  this.post(urlB,data,()=>{  this.hideLoading()  }) ---------------loading end	
+		  this.post(urlC,data,()=>{  this.hideLoading()  }) ---------------loading end	
+		  this.post(urlD,data,()=>{  this.hideLoading()  }) ---------------loading end	
 	  })
    })
   */
@@ -51,7 +53,11 @@
 		 	}
 		 },
 		 methods:{
+			 test:function(){
+				 
+			 },
 			login:function(){
+				 this.showLoading()
 				 let deviceId=util.getDeviceId();
 				 let broswerId=util.getBroswerId();
 				 let comData = {
@@ -81,12 +87,6 @@
 						 	verify_code: ''
 						 };
 						 this.request.post(this.globaData.INTERFACE_SSO_SKIN+'login',comData,response=>{
-								//this.hideLoading() 
-								// uni.showToast({
-								// 	icon:'none',
-								// 	title:'登陆成功'+JSON.stringify(response),
-								// 	duration:1500
-								// })
 								util.setPersonal(response.data)
 								let tempFlag = 0;
 								//登录用户岗位信息
@@ -122,40 +122,40 @@
 								
 								//1.4获取菜单
 								//不需要加密的数据
-								var comData4 = {
-									platform_code: this.globaData.PLATFORMCODE, //平台代码
-									app_code: this.globaData.APPCODE, //应用系统代码
-									unit_code: response.data.user.unit_code,
-									index_code:'index',
-									access_token: response.data.access_token //用户令牌
-								};
-								//登录用户岗位信息
-								this.request.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',comData4,data4=>{
-									this.hideLoading()
-									if (data4.code == 0) {
-										if (data4.data.list.length > 0) {
-											util.setMenu(data4.data)
-											tempFlag++;
-											console.log('tempFlag02:' + tempFlag);
-											if (tempFlag == 3) {
-												//跳转界面
-												this.gotoPage()
+									var comData4 = {
+										platform_code: this.globaData.PLATFORMCODE, //平台代码
+										app_code: this.globaData.APPCODE, //应用系统代码
+										unit_code: response.data.user.unit_code,
+										index_code:'index',
+										access_token: response.data.access_token //用户令牌
+									};
+									//登录用户岗位信息
+									this.request.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',comData4,data4=>{
+										this.hideLoading()
+										if (data4.code == 0) {
+											if (data4.data.list.length > 0) {
+												util.setMenu(data4.data)
+												tempFlag++;
+												console.log('tempFlag02:' + tempFlag);
+												if (tempFlag == 3) {
+													//跳转界面
+													this.gotoPage()
+												}
+											} else {
+												uni.showToast({
+													icon:'none',
+													title:'应用系统无权限，请联系管理员',
+													duration:1500
+												})
 											}
 										} else {
 											uni.showToast({
 												icon:'none',
-												title:'应用系统无权限，请联系管理员',
+												title:data4.msg,
 												duration:1500
 											})
 										}
-									} else {
-										uni.showToast({
-											icon:'none',
-											title:data4.msg,
-											duration:1500
-										})
-									}
-								})
+									})
 								//1.42.根据用户类型及代码查询教师/学生信息
 								var comData5 = {
 									platform_code: this.globaData.PLATFORMCODE, //平台代码

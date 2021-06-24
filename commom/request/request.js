@@ -1,11 +1,13 @@
 /**
  * 注意：
- * 不需要写showLoading,但为了保证加载框不会频闪，需要手动在页面中最后一次请求接口的方法内调用this.hideLoading()关闭加载框
+ * APP端多次调用showLoading会导致加载框频闪，所以为了保证加载框不会频闪，尽量避免多次调用
+ * 需手动在页面中最后一次请求接口的方法内调用this.hideLoading()关闭加载框
  */
 
 import Vue from 'vue'
 import {addSign} from './sign.js'
 import utils from '../util.js'
+
 /**
  * post请求
  * @param {Object} url  接口地址
@@ -23,7 +25,6 @@ function post(url,data,callback,title) {
 	 	access_token: personal.access_token,
 		...data,
 	 })
-	 Vue.prototype.showLoading(title||'')//在最开始显示一个加载框
 	 console.log(url,JSON.stringify(signData));
 	 let reuqestTask=uni.request({
 	 	url: url,
@@ -33,27 +34,25 @@ function post(url,data,callback,title) {
 	 	success: res => {//接口调用成功的回调函数
 			if(res.statusCode===200){
 				if(res.data.state==='fail'){
-					console.log(res.data);
 					uni.hideLoading()
 					showToast(res.data.msg)
 				}else{
 					callback(res.data)
 				}
 			}else{
-				console.log(res);
+				console.log('success',res);
 				uni.hideLoading()
-				console.log(process.env.NODE_ENV);
 				if(process.env.NODE_ENV==="development"){//开发环境，提示具体信息，生产环境，提示其他信息
 					showToast(res.data.Message)
 				}else{
-					showToast('网络请求失败')
+					showToast('网络请求异常')
 				}
 			}
 	 	},
 	 	fail: (e) => {//接口调用失败的回调函数
-	 		console.log(e);
+	 		console.log('fail',e);
 			uni.hideLoading()
-			showToast('网络连接超时')
+			showToast('网络请求失败')
 	 	},
 		complete: () => {
 			Vue.prototype.requestTask.delete(reuqestTask)
@@ -81,7 +80,6 @@ function get(url,data,callback,title) {
 	 	...data,
 	 	access_token: personal.access_token,
 	 })
-	 Vue.prototype.showLoading(title||'')//在最开始显示一个加载框
 	 console.log(url, JSON.stringify(signData))
 	 let reuqestTask=uni.request({
 	 	url: url,
@@ -91,20 +89,23 @@ function get(url,data,callback,title) {
 	 	success: res => {//接口调用成功的回调函数
 			if(res.statusCode===200){
 				if(res.data.state==='fail'){
-					console.log(res.data);
 					showToast(res.data.msg)
 					uni.hideLoading()
 				}else{
 					callback(res.data)
 				}
 			}else{
-				console.log(res);
+				console.log('success',res);
 				uni.hideLoading()
-				showToast('网络请求失败')
+				if(process.env.NODE_ENV==="development"){//开发环境，提示具体信息，生产环境，提示其他信息
+					showToast(res.data.Message)
+				}else{
+					showToast('网络请求失败')
+				}
 			}
 	 	},
 	 	fail: (e) => {//接口调用失败的回调函数
-	 		console.log(e);
+	 		console.log('fail',e);
 			uni.hideLoading()
 			showToast('网络连接超时')
 	 	},
@@ -119,7 +120,7 @@ function showToast(title){
 	uni.showToast({
 		icon:'none',
 		title:title,
-		duration:1500
+		duration:2000,
 	});
 }
 
