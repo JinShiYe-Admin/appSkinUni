@@ -20,7 +20,32 @@
             "path" : "pages/test/detail",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "detail"
+                "navigationBarTitleText": "detail",
+				"splitLine": {
+				  "color":"#07C160"  
+				} ,
+				"app-plus":{
+					"titleNView":{
+						"buttons":[{  // 具体说明请继续往下看
+						 "text": "卧槽",  // button字体图标
+						 "fontSize": "18px",
+						 "color":"#FFFFFF",
+						 "float": "right"  // button位置, 可以选择在左边或者右边
+						}]
+					}
+				},
+				"h5":{
+					"titleNView":{
+						"backgroundColor":"#000000",
+						"buttons":[{  // 具体说明请继续往下看
+						  "text": "卧槽",  // button字体图标
+						  "fontSize": "18px",
+						  "color":"#FFFFFF",
+						  "select":true,
+						  "float": "right"  // button位置, 可以选择在左边或者右边
+						}]
+					}
+				}
             }
             
         }

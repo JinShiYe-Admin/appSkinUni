@@ -116,53 +116,54 @@ function getBroswerId(){
 }
 
 /**
- * 跳转页面
+ * 跳转页面 页面刷新
  * @param {Object} url 页面路径
  * @param {Object} data 传参
  * @param {Object} _events 页面监听，用于子页面向父页面传值
  */
 function openwithData(url,data={},_events={}){
-	uni.navigateTo({ 
-		url: url,
-		animationType: 'pop-in',
-		events: {
-			..._events
-		},
-		success: function(res) {
-		    res.eventChannel.emit('pagedata', data)
-		 }
-	});
-}
-/**
- * 
- * @param {Object} url 页面路径
- * @param {Object} data 传参
- * @param {Object} _events 页面监听，用于子页面向父页面传值
- */
-function openwithUrlData(url,data={},_events={}){
-	uni.navigateTo({ 
+   //#ifdef H5
+	   uni.navigateTo({
 		url: url+'?pagedata='+encodeURIComponent(JSON.stringify(data)),
 		animationType: 'pop-in',
 		events: {
 			..._events
 		},
 		success: function(res) {
-		    // res.eventChannel.emit('pagedata', data)
+			// res.eventChannel.emit('pagedata', data)
 		}
-	});
+	   });
+   //#endif
+   //#ifndef H5
+		uni.navigateTo({
+			url: url,
+			animationType: 'slide-in-right',
+			events: {
+				..._events
+			},
+			success: function(res) {
+				res.eventChannel.emit('pagedata', data)
+			 }
+		});
+   //#endif
+	
 }
 
 /**
  * 获取父页面传过来的参数
  * @param {Object} option
  */
-function getPageDataFromUrl(option){
-	try{
-		return JSON.parse(decodeURIComponent(option.pagedata))
-	}catch(e){
-		return {}
-	}
-	
+function getPageData(option,eventChannel){
+	return new Promise((resove,reject)=>{
+		//#ifdef H5
+			resove(JSON.parse(decodeURIComponent(option.pagedata)))
+		//#endif
+		//#ifndef H5
+			eventChannel.on('pagedata', function(data) {
+				resove(data)
+			})
+		//#endif
+	})
 }
 
 //获取设备
@@ -180,6 +181,5 @@ module.exports = {
 	getDeviceId:getDeviceId,
 	getBroswerId:getBroswerId,
 	openwithData:openwithData,
-	openwithUrlData:openwithUrlData,
-	getPageDataFromUrl:getPageDataFromUrl,
+	getPageData:getPageData
 }

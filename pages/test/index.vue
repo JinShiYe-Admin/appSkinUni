@@ -37,7 +37,6 @@
 			<p>{{loginInfo}}</p>
 			<button type="default" @tap="login">登录</button>
 			<button type="default" @tap="toPage">跳转与传参</button>
-			<button type="default" @tap="toPageWithUrl">跳转与传参 通过Url</button>
 			<scroll-view scroll-y="true" >
 				<y-json-view :json="jsonData"/>
 			</scroll-view>
@@ -61,27 +60,9 @@
 							icon:'none',
 							title:'请先登录',
 							duration:1500
-						})
+						}) 
 					}else{
 						util.openwithData('./detail',this.jsonData,{
-							test1:function(data){
-								console.log(data);
-							},
-							test2:function(data){
-								console.log(data);
-							}
-						})
-					}
-			},
-			toPageWithUrl:function(){
-					if(this.jsonData.length===0){
-						uni.showToast({
-							icon:'none',
-							title:'请先登录',
-							duration:1500
-						})
-					}else{
-						util.openwithUrlData('./detail',this.jsonData,{
 							test1:function(data){
 								console.log(data);
 							},
