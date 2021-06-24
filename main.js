@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App'
 import {post,get} from 'commom/request/request.js'
-
 //配置项开始
 const COMMON = {};//参数对象 用于存全局公共参数
 const EnvKey = 3; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
@@ -72,7 +71,6 @@ Vue.prototype.SECRETKEY ='jsy309';//sign签名时需要的盐
 
 //以下内容不需要修改
 Vue.prototype.globaData=COMMON; //参数对象 用于存全局公共参数
-
 Vue.prototype.requestTask=new Map();//用于储存页面请求栈
 Vue.prototype.showLoading=(requestTitle='加载中...')=>uni.showLoading({title:String(requestTitle),mask:true})//显示加载框
 Vue.prototype.hideLoading=()=>{setTimeout(()=>{if(Vue.prototype.requestTask.size===0){uni.hideLoading()}},100)}//关闭加载框

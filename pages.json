@@ -16,6 +16,14 @@
 			}
 		}
 		
+        ,{
+            "path" : "pages/test/detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "detail"
+            }
+            
+        }
     ],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
 	"globalStyle": {

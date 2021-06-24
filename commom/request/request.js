@@ -115,13 +115,22 @@ function get(url,data,callback,title) {
 	 });
 	 Vue.prototype.requestTask.set(reuqestTask,true)
 }
-
+var timeTask=null
 function showToast(title){
-	uni.showToast({
-		icon:'none',
-		title:title,
-		duration:2000,
-	});
+	if(timeTask){clearTimeout(timeTask)}
+	timeTask=setTimeout(()=>{
+		//#ifdef APP-PLUS
+			plus.nativeUI.toast(title);
+		//#endif
+		//#ifndef APP-PLUS
+			uni.showToast({
+				icon:'none',
+				title:title,
+				position:'bottom',
+				duration:2000,
+			});
+		//#endif
+	},50)
 }
 
 module.exports = {

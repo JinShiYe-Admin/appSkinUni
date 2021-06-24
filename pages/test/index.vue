@@ -36,6 +36,8 @@
 	<view class="content">
 			<p>{{loginInfo}}</p>
 			<button type="default" @tap="login">登录</button>
+			<button type="default" @tap="toPage">跳转与传参</button>
+			<button type="default" @tap="toPageWithUrl">跳转与传参 通过Url</button>
 			<scroll-view scroll-y="true" >
 				<y-json-view :json="jsonData"/>
 			</scroll-view>
@@ -53,9 +55,42 @@
 		 	}
 		 },
 		 methods:{
-			 test:function(){
-				 
-			 },
+			toPage:function(){
+					if(this.jsonData.length===0){
+						uni.showToast({
+							icon:'none',
+							title:'请先登录',
+							duration:1500
+						})
+					}else{
+						util.openwithData('./detail',this.jsonData,{
+							test1:function(data){
+								console.log(data);
+							},
+							test2:function(data){
+								console.log(data);
+							}
+						})
+					}
+			},
+			toPageWithUrl:function(){
+					if(this.jsonData.length===0){
+						uni.showToast({
+							icon:'none',
+							title:'请先登录',
+							duration:1500
+						})
+					}else{
+						util.openwithUrlData('./detail',this.jsonData,{
+							test1:function(data){
+								console.log(data);
+							},
+							test2:function(data){
+								console.log(data);
+							}
+						})
+					}
+			},
 			login:function(){
 				 this.showLoading()
 				 let deviceId=util.getDeviceId();
@@ -122,40 +157,40 @@
 								
 								//1.4获取菜单
 								//不需要加密的数据
-									var comData4 = {
-										platform_code: this.globaData.PLATFORMCODE, //平台代码
-										app_code: this.globaData.APPCODE, //应用系统代码
-										unit_code: response.data.user.unit_code,
-										index_code:'index',
-										access_token: response.data.access_token //用户令牌
-									};
-									//登录用户岗位信息
-									this.request.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',comData4,data4=>{
-										this.hideLoading()
-										if (data4.code == 0) {
-											if (data4.data.list.length > 0) {
-												util.setMenu(data4.data)
-												tempFlag++;
-												console.log('tempFlag02:' + tempFlag);
-												if (tempFlag == 3) {
-													//跳转界面
-													this.gotoPage()
-												}
-											} else {
-												uni.showToast({
-													icon:'none',
-													title:'应用系统无权限，请联系管理员',
-													duration:1500
-												})
+								var comData4 = {
+									platform_code: this.globaData.PLATFORMCODE, //平台代码
+									app_code: this.globaData.APPCODE, //应用系统代码
+									unit_code: response.data.user.unit_code,
+									index_code:'index',
+									access_token: response.data.access_token //用户令牌
+								};
+								//登录用户岗位信息
+								this.request.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',comData4,data4=>{
+									this.hideLoading()
+									if (data4.code == 0) {
+										if (data4.data.list.length > 0) {
+											util.setMenu(data4.data)
+											tempFlag++;
+											console.log('tempFlag02:' + tempFlag);
+											if (tempFlag == 3) {
+												//跳转界面
+												this.gotoPage()
 											}
 										} else {
 											uni.showToast({
 												icon:'none',
-												title:data4.msg,
+												title:'应用系统无权限，请联系管理员',
 												duration:1500
 											})
 										}
-									})
+									} else {
+										uni.showToast({
+											icon:'none',
+											title:data4.msg,
+											duration:1500
+										})
+									}
+								})
 								//1.42.根据用户类型及代码查询教师/学生信息
 								var comData5 = {
 									platform_code: this.globaData.PLATFORMCODE, //平台代码
@@ -170,7 +205,6 @@
 									this.hideLoading()
 									if (data5.code == '0000') {
 										if (data5.data) {
-											
 											var tempPerInfo = util.getPersonal();
 											if (response.data.user.type_code == 'YHLX0003') {
 												tempPerInfo.tec_name = data5.data.tec_name;
