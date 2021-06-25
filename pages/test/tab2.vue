@@ -1,6 +1,6 @@
 <template>
 	<view>
-		tab2
+		考试
 	</view>
 </template>
 

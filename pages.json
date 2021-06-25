@@ -8,7 +8,7 @@
 		    "path" : "pages/test/index",
 		    "style" :                                                                                    
 		    {
-		        "navigationBarTitleText": "index"
+		        "navigationBarTitleText": "消息"
 		    }
 		    
 		},
@@ -55,7 +55,7 @@
             "path" : "pages/test/tab1",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "课程学习",
                 "enablePullDownRefresh": false
             }
             
@@ -64,7 +64,7 @@
             "path" : "pages/test/tab2",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "考试",
                 "enablePullDownRefresh": false
             }
             
@@ -73,7 +73,25 @@
             "path" : "pages/test/tab3",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "练习",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+		,{
+		    "path" : "pages/test/tab4",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "更多",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}
+        ,{
+            "path" : "pages/test/tab5",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "看看！看看",
                 "enablePullDownRefresh": false
             }
             
@@ -94,6 +112,40 @@
 			"navigationBarTextStyle": "white",//导航栏标题颜色及状态栏前景颜色，仅支持 black/white	
 			"navigationBarBackgroundColor": "#00CFBD"
 		}
-	}
-	//"tabBar": {}//官网文档说明：“tabBar 中的 list 是一个数组，只能配置最少2个、最多5个 tab，tab 按数组的顺序排序”，故不使用此种方案实现APP底部tab栏，将在home页自定义实现tab栏
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#007AFF",
+		"borderStyle": "black",
+		"backgroundColor": "#F8F8F8",
+		"list": [{
+				"pagePath": "pages/test/index",
+				"iconPath": "static/component.png",
+				"selectedIconPath": "static/componentHL.png",
+				"text": "消息"
+			},
+			{
+				"pagePath": "pages/test/tab1",
+				"iconPath": "static/api.png",
+				"selectedIconPath": "static/apiHL.png",
+				"text": "课程学习"
+			}, {
+				"pagePath": "pages/test/tab2",
+				"iconPath": "static/extui.png",
+				"selectedIconPath": "static/extuiHL.png",
+				"text": "考试"
+			}, {
+				"pagePath": "pages/test/tab3",
+				"iconPath": "static/template.png",
+				"selectedIconPath": "static/templateHL.png",
+				"text": "练习"
+			},
+			{
+				"pagePath": "pages/test/tab4",
+				"iconPath": "static/template.png",
+				"selectedIconPath": "static/templateHL.png",
+				"text": "更多"
+			}
+		]
+	} 
 }

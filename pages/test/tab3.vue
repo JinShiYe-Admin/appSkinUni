@@ -1,6 +1,6 @@
 <template>
 	<view>
-			tab3
+			练习
 	</view>
 </template>
 

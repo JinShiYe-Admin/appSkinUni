@@ -33,10 +33,11 @@
   */
 
 <template>
-	<view>
+	<view  class="content">
 		<p>{{loginInfo}}</p>
 		<button type="default" @tap="login">登录</button>
 		<button type="default" @tap="toPage">跳转与传参</button>
+		<button type="default" @tap="changeTab">动态修改tab栏</button>
 		<scroll-view scroll-y="true" >
 			<y-json-view :json="jsonData"/>
 		</scroll-view>
@@ -54,6 +55,15 @@
 		 	}
 		 },
 		 methods:{
+			 changeTab:function(){
+				 let tabBarOptions = {
+					 index:2,
+					 text:'看看！看看',
+					 iconPath:'../../static/logo.png',
+					 pagePath:'/pages/test/tab5'
+				 }
+				 uni.setTabBarItem(tabBarOptions)
+			 },
 			toPage:function(){
 					if(this.jsonData.length===0){
 						uni.showToast({

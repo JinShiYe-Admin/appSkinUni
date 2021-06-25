@@ -1,6 +1,6 @@
 <template>
 	<view>
-		课程学习
+			更多
 	</view>
 </template>
 

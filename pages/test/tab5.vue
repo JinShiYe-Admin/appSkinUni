@@ -1,6 +1,6 @@
 <template>
 	<view>
-		课程学习
+		看看！看看！
 	</view>
 </template>
 
