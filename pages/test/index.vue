@@ -33,13 +33,13 @@
   */
 
 <template>
-	<view class="content">
-			<p>{{loginInfo}}</p>
-			<button type="default" @tap="login">登录</button>
-			<button type="default" @tap="toPage">跳转与传参</button>
-			<scroll-view scroll-y="true" >
-				<y-json-view :json="jsonData"/>
-			</scroll-view>
+	<view>
+		<p>{{loginInfo}}</p>
+		<button type="default" @tap="login">登录</button>
+		<button type="default" @tap="toPage">跳转与传参</button>
+		<scroll-view scroll-y="true" >
+			<y-json-view :json="jsonData"/>
+		</scroll-view>
 	</view>
 </template>
 
@@ -50,7 +50,7 @@
 		 data() {
 		 	return {
 		 		 loginInfo:'用户名：xxld  密码：111111a',
-				 jsonData:[]
+				 jsonData:[],
 		 	}
 		 },
 		 methods:{
@@ -276,7 +276,7 @@
 	} 
 </script>
 
-<style >
+<style>
 	.content{
 		display: flex;
 		flex-flow: column nowrap;

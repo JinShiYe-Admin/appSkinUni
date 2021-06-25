@@ -13,9 +13,9 @@ import utils from '../util.js'
  * @param {Object} url  接口地址
  * @param {Object} data 请求数据
  * @param {Object} callback 返回数据且数据正常的回调
- * @param {Object} title 单次请求时 显示在前端的标题，可不传，默认为‘加载中...’
+ * @param {Object} ecallback 返回数据调用失败的回调 默认可不传 如果需要根据错误信息去重置页面的某个状态，可以传入
  */
-function post(url,data,callback,title) {
+function post(url,data,callback,ecallback) {
 	 const personal=utils.getPersonal()
 	 const signData =addSign({
 	 	app_code: personal.app_code,
@@ -47,6 +47,9 @@ function post(url,data,callback,title) {
 				}else{
 					showToast('网络请求异常')
 				}
+				if(ecallback){
+					ecallback(res.data)
+				}
 			}
 	 	},
 	 	fail: (e) => {//接口调用失败的回调函数
@@ -69,8 +72,9 @@ function post(url,data,callback,title) {
  * @param {Object} url  接口地址
  * @param {Object} data 请求数据
  * @param {Object} callback 返回数据且数据正常的回调
+ * @param {Object} ecallback 返回数据调用失败的回调 默认可不传 如果需要根据错误信息去重置页面的某个状态，可以传入
  */
-function get(url,data,callback,title) {
+function get(url,data,callback,ecallback) {
 	 const personal=utils.getPersonal()
 	 const signData =addSign({
 	 	app_code: personal.app_code,
@@ -101,6 +105,9 @@ function get(url,data,callback,title) {
 					showToast(res.data.Message)
 				}else{
 					showToast('网络请求失败')
+				}
+				if(ecallback){
+					ecallback(res.data)
 				}
 			}
 	 	},

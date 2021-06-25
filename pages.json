@@ -1,5 +1,8 @@
 //欲练此功，必先自宫：https://uniapp.dcloud.io/collocation/pages
-{
+{	
+	"easycom": {
+		"^u-(.*)": "@/third-ui/uview-ui/components/u-$1/u-$1.vue"
+	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 		    "path" : "pages/test/index",
@@ -14,9 +17,8 @@
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
-		}
-		
-        ,{
+		},
+        {
             "path" : "pages/test/detail",
             "style" :                                                                                    
             {
@@ -46,6 +48,33 @@
 						}]
 					}
 				}
+            }
+            
+        }
+        ,{
+            "path" : "pages/test/tab1",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/test/tab2",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/test/tab3",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
             }
             
         }

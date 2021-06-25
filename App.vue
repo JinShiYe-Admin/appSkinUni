@@ -12,7 +12,8 @@
 	}
 </script>
 
-<style>
-	/*每个页面公共css */
-	@import url("./commom/uni.css");
+<style lang="scss">
+	@import "./third-ui/uview-ui/index.scss";
+	@import "./commom/uni.css";
 </style>
+

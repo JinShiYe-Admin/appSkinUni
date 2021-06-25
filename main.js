@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App'
 import {post,get} from 'commom/request/request.js'
+import uView from './third-ui/uview-ui'
+Vue.use(uView);
 //配置项开始
 const COMMON = {};//参数对象 用于存全局公共参数
 const EnvKey = 3; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
@@ -91,4 +93,5 @@ App.mpType = 'app'
 const app = new Vue({
 	...App
 })
+
 app.$mount()
