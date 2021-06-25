@@ -122,7 +122,6 @@ function getBroswerId(){
  * @param {Object} _events 页面监听，用于子页面向父页面传值
  */
 function openwithData(url,data={},_events={}){
-   //#ifdef H5
 	   uni.navigateTo({
 		url: url+'?pagedata='+encodeURIComponent(JSON.stringify(data)),
 		animationType: 'pop-in',
@@ -133,19 +132,6 @@ function openwithData(url,data={},_events={}){
 			// res.eventChannel.emit('pagedata', data)
 		}
 	   });
-   //#endif
-   //#ifndef H5
-		uni.navigateTo({
-			url: url,
-			animationType: 'slide-in-right',
-			events: {
-				..._events
-			},
-			success: function(res) {
-				res.eventChannel.emit('pagedata', data)
-			 }
-		});
-   //#endif
 	
 }
 
@@ -153,17 +139,8 @@ function openwithData(url,data={},_events={}){
  * 获取父页面传过来的参数
  * @param {Object} option
  */
-function getPageData(option,eventChannel){
-	return new Promise((resove,reject)=>{
-		//#ifdef H5
-			resove(JSON.parse(decodeURIComponent(option.pagedata)))
-		//#endif
-		//#ifndef H5
-			eventChannel.on('pagedata', function(data) {
-				resove(data)
-			})
-		//#endif
-	})
+function getPageData(option){
+	return JSON.parse(decodeURIComponent(option.pagedata))
 }
 
 //获取设备

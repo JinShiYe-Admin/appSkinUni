@@ -18,10 +18,8 @@
 		onLoad:function(option){
 			//Url传参
 			const eventChannel = this.getOpenerEventChannel()
-			util.getPageData(option,eventChannel).then(pageData=>{
-				console.log('url 传参',pageData);
-				this.name=pageData.user_name
-			})
+			console.log('url 传参',pageData);
+			this.name=pageData.user_name
 			setTimeout(()=>{
 				//向父页面发送信息
 				eventChannel.emit('test1', {data: 'test1'});
