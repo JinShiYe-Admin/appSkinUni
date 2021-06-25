@@ -18,6 +18,7 @@
 		onLoad:function(option){
 			//Url传参
 			const eventChannel = this.getOpenerEventChannel()
+			let pageData=util.getPageData(option)
 			console.log('url 传参',pageData);
 			this.name=pageData.user_name
 			setTimeout(()=>{

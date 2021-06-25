@@ -140,7 +140,13 @@ function openwithData(url,data={},_events={}){
  * @param {Object} option
  */
 function getPageData(option){
-	return JSON.parse(decodeURIComponent(option.pagedata))
+	try{
+		return JSON.parse(decodeURIComponent(option.pagedata))
+	}catch(e){
+		console.log(e);
+		return {}
+	}
+	
 }
 
 //获取设备
