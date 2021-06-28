@@ -1,6 +1,6 @@
 <template>
 	<view>
-		课程学习
+		考试 （暂未开放）
 	</view>
 </template>
 

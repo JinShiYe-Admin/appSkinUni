@@ -29,7 +29,7 @@ function post(url,data,callback,ecallback) {
 	 let reuqestTask=uni.request({
 	 	url: url,
 	 	method: 'POST',
-	 	header: {'content-type': 'application/json'},
+	 	header: {'content-type': 'application/json; charset=UTF-8'},
 	 	data: signData,
 	 	success: res => {//接口调用成功的回调函数
 			if(res.statusCode===200){
@@ -88,7 +88,7 @@ function get(url,data,callback,ecallback) {
 	 let reuqestTask=uni.request({
 	 	url: url,
 	 	method: 'GET',
-	 	header: {'content-type': 'application/json'},
+	 	header: {'content-type': 'application/json; charset=UTF-8'},
 	 	data: signData,
 	 	success: res => {//接口调用成功的回调函数
 			if(res.statusCode===200){

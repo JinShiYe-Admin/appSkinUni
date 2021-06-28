@@ -50,7 +50,7 @@
 	export default {
 		 data() {
 		 	return {
-		 		 loginInfo:'用户名：xxld  密码：111111a',
+		 		 loginInfo:'用户名：xuesheng02  密码：111111a',
 				 jsonData:[],
 		 	}
 		 },
@@ -104,7 +104,7 @@
 						 	uuid: deviceId, //设备唯一识别码,防同一应用在不同机器上登录互串,验证码校检用
 						 	webid: broswerId, //浏览器识别码,防不同浏览器登录同一应用互串,验证码校检用（web用浏览器类型加版本，app用操作系统+版本））
 						 	shaketype: '1', //
-						 	login_name: rsaPublicKey.encrypt('xxld'), //登录名
+						 	login_name: rsaPublicKey.encrypt('xuesheng02'), //登录名
 						 	password: rsaPublicKey.encrypt('111111a'), //
 						 	device_type: '1', //登录设备类型，0：WEB、1：APP、2：客户端
 						 	platform_code: this.globaData.PLATFORMCODE, //平台代码
@@ -114,38 +114,6 @@
 						 };
 						 this.request.post(this.globaData.INTERFACE_SSO_SKIN+'login',comData,response=>{
 								util.setPersonal(response.data)
-								let tempFlag = 0;
-								//登录用户岗位信息
-								let comData3 = {
-									platform_code: response.data.user.platform_code, //平台代码
-									app_code: response.data.user.app_code, //应用系统代码
-									index_code: 'index', //页面权限符,必传,从登录皮肤处获得
-									unit_code: response.data.user.unit_code, //学校代码,必传
-									user_code: response.data.user.user_code, //用户代码,必传
-									access_token: response.data.access_token //用户令牌
-								};
-								this.request.post(this.globaData.INTERFACE_HR_SUB+'user/getUserImg',comData3,data3=>{
-									console.log("data3: " + JSON.stringify(data3));
-									this.hideLoading()
-									if (data3.code == 0) {
-										let tempPerInfo = util.getPersonal();
-										tempPerInfo.hrImg_url = data3.data.user_img;
-										util.setPersonal(tempPerInfo);
-										tempFlag++;
-										console.log('tempFlag01:' + tempFlag);
-										if (tempFlag == 3) {
-											//跳转界面
-											this.gotoPage()
-										}
-									} else {
-										uni.showToast({
-											icon:'none',
-											title:data3.msg,
-											duration:1500
-										})
-									}
-								})
-								
 								//1.4获取菜单
 								//不需要加密的数据
 								var comData4 = {
@@ -155,18 +123,14 @@
 									index_code:'index',
 									access_token: response.data.access_token //用户令牌
 								};
-								//登录用户岗位信息
 								this.request.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',comData4,data4=>{
 									this.hideLoading()
+									console.log("data4: " + JSON.stringify(data4));
 									if (data4.code == 0) {
 										if (data4.data.list.length > 0) {
 											util.setMenu(data4.data)
-											tempFlag++;
-											console.log('tempFlag02:' + tempFlag);
-											if (tempFlag == 3) {
-												//跳转界面
-												this.gotoPage()
-											}
+											//跳转界面
+											this.gotoPage()
 										} else {
 											uni.showToast({
 												icon:'none',
@@ -182,60 +146,7 @@
 										})
 									}
 								})
-								//1.42.根据用户类型及代码查询教师/学生信息
-								var comData5 = {
-									platform_code: this.globaData.PLATFORMCODE, //平台代码
-									app_code: this.globaData.APPCODE, //应用系统代码
-									unit_code: response.data.user.unit_code,
-									user_type_code:response.data.user.type_code,
-									user_code:response.data.user.user_code,
-									index_code:'index',
-									access_token: response.data.access_token //用户令牌
-								};
-								this.request.post(this.globaData.INTERFACE_HR_SUB + 'user/getUserInfoByTypeAndCode',comData5,data5=>{
-									this.hideLoading()
-									if (data5.code == '0000') {
-										if (data5.data) {
-											var tempPerInfo = util.getPersonal();
-											if (response.data.user.type_code == 'YHLX0003') {
-												tempPerInfo.tec_name = data5.data.tec_name;
-												tempPerInfo.sch_name = data5.data.sch_name;
-												tempPerInfo.sch_code = data5.data.sch_code;
-												tempPerInfo.tec_code = data5.data.tec_code;
-												tempPerInfo.dpt_name = data5.data.dpt_name;
-												tempPerInfo.dpt_code = data5.data.dpt_code;
-											} else{
-												tempPerInfo.cls_name = data5.data.cls_name;
-												tempPerInfo.sch_name = data5.data.sch_name;
-												tempPerInfo.sch_code = data5.data.sch_code;
-												tempPerInfo.cls_code = data5.data.cls_code;
-												tempPerInfo.grd_name = data5.data.grd_name;
-												tempPerInfo.grd_code = data5.data.grd_code;
-												tempPerInfo.stu_name = data5.data.stu_name;
-												tempPerInfo.stu_code = data5.data.stu_code;
-											}
-											util.setPersonal(tempPerInfo)
-											tempFlag++;
-											console.log('tempFlag02:' + tempFlag);
-											if (tempFlag == 3) {
-												//跳转界面
-												this.gotoPage()
-											}
-										} else {
-											uni.showToast({
-												icon:'none',
-												title:'应用系统无权限，请联系管理员',
-												duration:1500
-											})
-										}
-									} else {
-										uni.showToast({
-											icon:'none',
-											title:data5.msg,
-											duration:1500
-										})
-									}
-								})
+								 
 						 },'正在登录...')
 					 }else{
 						 uni.showToast({

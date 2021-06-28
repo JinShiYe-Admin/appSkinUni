@@ -1,6 +1,6 @@
 <template>
 	<view>
-			更多
+		练习
 	</view>
 </template>
 
@@ -12,7 +12,6 @@
 			}
 		},
 		methods: {
-			
 		}
 	}
 </script>

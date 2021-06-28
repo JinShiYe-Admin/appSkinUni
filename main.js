@@ -22,15 +22,17 @@ switch (EnvKey) {
 		COMMON.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 	case 3:
-		COMMON.PLATFORMCODE ='PT0001';//平台代码
-		COMMON.APPCODE ='schapp#';//应用系统代码
+		COMMON.PLATFORMCODE ='PT0003';//平台代码
+		COMMON.APPCODE ='schappUni#';//应用系统代码
 		
 		COMMON.INTERFACE_SSO_SKIN ='http://nwifapp.jiaobaowang.net/ssotoskin/api/skin/';//单点登录,供PC外皮及APP用户登录,管理
 		COMMON.INTERFACE_SSO_HR ='http://nwifapp.jiaobaowang.net/ssotohr/api/hr/';//单点登录,供人事系统使用
 		COMMON.INTERFACE_SUP_HR ='http://nwifapp.jiaobaowang.net/suptohr/api/hr/';//单点对人事及登录皮肤接口
 		COMMON.INTERFACE_SSO_SUB ='http://nwifapp.jiaobaowang.net/ssotosub/api/sub/';//单点登录,供各子系统用
-		COMMON.INTERFACE_HR_SUB ='http://nwifapp.jiaobaowang.net/testhrtosub/api/sub/';//人事接口,供子系统用
+		COMMON.INTERFACE_HR_SUB ='http://nwifapp.jiaobaowang.net/testhrunvtosub/api/sub/';//人事接口,供子系统用
 		COMMON.INTERFACE_HR_SKIN ='http://nwifapp.jiaobaowang.net/testhrtosup/api/skin/';//人事接口,供APP或PC注册及外皮用
+		COMMON.INTERFACE_UNVEDUSUBAPI ='http://139.129.252.49:8180/unvedusubapi/api/';//继续教育接口文档 供展示前台
+		
 		
 		COMMON.QN_APPID =16;//七牛appid
 		COMMON.QN_APPKEY ='oatest1010'; //七牛appkey

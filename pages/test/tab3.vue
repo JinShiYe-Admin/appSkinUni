@@ -1,6 +1,6 @@
 <template>
 	<view>
-			练习
+			更多（暂未开放）
 	</view>
 </template>
 
