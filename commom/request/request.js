@@ -45,7 +45,6 @@ function post(url,data,callback,ecallback) {
 					}
 				}
 			}else{
-				console.log('success',res);
 				uni.hideLoading()
 				if(process.env.NODE_ENV==="development"){//开发环境，提示具体信息，生产环境，提示其他信息
 					showToast(res.data.Message)
@@ -64,7 +63,6 @@ function post(url,data,callback,ecallback) {
 	 	},
 		complete: () => {
 			Vue.prototype.requestTask.delete(reuqestTask)
-			
 		}
 	 });
 	Vue.prototype.requestTask.set(reuqestTask,true)
@@ -101,10 +99,9 @@ function get(url,data,callback,ecallback) {
 					showToast(res.data.msg)
 					uni.hideLoading()
 				}else{
-					callback(res.data)
+					callback(res.data.data,res.data)
 				}
 			}else{
-				console.log('success',res);
 				uni.hideLoading()
 				if(process.env.NODE_ENV==="development"){//开发环境，提示具体信息，生产环境，提示其他信息
 					showToast(res.data.Message)
