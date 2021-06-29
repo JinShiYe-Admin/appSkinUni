@@ -56,9 +56,17 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "课程学习",
-                "enablePullDownRefresh": true
+                "enablePullDownRefresh": false
             }
         }
+		,{//课程学习 详情
+		    "path" : "pages/course_study/detail",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		}
 		,{//练习
 		    "path" : "pages/course_practice/index",
 		    "style" :                                                                                    
@@ -83,6 +91,9 @@
 			"maxWidth": 1190,//单位px，当浏览器可见区域宽度大于maxWidth时，两侧留白，当小于等于maxWidth时，页面铺满；不同页面支持配置不同的maxWidth；maxWidth = leftWindow(可选)+page(页面主体)+rightWindow(可选)   
 			"navigationBarTextStyle": "white",//导航栏标题颜色及状态栏前景颜色，仅支持 black/white	
 			"navigationBarBackgroundColor": "#00CFBD"
+		},
+		"usingComponents": {
+			"ly-tree-node": "/components/ly-tree/ly-tree-node"
 		}
 	},
 	"tabBar": {

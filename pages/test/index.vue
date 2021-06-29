@@ -94,7 +94,7 @@
 				 	webid: broswerId, //浏览器识别码,防不同浏览器登录同一应用互串,验证码校检用（web用浏览器类型加版本，app用操作系统+版本））
 				 	shaketype: '1', //
 				 };
-				 this.request.post(this.globaData.INTERFACE_SSO_SKIN+'login/getEncryptKey',comData,response=>{
+				 this.post(this.globaData.INTERFACE_SSO_SKIN+'login/getEncryptKey',comData,(response0,response)=>{
 					 if(response.code==='0000'){
 						 let data=response.data
 						 let ConsultPublicKey = { n: String(data.Modulus), e: String(data.Exponent) }
@@ -112,7 +112,7 @@
 						 	unit_code: '-1', //单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 						 	verify_code: ''
 						 };
-						 this.request.post(this.globaData.INTERFACE_SSO_SKIN+'login',comData,response=>{
+						 this.post(this.globaData.INTERFACE_SSO_SKIN+'login',comData,(response0,response)=>{
 								util.setPersonal(response.data)
 								//1.4获取菜单
 								//不需要加密的数据
@@ -123,7 +123,7 @@
 									index_code:'index',
 									access_token: response.data.access_token //用户令牌
 								};
-								this.request.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',comData4,data4=>{
+								this.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',comData4,(_data4,data4)=>{
 									this.hideLoading()
 									console.log("data4: " + JSON.stringify(data4));
 									if (data4.code == 0) {
@@ -193,6 +193,7 @@
 			}
 		 },
 		 onLoad:function(){
+			 util.clearStorage()
 		 }
 	} 
 </script>

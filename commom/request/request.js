@@ -37,7 +37,12 @@ function post(url,data,callback,ecallback) {
 					uni.hideLoading()
 					showToast(res.data.msg)
 				}else{
-					callback(res.data)
+					if(res.data.code==='0000'){
+						callback(res.data.data,res.data)
+					}else{
+						uni.hideLoading()
+						showToast(res.data.msg)
+					}
 				}
 			}else{
 				console.log('success',res);
