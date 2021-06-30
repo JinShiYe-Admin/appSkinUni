@@ -50,7 +50,7 @@
 	export default {
 		 data() {
 		 	return {
-		 		 loginInfo:'用户名：xuesheng02  密码：111111a',
+		 		 loginInfo:'用户名：xuesheng03  密码：111111a',
 				 jsonData:[],
 		 	}
 		 },
@@ -104,7 +104,7 @@
 						 	uuid: deviceId, //设备唯一识别码,防同一应用在不同机器上登录互串,验证码校检用
 						 	webid: broswerId, //浏览器识别码,防不同浏览器登录同一应用互串,验证码校检用（web用浏览器类型加版本，app用操作系统+版本））
 						 	shaketype: '1', //
-						 	login_name: rsaPublicKey.encrypt('xuesheng02'), //登录名
+						 	login_name: rsaPublicKey.encrypt('xuesheng03'), //登录名
 						 	password: rsaPublicKey.encrypt('111111a'), //
 						 	device_type: '1', //登录设备类型，0：WEB、1：APP、2：客户端
 						 	platform_code: this.globaData.PLATFORMCODE, //平台代码
