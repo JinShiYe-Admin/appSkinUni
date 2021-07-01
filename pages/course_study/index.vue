@@ -8,11 +8,12 @@
 		<view class="line-h"></view>
 		<uni-row class="demo-uni-row">
 		    <uni-col :xs="12" :sm="12" :md="6" :lg="4" :xl="4" v-for="item in dataList">
-		       <uni-card mode="style" :is-shadow="true" :thumbnail="item.book_img_url" @click="toDetail(item)">
+		       <uni-card mode="style" :is-shadow="true" :thumbnail="item.book_img_url" @click="toDetail(item)" class="u-card">
 					<text class="text">{{ item.sub_name }}</text>
 		       </uni-card>
 		    </uni-col>
 		</uni-row>
+		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
 
@@ -28,6 +29,7 @@
 				tabIndex: 0,
 				tabBars: [],
 				scrollInto: "",
+				tabbar: []
 			}
 		},
 		methods: {
@@ -77,6 +79,7 @@
 			}
 		},
 		onLoad:function(){
+			this.tabbar = util.getMenu();
 			setTimeout(()=>{
 				this.showLoading();
 				this.getTabList();
@@ -99,10 +102,7 @@
         flex: 1;
         flex-direction: column;
         overflow: hidden;
-        background-color: #ffffff;
-        /* #ifdef MP-ALIPAY || MP-BAIDU */
-        height: 100vh;
-        /* #endif */
+        background-color: #EEF0F2;
     }
 
     .scroll-h {
@@ -111,6 +111,7 @@
 		width:100%;
 		/* #endif */
 		height: 80rpx;
+		background-color: #FFFFFF;
         flex-direction: row;
         /* #ifndef APP-PLUS */
         white-space: nowrap;
@@ -182,5 +183,9 @@
 	 	position: absolute;
 	 	top: 5px;
 	 	right: 15px;
+	 }
+	 
+	 .u-card{
+		 margin: 4px 7px;
 	 }
 </style>

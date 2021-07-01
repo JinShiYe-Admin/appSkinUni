@@ -5,14 +5,15 @@
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
-	"networkTimeout":{/*全局网络请求超时时间*/
-		"request":10000,/*uni.request 的超时时间，单位毫秒。*/
-		"connectSocket":60000,/*uni.connectSocket 的超时时间，单位毫秒。*/
-		"uploadFile":30000,/*uni.uploadFile 的超时时间，单位毫秒。*/
-		"downloadFile":30000/*uni.downloadFile 的超时时间，单位毫秒。*/
-	},
+    "networkTimeout" : {
+        /*全局网络请求超时时间*/
+        "request" : 10000, /*uni.request 的超时时间，单位毫秒。*/
+        "connectSocket" : 60000, /*uni.connectSocket 的超时时间，单位毫秒。*/
+        "uploadFile" : 30000, /*uni.uploadFile 的超时时间，单位毫秒。*/
+        "downloadFile" : 30000 /*uni.downloadFile 的超时时间，单位毫秒。*/
+    },
     /* 5+App特有相关 */
-    "app-plus" : { 
+    "app-plus" : {
         "usingComponents" : true,
         "nvueStyleCompiler" : "uni-app",
         "compilerVersion" : 3,
@@ -51,7 +52,9 @@
             /* ios打包配置 */
             "ios" : {},
             /* SDK配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {
+                "ad" : {}
+            }
         },
         "uniStatistics" : {
             "enable" : true
