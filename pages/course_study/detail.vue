@@ -80,6 +80,8 @@
 				if(obj.childNodesId.length===0){//如果>0说明是父节点，不管
 					this.showLoading()
 					if(obj.data.url){//如果是视频，获取学习此视频的信息
+						this.clearInterval()
+						this.updateCurrentTime();
 						this.getVideoLearnInfo(obj.parentId,obj.data.id,obj.data)
 					}else{//如果不是视频，获取目录下的视频列表
 						this.getCatalogFile(obj.data.id,video_list=>{
