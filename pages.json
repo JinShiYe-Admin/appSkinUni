@@ -1,16 +1,20 @@
 //欲练此功，必先自宫：https://uniapp.dcloud.io/collocation/pages
-{	
+{
 	"easycom": {
 		"^u-(.*)": "@/third-ui/uview-ui/components/u-$1/u-$1.vue"
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-		    "path" : "pages/test/index",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "消息"
-		    }
-		    
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/test/index",
+			"style": {
+				"navigationBarTitleText": "消息"
+			}
 		},
 		{
 			"path": "pages/index/index",
@@ -18,56 +22,51 @@
 				"navigationBarTitleText": "uni-app"
 			}
 		},
-        {
-            "path" : "pages/test/detail",
-            "style" :{
-                "navigationBarTitleText": "detail"
-            }
-        }
-		,{
-		    "path" : "pages/test/tab1",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "考试",
-		        "enablePullDownRefresh": false
-		    }
-		    
+		{
+			"path": "pages/test/detail",
+			"style": {
+				"navigationBarTitleText": "detail"
+			}
+		}, {
+			"path": "pages/test/tab1",
+			"style": {
+				"navigationBarTitleText": "考试",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/test/tab3",
+			"style": {
+				"navigationBarTitleText": "更多",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/test/tab5",
+			"style": {
+				"navigationBarTitleText": "看看！看看",
+				"enablePullDownRefresh": false
+			}
+		}, { //课程学习
+			"path": "pages/course_study/index",
+			"style": {
+				"navigationBarTitleText": "课程学习",
+				"enablePullDownRefresh": true
+			}
+		}, { //练习
+			"path": "pages/course_practice/index",
+			"style": {
+				"navigationBarTitleText": "练习",
+				"enablePullDownRefresh": false
+			}
 		}
-		,{
-		    "path" : "pages/test/tab3",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "更多",
-		        "enablePullDownRefresh": false
-		    }
-		    
-		}
-		,{
-		    "path" : "pages/test/tab5",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "看看！看看",
-		        "enablePullDownRefresh": false
-		    }
-		    
-		}
-        ,{//课程学习
-            "path" : "pages/course_study/index",
+	    ,{
+            "path" : "pages/more/index",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "课程学习",
-                "enablePullDownRefresh": true
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
             }
+            
         }
-		,{//练习
-		    "path" : "pages/course_practice/index",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "练习",
-		        "enablePullDownRefresh": false
-		    }
-		    
-		}
     ],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
 	"globalStyle": {
@@ -76,12 +75,12 @@
 		"navigationBarTitleText": "教宝校园",
 		"navigationBarTextStyle": "white",
 		"navigationBarBackgroundColor": "#00CFBD",
-		"backgroundColor": "#F8F8F8",//窗口的背景色 微信小程序、百度小程序、字节跳动小程序
-		"backgroundColorTop": "#F4F5F6",//顶部窗口的背景色（bounce回弹区域） 仅 iOS 平台
-		"backgroundColorBottom": "#F4F5F6",//底部窗口的背景色（bounce回弹区域） 仅 iOS 平台
-		"h5": {//设置编译到 H5 平台的特定样式  H5
-			"maxWidth": 1190,//单位px，当浏览器可见区域宽度大于maxWidth时，两侧留白，当小于等于maxWidth时，页面铺满；不同页面支持配置不同的maxWidth；maxWidth = leftWindow(可选)+page(页面主体)+rightWindow(可选)   
-			"navigationBarTextStyle": "white",//导航栏标题颜色及状态栏前景颜色，仅支持 black/white	
+		"backgroundColor": "#F8F8F8", //窗口的背景色 微信小程序、百度小程序、字节跳动小程序
+		"backgroundColorTop": "#F4F5F6", //顶部窗口的背景色（bounce回弹区域） 仅 iOS 平台
+		"backgroundColorBottom": "#F4F5F6", //底部窗口的背景色（bounce回弹区域） 仅 iOS 平台
+		"h5": { //设置编译到 H5 平台的特定样式  H5
+			"maxWidth": 1190, //单位px，当浏览器可见区域宽度大于maxWidth时，两侧留白，当小于等于maxWidth时，页面铺满；不同页面支持配置不同的maxWidth；maxWidth = leftWindow(可选)+page(页面主体)+rightWindow(可选)   
+			"navigationBarTextStyle": "white", //导航栏标题颜色及状态栏前景颜色，仅支持 black/white	
 			"navigationBarBackgroundColor": "#00CFBD"
 		}
 	},
@@ -90,34 +89,57 @@
 		"selectedColor": "#007AFF",
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
-		"list": [{
-				"pagePath": "pages/test/index",
-				"iconPath": "static/component.png",
-				"selectedIconPath": "static/componentHL.png",
-				"text": "消息"
+		"list": [
+			{
+				"pagePath": "pages/test/index"
 			},
 			{
-				"pagePath": "pages/course_study/index",
-				"iconPath": "static/api.png",
-				"selectedIconPath": "static/apiHL.png",
-				"text": "课程学习"
-			}, {
-				"pagePath": "pages/test/tab1",
-				"iconPath": "static/extui.png",
-				"selectedIconPath": "static/extuiHL.png",
-				"text": "考试"
-			}, {
-				"pagePath": "pages/course_practice/index",
-				"iconPath": "static/template.png",
-				"selectedIconPath": "static/templateHL.png",
-				"text": "练习"
+				"pagePath": "pages/course_practice/index"
 			},
 			{
-				"pagePath": "pages/test/tab3",
-				"iconPath": "static/template.png",
-				"selectedIconPath": "static/templateHL.png",
-				"text": "更多"
+				"pagePath": "pages/course_study/index"
+			},
+			{
+				"pagePath": "pages/more/index"
+			},
+			{
+				"pagePath": "pages/test/tab1"
+			},
+			{
+				"pagePath": "pages/test/tab3"
+			},
+			{
+				"pagePath": "pages/test/tab5"
 			}
+			// {
+			// 	"pagePath": "pages/test/index",
+			// 	"iconPath": "static/component.png",
+			// 	"selectedIconPath": "static/componentHL.png",
+			// 	"text": "消息"
+			// },
+			// {
+			// 	"pagePath": "pages/course_study/index",
+			// 	"iconPath": "static/api.png",
+			// 	"selectedIconPath": "static/apiHL.png",
+			// 	"text": "课程学习"
+			// },
+			// {
+			// 	"pagePath": "pages/test/tab1",
+			// 	"iconPath": "static/extui.png",
+			// 	"selectedIconPath": "static/extuiHL.png",
+			// 	"text": "考试"
+			// }, {
+			// 	"pagePath": "pages/course_practice/index",
+			// 	"iconPath": "static/template.png",
+			// 	"selectedIconPath": "static/templateHL.png",
+			// 	"text": "练习"
+			// },
+			// {
+			// 	"pagePath": "pages/test/tab3",
+			// 	"iconPath": "static/template.png",
+			// 	"selectedIconPath": "static/templateHL.png",
+			// 	"text": "更多"
+			// }
 		]
-	} 
+	}
 }

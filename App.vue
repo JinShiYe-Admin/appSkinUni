@@ -2,6 +2,9 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch，app启动')
+			// uni.navigateTo({
+			// 	url: 'pages/login/login'
+			// })
 		},
 		onShow: function() {
 			console.log('App Show，app展现在前台')

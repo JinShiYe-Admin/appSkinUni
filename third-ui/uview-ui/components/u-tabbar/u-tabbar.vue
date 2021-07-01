@@ -22,7 +22,7 @@
 						:custom-prefix="item.customIcon ? 'custom-icon' : 'uicon'"
 					></u-icon>
 					<u-badge :count="item.count" :is-dot="item.isDot"
-						v-if="item.count || item.isDot"
+						v-if="item.count"
 						:offset="[-2, getOffsetRight(item.count, item.isDot)]"
 					></u-badge>
 				</view>
@@ -73,17 +73,17 @@
 			// 非凸起图标的大小，单位任意，数值默认rpx
 			iconSize: {
 				type: [String, Number],
-				default: 40
+				default: '20px'
 			},
 			// 凸起的图标的大小，单位任意，数值默认rpx
 			midButtonSize: {
 				type: [String, Number],
-				default: 90
+				default: '45px'
 			},
 			// 激活时的演示，包括字体图标，提示文字等的演示
 			activeColor: {
 				type: String,
-				default: '#303133'
+				default: '#00CFBD'
 			},
 			// 未激活时的颜色
 			inactiveColor: {
@@ -289,14 +289,12 @@
 
 				&__text {
 					color: $u-content-color;
-					font-size: 26rpx;
+					font-size: 13px;
 					line-height: 28rpx;
 					position: absolute;
 					bottom: 14rpx;
 					left: 50%;
 					transform: translateX(-50%);
-					width: 100%;
-					text-align: center;
 				}
 			}
 
