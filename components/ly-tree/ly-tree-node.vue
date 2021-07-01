@@ -354,7 +354,7 @@
 	}
 	
 	.ly-tree-node__label {
-		font-size: 28rpx
+		font-size: 26rpx
 	}
 	
 	.ly-tree-node__loading-icon {

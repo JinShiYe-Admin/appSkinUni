@@ -66,6 +66,9 @@
 			   })
 			},
 			toDetail(item){
+				let tabData=this.tabBars[this.tabIndex]
+				console.log("tabData: " + JSON.stringify(tabData));
+				item.term_name=tabData.name
 				util.openwithData('./detail',item,{
 					callParent:data=>{
 						console.log("data: " + JSON.stringify(data));

@@ -3,18 +3,21 @@
 		<view style="flex: 1;">
 			<template v-if="videoData">
 				<video style="width: 100%;height: 200px;" :src="videoData.url" 
-				:initial-time="videoData.currTime"
-				@error="videoErrorCallback" 
-				@play="onPlay"  
-				@pause="onPause" 
-				@ended="onEnded" 
-				@timeupdate="onTimeupdate"  
-				:show-fullscreen-btn="false"
-				:show-play-btn="true"
-				:enable-progress-gesture="false"
-				:show-mute-btn="true"
-				:show-center-play-btn="true"
-				:controls="false"></video>
+					:initial-time="videoData.curr_time"
+					@error="videoErrorCallback" 
+					@play="onPlay"  
+					@timeupdate="onTimeupdate"
+					@pause="onPause" 
+					@waiting="onWaiting"
+					:show-fullscreen-btn="false"
+					:show-play-btn="true"
+					:enable-progress-gesture="false"
+					:show-mute-btn="true"
+					play-btn-position="center"
+					:show-center-play-btn="true"
+					:controls="true"> 
+					<!-- @ended="onEnded"  播放结束时，end和pause会同时触发，看上去end好像没有必要存在了-->
+				</video>
 			</template>
 			<template v-else>
 				<view style="width: 100%;height: 200px;display: flex;flex-direction: column;justify-content: center;background-color: #000000;">
@@ -27,13 +30,14 @@
 		<view class="uni-padding-wrap">
 			<view class="uni-box">
 				<uni-title class="h4" type="h4" :title="itemData.sub_name"></uni-title>
-				<uni-title class="h5" type="h5" :title="`课程总时长：${pageData.video_times?pageData.video_times:'0'}`"></uni-title>
-				<!-- <uni-title class="h5" type="h5" :title="`已学总时长：${pageData.learn_time?pageData.learn_time:'未开始学习'}`"></uni-title> -->
-				<uni-title class="h5" type="h5" :title="`本视频时长：${pageData.times?pageData.times:'请选择视频'}`"></uni-title>
+				<uni-title class="h5" type="h5" :title="`课程总时长：${pageData.video_timesStr?pageData.video_timesStr:'0'}`"></uni-title>
+				<uni-title v-if="!itemData.ex_score" class="h5" type="h5" :title="`已学总时长：${pageData.learn_timeStr?pageData.learn_timeStr:'未开始学习'}`"></uni-title>
 			</view>
-			<!-- <view>
-				<progress percent="67.89" border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5"/>
-			</view> -->
+			<view v-if="!itemData.ex_score">
+				<progress :percent="pageData.percent" border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5"/>
+			</view>
+			<uni-title class="h5" type="h5" :title="`本视频时长：${pageData.timesStr?pageData.timesStr:'请选择视频'}`"></uni-title>
+			<uni-title v-if="!itemData.ex_score" class="h5" type="h5" :title="`本视频已学时长：${pageData.video_learn_timeStr?pageData.video_learn_timeStr:'未开始学习'}`"></uni-title>
 		</view>
 		<view class="line-h"></view>
 		<view class="uni-padding-wrap">
@@ -56,15 +60,18 @@
 	export default {
 		data() {
 			return {
-				itemData:'',
+				
 				treeLoadReady:false,
 				props: {label: 'name',icon: 'img',},
 				
-				
-				pageData:'',
-				treeData:[],
-				videoData:'',
-				checkedKeys:[],
+				itemData:'',//列表项带过来的数据
+				pageData:'',//详情数据
+				treeData:[],//树形菜单
+				videoData:'',//点击树形菜单获取的视频信息
+				checkedKeys:[],//选中的树形菜单节点
+				times:'',//页面计时器对象
+				timesPlay:'',//页面计时器对象
+				resetAfterTime:'',//是否需要重置起始时间
 			}
 		},
 		methods: {
@@ -76,6 +83,7 @@
 						this.getVideoLearnInfo(obj.parentId,obj.data.id,obj.data)
 					}else{//如果不是视频，获取目录下的视频列表
 						this.getCatalogFile(obj.data.id,video_list=>{
+							console.log("video_list: " + JSON.stringify(video_list));
 							setTreeDataAndChecked(this,obj.data.id,'',video_list)
 							this.hideLoading()
 						})
@@ -124,7 +132,15 @@
 						timeStr+=(''+response.video_times/60/60).split(".")[0]+' 小时 '
 					}
 					timeStr+=(''+response.video_times/60).split(".")[0]+' 分钟 '+response.video_times%60+' 秒'
-					response.video_times=timeStr
+					
+					let ltimeStr=''
+					if(((''+response.learn_time/60/60).split(".")[0])>0){
+						ltimeStr+=(''+response.learn_time/60/60).split(".")[0]+' 小时 '
+					}
+					ltimeStr+=(''+response.learn_time/60).split(".")[0]+' 分钟 '+response.learn_time%60+' 秒'
+					response.video_timesStr=timeStr
+					response.learn_timeStr=ltimeStr
+					response.percent=(response.learn_time/response.video_times)*100
 					this.pageData=response
 				})
 			},
@@ -155,14 +171,24 @@
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/getVideoLearnInfo',comData,response=>{
 					console.log("responsea: " + JSON.stringify(response));
-					videoInfo.currTime=response.curr_time
-					this.videoData.currTime=videoInfo
-					let timeStr=''
+					videoInfo.curr_time=response.curr_time
+					this.videoData=videoInfo
+					let timeStr='' 
 					if(((''+response.times/60/60).split(".")[0])>0){
 						timeStr+=(''+response.times/60/60).split(".")[0]+' 小时 '
 					}
 					timeStr+=(''+response.times/60).split(".")[0]+' 分钟 '+response.times%60+' 秒'
-					this.pageData.times=timeStr
+					let video_learn_timeStr=''
+					if(((''+response.learn_time/60/60).split(".")[0])>0){
+						video_learn_timeStr+=(''+response.learn_time/60/60).split(".")[0]+' 小时 '
+					}
+					video_learn_timeStr+=(''+response.learn_time/60).split(".")[0]+' 分钟 '+response.learn_time%60+' 秒'
+					this.pageData.timesStr=timeStr
+					this.pageData.learnInfo=response
+					this.pageData.video_learn_timeStr=video_learn_timeStr
+					
+					this.videoData.after_time=response.curr_time
+					this.videoData.log_id=null
 					this.hideLoading()
 				})
 			},
@@ -173,24 +199,109 @@
 				})
 			},
 			onPlay(e){
-				  console.log("onPlay:" + JSON.stringify(e));
+				  this.setInterval();
 			},
 			onPause(e){
 				  console.log("onPause:" + JSON.stringify(e));
-			},
-			onEnded(e){
-				  console.log("onEnded:" + JSON.stringify(e));
+				   //暂停计时并更新时间
+				   this.clearInterval()
+				   this.updateCurrentTime();
+				   this.videoData.after_time=this.videoData.curr_time
 			},
 			onTimeupdate(e){
-				  console.log("onTimeupdate:" + JSON.stringify(e.detail));
-			}
+				this.videoData.curr_time=parseInt((""+(e.detail.currentTime+0.1)).split(".")[0])
+				if(this.resetAfterTime){
+					 this.resetAfterTime=false
+					 this.videoData.after_time=parseInt((""+(e.detail.currentTime+0.1)).split(".")[0])
+				}
+			},
+			onWaiting(e){
+				  console.log("onWaiting:" + JSON.stringify(e));
+				  this.setInterval();
+				  this.resetAfterTime=true
+			},
+			updateCurrentTime(){
+				let after_time=this.videoData.after_time
+				let curr_time=this.videoData.curr_time
+				let play_time=curr_time-after_time
+				console.log("播放时长实际上是这样的: ",after_time,curr_time,play_time);
+				if(play_time>0){//播放时间有效才请求
+					const comData={
+						per_code:this.pageData.learnInfo.per_code,
+						coll_code:this.pageData.learnInfo.coll_code,
+						major_code:this.pageData.learnInfo.major_code,
+						sys_grd_code:this.pageData.learnInfo.sys_grd_code,
+						term_code:this.itemData.term_code,
+						sub_code:this.itemData.sub_code,
+						stu_code:personal.user_code,
+						stu_catalog_file_id:this.pageData.learnInfo.id,
+						start_time:util.getDate('YYYY-MM-DD HH:mm:ss'),
+						current_time:curr_time,
+						play_time:play_time,
+						index_code:"CourseStudy:Index",
+					}
+					if(this.videoData.log_id){
+						comData.log_id=this.videoData.log_id
+					}
+					console.log(JSON.stringify(comData))
+					this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/updateCurrentTime',comData,response=>{
+						console.log("responsea: " + JSON.stringify(response));
+						if(response.log_id){
+							this.videoData.log_id=response.log_id
+						}
+					})
+				}
+			},
+			setInterval(){//更新视频进度计时器
+				if(this.times){
+					this.clearInterval()
+				}
+				this.times=setInterval(()=>{
+					this.updateCurrentTime();
+				},15000)
+			}, 
+			clearInterval(){
+				clearInterval(this.times)
+				this.times=null
+			},
 		},
 		onLoad: function(option) {
 			uni.setNavigationBarTitle({title: "详情"})
 			const itemData = util.getPageData(option);
+			console.log("itemData: " + JSON.stringify(itemData));
 			this.treeLoadReady=true
 			this.itemData=itemData
 			this.getDetailById(itemData)
+		},
+		onUnload:function(){
+			let after_time=this.videoData.after_time
+			let curr_time=this.videoData.curr_time
+			let play_time=curr_time-after_time
+			console.log("播放时长实际上是这样的: ",play_time);
+			const comData={
+				per_code:this.pageData.learnInfo.per_code,
+				coll_code:this.pageData.learnInfo.coll_code,
+				major_code:this.pageData.learnInfo.major_code,
+				sys_grd_code:this.pageData.learnInfo.sys_grd_code,
+				term_code:this.itemData.term_code,
+				sub_code:this.itemData.sub_code,
+				stu_code:personal.user_code,
+				stu_catalog_file_id:this.pageData.learnInfo.id,
+				start_time:util.getDate('YYYY-MM-DD HH:mm:ss'),
+				current_time:curr_time,
+				play_time:play_time,
+				index_code:"CourseStudy:Index",
+			}
+			if(this.videoData.log_id){
+				comData.log_id=this.videoData.log_id
+			}
+			this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/updateCurrentTime',comData,response=>{
+				console.log("responsea: " + JSON.stringify(response));
+				if(response.log_id){
+					this.videoData.log_id=response.log_id
+				}
+			})
+			this.clearInterval()
 		}
 	}
 	//获取多维数组第一个最下级目录的第一个节点对象
@@ -227,6 +338,7 @@
 			}
 		}
 	}
+	
 </script>
 
 <style>

@@ -532,7 +532,7 @@
 		cursor: default;
 		background: #FFF;
 		color: #606266;
-		padding: 30rpx;
+		padding: 10rpx 10rpx 10rpx 20rpx;
 	}
 	
 	.ly-tree.is-empty {
