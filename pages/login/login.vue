@@ -25,10 +25,10 @@
 	export default {
 		data() {
 			return {
+				loginInfo:{},
 				title: '教宝校园大学',
 				uname: '',
 				passw: '',
-				loginInfo: '用户名：xuesheng02  密码：111111a',
 				jsonData: [],
 				showArray: [],
 				pageArray: [{
@@ -110,7 +110,9 @@
 						webid: broswerId, //浏览器识别码,防不同浏览器登录同一应用互串,验证码校检用（web用浏览器类型加版本，app用操作系统+版本））
 						shaketype: '1', //
 					};
-					this.request.post(this.globaData.INTERFACE_SSO_SKIN + 'login/getEncryptKey', comData, response => {
+					console.log('response.comData:'+JSON.stringify(comData));
+					this.post(this.globaData.INTERFACE_SSO_SKIN + 'login/getEncryptKey', comData, (response0,response) => {
+						console.log('response:'+JSON.stringify(response));
 						if (response.code === '0000') {
 							let data = response.data
 							let ConsultPublicKey = {
@@ -131,27 +133,26 @@
 								unit_code: '-1', //单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 								verify_code: ''
 							};
-							this.request.post(this.globaData.INTERFACE_SSO_SKIN + 'login', comData,
+							this.post(this.globaData.INTERFACE_SSO_SKIN + 'login', comData,
 							response => {
-								util.setPersonal(response.data)
+								console.log('login:'+JSON.stringify(response));
+								this.loginInfo = response;
 								//1.4获取菜单
 								//不需要加密的数据
 								var comData4 = {
 									platform_code: this.globaData.PLATFORMCODE, //平台代码
 									app_code: this.globaData.APPCODE, //应用系统代码
-									unit_code: response.data.user.unit_code,
+									unit_code: response.user.unit_code,
 									index_code: 'index',
-									access_token: response.data.access_token //用户令牌
+									access_token: response.access_token //用户令牌
 								};
-								this.request.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',
-									comData4, data4 => {
+								this.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',
+									comData4, (data1,data4) => {
 										this.hideLoading()
 										console.log("data4: " + JSON.stringify(data4));
 										if (data4.code == 0) {
 											if (data4.data.list.length > 0) {
 												this.setPageMenu(data4.data.list[0].childList);
-												//跳转界面
-												// this.gotoPage()
 											} else {
 												uni.showToast({
 													icon: 'none',
@@ -180,7 +181,7 @@
 				}
 			},
 			gotoPage: function() {
-				let tempData = util.getPersonal();
+				let tempData = this.loginInfo;
 				//将personal 中的key更改为指定的值
 				tempData.user_name = tempData.user.user_name;
 				tempData.sex = tempData.user.sex;

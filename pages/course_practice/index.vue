@@ -1,7 +1,9 @@
 <template>
-	<view class="content">
-		课程练习
-		<u-tabbar :list="tabbar"></u-tabbar>
+	<view class="tabs">
+		<uni-easyinput suffixIcon="arrowdown" v-model="value" placeholder="请输入内容" @iconClick="iconClick"></uni-easyinput>
+		<uni-easyinput suffixIcon="arrowdown" v-model="value" placeholder="请输入内容" @iconClick="iconClick"></uni-easyinput>
+		<uni-easyinput suffixIcon="arrowdown" v-model="value" placeholder="请输入内容" @iconClick="iconClick"></uni-easyinput>
+		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
 
@@ -9,9 +11,12 @@
 	import util from '../../commom/util.js'
 	export default {
 		data() {
-			return {
+			return { 
+				value:'',
 				tabbar: []
 			}
+		},
+		methods: {
 		},
 		onLoad() {
 			this.tabbar = util.getMenu();
@@ -20,10 +25,21 @@
 </script>
 
 <style>
-	.content {
-		display: flex;
+	page {
+	    width: 100%;
+	    min-height: 100%;
+	    display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+		background-color: #EEF0F2;
+	}
+	.tabs {
+	    display: flex;
+	    flex-direction: row;
+	    overflow: hidden;
+	    background-color: #FFFFFF;
+		padding: 3px;
+	}
+	.flex-box{
+		 flex: 1;
 	}
 </style>

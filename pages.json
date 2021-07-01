@@ -10,46 +10,11 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-		}, {
-			"path": "pages/test/index",
-			"style": {
-				"navigationBarTitleText": "消息"
-			}
-		},
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		},
-		{
-			"path": "pages/test/detail",
-			"style": {
-				"navigationBarTitleText": "detail"
-			}
-		}, {
-			"path": "pages/test/tab1",
-			"style": {
-				"navigationBarTitleText": "考试",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "pages/test/tab3",
-			"style": {
-				"navigationBarTitleText": "更多",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "pages/test/tab5",
-			"style": {
-				"navigationBarTitleText": "看看！看看",
-				"enablePullDownRefresh": false
-			}
 		}, { //课程学习
 			"path": "pages/course_study/index",
 			"style": {
 				"navigationBarTitleText": "课程学习",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 		}, { //练习
 			"path": "pages/course_practice/index",
@@ -57,17 +22,20 @@
 				"navigationBarTitleText": "练习",
 				"enablePullDownRefresh": false
 			}
+		}, {
+			"path": "pages/more/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, { //课程学习 详情
+			"path": "pages/course_study/detail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
 		}
-	    ,{
-            "path" : "pages/more/index",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
 	"globalStyle": {
 		//"navigationStyle":"custom",//屏蔽原生导航栏，使用自定义导航栏NavBar https://uniapp.dcloud.io/collocation/pages?id=customnav   https://ask.dcloud.net.cn/article/34921
@@ -82,6 +50,9 @@
 			"maxWidth": 1190, //单位px，当浏览器可见区域宽度大于maxWidth时，两侧留白，当小于等于maxWidth时，页面铺满；不同页面支持配置不同的maxWidth；maxWidth = leftWindow(可选)+page(页面主体)+rightWindow(可选)   
 			"navigationBarTextStyle": "white", //导航栏标题颜色及状态栏前景颜色，仅支持 black/white	
 			"navigationBarBackgroundColor": "#00CFBD"
+		},
+		"usingComponents": {
+			"ly-tree-node": "/components/ly-tree/ly-tree-node"
 		}
 	},
 	"tabBar": {
@@ -91,9 +62,6 @@
 		"backgroundColor": "#F8F8F8",
 		"list": [
 			{
-				"pagePath": "pages/test/index"
-			},
-			{
 				"pagePath": "pages/course_practice/index"
 			},
 			{
@@ -101,45 +69,7 @@
 			},
 			{
 				"pagePath": "pages/more/index"
-			},
-			{
-				"pagePath": "pages/test/tab1"
-			},
-			{
-				"pagePath": "pages/test/tab3"
-			},
-			{
-				"pagePath": "pages/test/tab5"
 			}
-			// {
-			// 	"pagePath": "pages/test/index",
-			// 	"iconPath": "static/component.png",
-			// 	"selectedIconPath": "static/componentHL.png",
-			// 	"text": "消息"
-			// },
-			// {
-			// 	"pagePath": "pages/course_study/index",
-			// 	"iconPath": "static/api.png",
-			// 	"selectedIconPath": "static/apiHL.png",
-			// 	"text": "课程学习"
-			// },
-			// {
-			// 	"pagePath": "pages/test/tab1",
-			// 	"iconPath": "static/extui.png",
-			// 	"selectedIconPath": "static/extuiHL.png",
-			// 	"text": "考试"
-			// }, {
-			// 	"pagePath": "pages/course_practice/index",
-			// 	"iconPath": "static/template.png",
-			// 	"selectedIconPath": "static/templateHL.png",
-			// 	"text": "练习"
-			// },
-			// {
-			// 	"pagePath": "pages/test/tab3",
-			// 	"iconPath": "static/template.png",
-			// 	"selectedIconPath": "static/templateHL.png",
-			// 	"text": "更多"
-			// }
 		]
 	}
 }
