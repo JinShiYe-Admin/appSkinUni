@@ -121,12 +121,16 @@
 							// })
 							//如果已学视频和目录id正确的话，使用以上代码，可以将树形菜单正确显示，
 						// }else{//获取第一个最下级目录下的文件
-							const lastObj=getArrayLayer(response.book_catalog_list,'children')
-							this.getCatalogFile(lastObj.id,video_list=>{
-								let videoInfo=video_list[0]
-								setTreeDataAndChecked(this,lastObj.id,videoInfo.id,video_list)
-								this.getVideoLearnInfo(lastObj.id,videoInfo.id,videoInfo)
-							})
+							if(response.book_catalog_list.length>0){
+								const lastObj=getArrayLayer(response.book_catalog_list,'children')
+								this.getCatalogFile(lastObj.id,video_list=>{
+									let videoInfo=video_list[0]
+									setTreeDataAndChecked(this,lastObj.id,videoInfo.id,video_list)
+									this.getVideoLearnInfo(lastObj.id,videoInfo.id,videoInfo)
+								})
+							}else{
+								this.hideLoading()
+							}
 						// }
 					}
 					let timeStr=''
@@ -142,7 +146,11 @@
 					ltimeStr+=(''+response.learn_time/60).split(".")[0]+' 分钟 '+response.learn_time%60+' 秒'
 					response.video_timesStr=timeStr
 					response.learn_timeStr=ltimeStr
-					response.percent=(response.learn_time/response.video_times)*100
+					console.log("responseresponseresponseresponse" + JSON.stringify(response));
+					response.percent=0
+					if(response.video_times>0){
+						response.percent=(response.learn_time/response.video_times)*100
+					}
 					this.pageData=response
 				})
 			},
@@ -280,29 +288,31 @@
 			let curr_time=this.videoData.curr_time
 			let play_time=curr_time-after_time
 			console.log("播放时长实际上是这样的: ",play_time);
-			const comData={
-				per_code:this.pageData.learnInfo.per_code,
-				coll_code:this.pageData.learnInfo.coll_code,
-				major_code:this.pageData.learnInfo.major_code,
-				sys_grd_code:this.pageData.learnInfo.sys_grd_code,
-				term_code:this.itemData.term_code,
-				sub_code:this.itemData.sub_code,
-				stu_code:personal.user_code,
-				stu_catalog_file_id:this.pageData.learnInfo.id,
-				start_time:util.getDate('YYYY-MM-DD HH:mm:ss'),
-				current_time:curr_time,
-				play_time:play_time,
-				index_code:"CourseStudy:Index",
-			}
-			if(this.videoData.log_id){
-				comData.log_id=this.videoData.log_id
-			}
-			this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/updateCurrentTime',comData,response=>{
-				console.log("responsea: " + JSON.stringify(response));
-				if(response.log_id){
-					this.videoData.log_id=response.log_id
+			if(play_time>0){//播放时间有效才请求
+				const comData={
+					per_code:this.pageData.learnInfo.per_code,
+					coll_code:this.pageData.learnInfo.coll_code,
+					major_code:this.pageData.learnInfo.major_code,
+					sys_grd_code:this.pageData.learnInfo.sys_grd_code,
+					term_code:this.itemData.term_code,
+					sub_code:this.itemData.sub_code,
+					stu_code:personal.user_code,
+					stu_catalog_file_id:this.pageData.learnInfo.id,
+					start_time:util.getDate('YYYY-MM-DD HH:mm:ss'),
+					current_time:curr_time,
+					play_time:play_time,
+					index_code:"CourseStudy:Index",
 				}
-			})
+				if(this.videoData.log_id){
+					comData.log_id=this.videoData.log_id
+				}
+				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/updateCurrentTime',comData,response=>{
+					console.log("responsea: " + JSON.stringify(response));
+					if(response.log_id){
+						this.videoData.log_id=response.log_id
+					}
+				})
+			}
 			this.clearInterval()
 		}
 	}

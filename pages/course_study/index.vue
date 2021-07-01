@@ -12,7 +12,7 @@
 					<text class="text">{{ item.sub_name }}</text>
 		       </uni-card>
 		    </uni-col>
-		</uni-row>
+		</uni-row> 
 		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
