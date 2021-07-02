@@ -95,6 +95,17 @@ function getMenuMore(){
 	const _value=uni.getStorageSync(Vue.prototype.meunListMore)
 	if(_value){return JSON.parse(_value)}else{return {}}
 }
+
+//设置切换tabbar时菜单信息
+function setTabbarMenu(data){
+	uni.setStorageSync(Vue.prototype.tabbarMenu,JSON.stringify(data))
+}
+//获取切换tabbar时菜单信息
+function getTabbarMenu(){
+	const _value=uni.getStorageSync(Vue.prototype.tabbarMenu)
+	if(_value){return JSON.parse(_value)}else{return {}}
+}
+
 //清除登录用户的菜单信息
 function removeMenu(){
 	uni.removeStorageSync(Vue.prototype.meunList);
@@ -177,5 +188,8 @@ module.exports = {
 	getDeviceId:getDeviceId,
 	getBroswerId:getBroswerId,
 	openwithData:openwithData,
-	getPageData:getPageData
+	getPageData:getPageData,
+	setTabbarMenu:setTabbarMenu,
+	getMenu:getMenu,
+	getTabbarMenu:getTabbarMenu
 }

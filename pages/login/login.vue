@@ -270,6 +270,8 @@
 						url: 'schappUni_CoursePractice',
 						childList: []
 					});
+				}else{
+					util.setMenuMore([]);
 				}
 				this.showArray = [].concat(tempA);
 				util.setMenu(this.showArray);

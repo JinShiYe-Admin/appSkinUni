@@ -89,6 +89,7 @@ Vue.prototype.hideLoading=()=>{setTimeout(()=>{if(Vue.prototype.requestTask.size
 Vue.prototype.personal="PERSONAL"//登录用户信息存入storage时key的名称
 Vue.prototype.meunList="MENULIST"//登录用户菜单信息存入storage时key的名称
 Vue.prototype.meunListMore="MENULISTMORE"//登录用户菜单信息存入storage时key的名称
+Vue.prototype.tabbarMenu="TABBARMENU"//点击tabbar时，传菜单内容
 Vue.prototype.post=post //引入全局请求
 Vue.prototype.get=get //引入全局请求
 

@@ -5,7 +5,8 @@
 			<view class="u-navbar-inner" :style="[navbarInnerStyle]">
 				<view class="u-back-wrap" v-if="isBack" @tap="goBack">
 					<view class="u-icon-wrap">
-						<u-icon :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
+						<u-icon v-if='backFlag==0' :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
+						<image v-if='backFlag!=0' :src="backImg" style="width: 30px;height: 30px;border-radius: 50%;"></image>
 					</view>
 					<view class="u-icon-wrap u-back-text u-line-1" v-if="backText" :style="[backTextStyle]">{{ backText }}</view>
 				</view>
@@ -75,12 +76,20 @@
 			// 返回箭头的颜色
 			backIconColor: {
 				type: String,
-				default: '#606266'
+				default: 'white'
+			},
+			backFlag:{
+				type: [String, Number],
+				default: 0
 			},
 			// 左边返回的图标
 			backIconName: {
 				type: String,
 				default: 'nav-back'
+			},
+			backImg: {
+				type: String,
+				default: ''
 			},
 			// 左边返回图标的大小，rpx
 			backIconSize: {
@@ -97,7 +106,7 @@
 				type: Object,
 				default () {
 					return {
-						color: '#606266'
+						color: 'white'
 					}
 				}
 			},
@@ -114,7 +123,7 @@
 			// 标题的颜色
 			titleColor: {
 				type: String,
-				default: '#606266'
+				default: 'white'
 			},
 			// 标题字体是否加粗
 			titleBold: {
@@ -135,7 +144,7 @@
 				type: Object,
 				default () {
 					return {
-						background: '#ffffff'
+						background: '#00CFBD'
 					}
 				}
 			},
