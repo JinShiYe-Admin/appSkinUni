@@ -85,9 +85,20 @@ function getMenu(){
 	const _value=uni.getStorageSync(Vue.prototype.meunList)
 	if(_value){return JSON.parse(_value)}else{return {}}
 }
+
+//设置登录用户的菜单信息
+function setMenuMore(data){
+	uni.setStorageSync(Vue.prototype.meunListMore,JSON.stringify(data))
+}
+//获取登录用户的菜单信息
+function getMenuMore(){
+	const _value=uni.getStorageSync(Vue.prototype.meunListMore)
+	if(_value){return JSON.parse(_value)}else{return {}}
+}
 //清除登录用户的菜单信息
 function removeMenu(){
 	uni.removeStorageSync(Vue.prototype.meunList);
+	uni.removeStorageSync(Vue.prototype.meunListMore);
 }
 
 //清除本地所有storage缓存
@@ -159,6 +170,8 @@ module.exports = {
 	removePersonal:removePersonal,
 	setMenu:setMenu,
 	getMenu:getMenu,
+	setMenuMore:setMenuMore,
+	getMenuMore:getMenuMore,
 	removeMenu:removeMenu,
 	clearStorage:clearStorage,
 	getDeviceId:getDeviceId,
