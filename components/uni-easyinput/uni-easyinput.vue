@@ -1,7 +1,7 @@
 <template>
-	<view class="uni-easyinput" :class="{'uni-easyinput-error':msg}" :style="{color:inputBorder && msg?'#dd524d':styles.color}">
+	<view class="uni-easyinput" :class="{'uni-easyinput-error':msg}" :style="{color:inputBorder && msg?'#dd524d':styles.color,'margin':styles.margin}">
 		<view class="uni-easyinput__content" :class="{'is-input-border':inputBorder ,'is-input-error-border':inputBorder && msg,'is-textarea':type==='textarea','is-disabled':disabled}"
-		 :style="{'border-color':inputBorder && msg?'#dd524d':styles.borderColor,'background-color':disabled?styles.disableColor:''}">
+		 :style="{'border-color':inputBorder && msg?'#dd524d':styles.borderColor,'background-color':disabled?styles.disableColor:'','border-radius':styles.borderRadius}" @click="putClick">
 			<uni-icons v-if="prefixIcon" class="content-clear-icon" :type="prefixIcon" color="#c0c4cc" @click="onClickIcon('prefix')"></uni-icons>
 			<textarea v-if="type === 'textarea'" class="uni-easyinput__content-textarea" :class="{'input-padding':inputBorder}"
 			 :name="name" :value="val" :placeholder="placeholder" :placeholderStyle="placeholderStyle" :disabled="disabled"
@@ -210,6 +210,9 @@
 			},
 			onClickIcon(type) {
 				this.$emit('iconClick', type)
+			},
+			putClick(type) {
+				this.$emit('onInputClick', type)
 			},
 			/**
 			 * 获取父元素实例
@@ -422,6 +425,6 @@
 	}
 
 	.is-disabled {
-		background-color: #eee;
+		background-color: #FFFFFF;
 	}
 </style>

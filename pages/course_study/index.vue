@@ -8,11 +8,11 @@
 		<view class="line-h"></view>
 		<uni-row class="demo-uni-row">
 		    <uni-col :xs="12" :sm="12" :md="6" :lg="4" :xl="4" v-for="item in dataList">
-		       <uni-card mode="style" :is-shadow="true" :thumbnail="item.book_img_url" @click="toDetail(item)" class="u-card">
+		       <uni-card-study mode="style" :is-shadow="true" :thumbnail="item.book_img_url" @click="toDetail(item)" class="u-card">
 					<text class="text">{{ item.sub_name }}</text>
-		       </uni-card>
-		    </uni-col>
-		</uni-row>
+		       </uni-card-study>
+		    </uni-col> 
+		</uni-row> 
 		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
@@ -20,7 +20,6 @@
 <script>
 	import util from '../../commom/util.js'
 	const personal=util.getPersonal();
-	const menuList=util.getMenu();
 	export default {
 		data() {
 			return {
