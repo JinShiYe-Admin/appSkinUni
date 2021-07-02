@@ -10,14 +10,35 @@
 			<picker class="flex-box" @change="statusClick" :value="statusIndex" :range="statusArray" range-key="name">
 				<uni-easyinput suffixIcon="arrowdown" :styles="styles" disabled :value="statusArray[statusIndex].name" ></uni-easyinput>
 			</picker>
-			<!-- <u-tabbar :list="tabbar" ></u-tabbar> -->
 		</view>
 		<view class="content-body">
-		<template v-for="item in pageData.list">
-			<view>{{item}}</view>
-		</template> 
+			<template v-for="item in pageData">
+				<uni-card  isShadow><!--  @click="clickCard" -->
+					<uni-tag v-if="item.stu_test_status==2" text="已做" size="small" type="warning" class="tag-right"/>
+					<uni-tag v-else-if="item.stu_test_status==1" text="未做" size="small" type="error" class="tag-right"/>
+					<uni-tag v-else-if="item.stu_test_status==3" text="已评" size="small" type="primary" class="tag-right"/>
+					<uni-title class="h4" type="h4" :title="item.test_name"></uni-title>
+					<uni-row style="margin-top: 5px;">
+						<uni-col :span="10" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><text style="font-size: 22rpx;">学期: {{item.grd_name}}{{item.term_name}}</text></uni-col>
+						<uni-col :span="10"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><text style="font-size: 22rpx;">课程: {{item.sub_name}}</text></uni-col>
+						<uni-col :span="4"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;text-align: right;"><text style="font-size: 22rpx;">满分: {{parseInt(item.score)}}</text></uni-col>
+					</uni-row>
+					<uni-row>
+						<uni-col :span="24">
+							<text style="font-size: 22rpx;margin-top: 8px;">时间: {{item.start_time.split(' ')[0]}} ~ {{item.end_time.split(' ')[0]}}</text>
+						</uni-col>
+					</uni-row>
+					<uni-row style="margin-top: 10px;">
+						<uni-col :span="24" style="text-align: right;">
+							 <button v-if="item.stu_test_status!=1" class="mini-btn" type="default" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;"  @click="clickLook(item)">查看</button>
+							 <button v-if="item.stu_test_status!=3" class="mini-btn" type="primary" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;"  @click="clickTest(item)">答题</button>
+						</uni-col>
+					</uni-row>
+				</uni-card>
+			</template> 
 		</view>
 		<uni-load-more :status="status" :icon-size="17" :content-text="contentText" />
+		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
 
@@ -28,7 +49,7 @@
 		data() {
 			return {
 				queryData:{},//查询栏得到的数据
-				pageData:{list:[1,2,3,4,5,6,7]},//页面列表数据
+				pageData:[],//页面列表数据
 				
 				page_number:1,//页码
 				
@@ -42,11 +63,11 @@
 
 				status:'more',//加载更多的状态
 				contentText: {
-					contentdown: '上拉加载更多',
+					contentdown: '',//上滑加载更多
 					contentrefresh: '加载中',
-					contentnomore: '没有更多'
+					contentnomore: ''//没有更多
 				},
-				loadingShow:true,//是否加载更多
+				canload:true,//是否加载更多
 				
 				tabbar: [],
 				styles: {borderColor:'rgba(204,198,204,0.4)',borderRadius: '10px',margin: '0 1px 0'}
@@ -59,19 +80,22 @@
 					let term=this.queryData.list[(e.detail.value-1)]
 					this.subArray=[{sub_name:'全部',sub_code:''}].concat(term.sub_list)
 				}
-				this.loadingShow=true
+				this.showLoading()
+				this.canload=true
 				this.page_number=1
 				this.getPageList()
 			},
 			courseClick:function(e){
 				this.subIndex=e.detail.value
-				this.loadingShow=true
+				this.showLoading()
+				this.canload=true
 				this.page_number=1
 				this.getPageList()
 			},
 			statusClick:function(e){
 				this.statusIndex=e.detail.value
-				this.loadingShow=true
+				this.showLoading()
+				this.canload=true
 				this.page_number=1
 				this.getPageList()
 			},
@@ -112,15 +136,21 @@
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/page',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
-					this.pageData=response.list
+					this.pageData=this.pageData.concat(response.list)
 					if(this.page_number>=response.total_page){
 						this.status = 'noMore';
-						this.loadingShow=false
+						this.canload=false
 					}else{
 						this.status = 'more';
 					}
 					this.hideLoading()
 				})
+			},
+			clickLook(item){
+				util.openwithData('./detail-show',item)
+			},
+			clickTest(item){
+				util.openwithData('./detail-practice',item)
 			}
 		},
 		onLoad() {
@@ -130,7 +160,7 @@
 			this.getPageList()
 		},
 		onReachBottom() {
-			if(this.loadingShow){
+			if(this.canload){
 				this.status = 'loading';
 				this.page_number=this.page_number+1
 				this.getPageList()
@@ -154,11 +184,20 @@
 	    overflow: hidden;
 	    background-color: #FFFFFF;
 		padding: 3px;
+		z-index: 10;
 	}
 	.flex-box{
 		 flex: 1;
 	}
 	.content-body{
 		margin-top:50px
+	}
+	
+	.tag-right{
+		position: absolute;
+		right: 10px;
+		margin-top: 6px;
+		font-size: 12px;
+		height: 22px;
 	}
 </style>
