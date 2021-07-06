@@ -5,8 +5,8 @@
 			<view class="u-navbar-inner" :style="[navbarInnerStyle]">
 				<view class="u-back-wrap" v-if="isBack" @tap="goBack">
 					<view class="u-icon-wrap">
-						<u-icon v-if='backFlag==0' :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
-						<image v-if='backFlag!=0' :src="backImg" style="width: 30px;height: 30px;border-radius: 50%;"></image>
+						<image v-if='backFlag==0' :src="backImg" style="width: 30px;height: 30px;border-radius: 50%;"></image>
+						<u-icon v-if='backFlag<0' :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
 					</view>
 					<view class="u-icon-wrap u-back-text u-line-1" v-if="backText" :style="[backTextStyle]">{{ backText }}</view>
 				</view>
@@ -80,7 +80,7 @@
 			},
 			backFlag:{
 				type: [String, Number],
-				default: 0
+				default: 1
 			},
 			// 左边返回的图标
 			backIconName: {

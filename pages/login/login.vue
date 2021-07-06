@@ -1,31 +1,43 @@
 <template>
-	<view class="content">
+	<view>
+		<uniNavBar title='登录' backgroundColor='#00CFBD' fixed='true' statusBar='true' color='white' @clickLeft='clickLeft()'></uniNavBar>
 		<view class="titletal">
 			<text class="title">{{title}}</text>
 		</view>
-		<view class="inputView">
-			<image class="nameImage" src="../../static/login/name.png"></image>
-			<label class="loginLab">账号</label>
-			<input class="inputText" type="text" placeholder="请输入账号" value="user" v-model="uname" />
+		<!-- <view class="uni-list"> -->
+		<view class="uni-list-cell" style="height: 60px;">
+			<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
+				<image class="nameImage" src="../../static/login/name.png"></image>
+				<label class="loginLab">账号</label>
+			</view>
+			<view class="uni-list-cell-db">
+				<!-- <input v-model="upassword" password type="text" placeholder="请输入密码" /> -->
+				<input class="inputText" type="text" placeholder="请输入账号" value="user" v-model="uname" />
+			</view>
 		</view>
-		<view class="line"></view>
-		<view class="inputView">
-			<image class="keyImage" src="../../static/login/key.png"></image>
-			<label class="loginLab">密码</label>
-			<input class="inputText" password="true" type="text" placeholder="请输入密码" value="pass" v-model="passw" />
+		<view class="uni-list-cell">
+			<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
+				<image class="keyImage" src="../../static/login/key.png"></image>
+				<label class="loginLab">密码</label>
+			</view>
+			<view class="uni-list-cell-db">
+				<!-- <input v-model="confirmpassword" password style="" type="text" placeholder="请确认密码" /> -->
+				<input class="inputText" password="true" type="text" placeholder="请输入密码" value="pass" v-model="passw" />
+			</view>
 		</view>
-		<view class="line"></view>
 		<view class="loginBtnView"><button class="loginBtn" @tap="login">登录</button></view>
+		<view @click="zhuce" style="margin-top: 30px;float: left;margin-left: 40px;color: #00CFBD;">账号注册/找回密码</view>
 	</view>
 </template>
 
 <script>
 	import util from '../../commom/util.js'
 	import RSAKey from '../../commom/encrypt/rsa.js'
+	import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
 	export default {
 		data() {
 			return {
-				loginInfo:{},
+				loginInfo: {},
 				title: '教宝校园大学',
 				uname: '',
 				passw: '',
@@ -68,7 +80,16 @@
 				}, ],
 			}
 		},
+		components: {
+			uniNavBar
+		},
 		methods: {
+			clickLeft:function(){
+				console.log('clickLeft');
+			},
+			zhuce: function() {
+				util.openwithData('/pages/register/index');
+			},
 			toPage: function() {
 				if (this.jsonData.length === 0) {
 					uni.showToast({
@@ -110,9 +131,10 @@
 						webid: broswerId, //浏览器识别码,防不同浏览器登录同一应用互串,验证码校检用（web用浏览器类型加版本，app用操作系统+版本））
 						shaketype: '1', //
 					};
-					console.log('response.comData:'+JSON.stringify(comData));
-					this.post(this.globaData.INTERFACE_SSO_SKIN + 'login/getEncryptKey', comData, (response0,response) => {
-						console.log('response:'+JSON.stringify(response));
+					console.log('response.comData:' + JSON.stringify(comData));
+					this.post(this.globaData.INTERFACE_SSO_SKIN + 'login/getEncryptKey', comData, (response0,
+						response) => {
+						console.log('response:' + JSON.stringify(response));
 						if (response.code === '0000') {
 							let data = response.data
 							let ConsultPublicKey = {
@@ -134,42 +156,42 @@
 								verify_code: ''
 							};
 							this.post(this.globaData.INTERFACE_SSO_SKIN + 'login', comData,
-							response => {
-								console.log('login:'+JSON.stringify(response));
-								this.loginInfo = response;
-								//1.4获取菜单
-								//不需要加密的数据
-								var comData4 = {
-									platform_code: this.globaData.PLATFORMCODE, //平台代码
-									app_code: this.globaData.APPCODE, //应用系统代码
-									unit_code: response.user.unit_code,
-									index_code: 'index',
-									access_token: response.access_token //用户令牌
-								};
-								this.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',
-									comData4, (data1,data4) => {
-										this.hideLoading()
-										console.log("data4: " + JSON.stringify(data4));
-										if (data4.code == 0) {
-											if (data4.data.list.length > 0) {
-												this.setPageMenu(data4.data.list[0].childList);
+								response => {
+									console.log('login:' + JSON.stringify(response));
+									this.loginInfo = response;
+									//1.4获取菜单
+									//不需要加密的数据
+									var comData4 = {
+										platform_code: this.globaData.PLATFORMCODE, //平台代码
+										app_code: this.globaData.APPCODE, //应用系统代码
+										unit_code: response.user.unit_code,
+										index_code: 'index',
+										access_token: response.access_token //用户令牌
+									};
+									this.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',
+										comData4, (data1, data4) => {
+											this.hideLoading();
+											console.log("data4: " + JSON.stringify(data4));
+											if (data4.code == 0) {
+												if (data4.data.list.length > 0) {
+													this.setPageMenu(data4.data.list[0].childList);
+												} else {
+													uni.showToast({
+														icon: 'none',
+														title: '应用系统无权限，请联系管理员',
+														duration: 1500
+													})
+												}
 											} else {
 												uni.showToast({
 													icon: 'none',
-													title: '应用系统无权限，请联系管理员',
+													title: data4.msg,
 													duration: 1500
 												})
 											}
-										} else {
-											uni.showToast({
-												icon: 'none',
-												title: data4.msg,
-												duration: 1500
-											})
-										}
-									})
+										})
 
-							}, '正在登录...')
+								}, '正在登录...')
 						} else {
 							uni.showToast({
 								icon: 'none',
@@ -196,6 +218,8 @@
 				tempData.id = tempData.user.id;
 				tempData.type_code = tempData.user.type_code;
 				tempData.app_code = tempData.user.app_code;
+				tempData.userName0 = this.uname;
+				tempData.passWord0 = this.passw;
 				delete tempData['user'];
 				console.log('new tempData:' + JSON.stringify(tempData));
 				util.setPersonal(tempData)
@@ -212,11 +236,11 @@
 						console.log("跳转页面吧");
 						this.jsonData = tempData;
 						var tempArray = util.getMenu();
-						if (tempArray.length>0) {
+						if (tempArray.length > 0) {
 							uni.switchTab({
 								url: tempArray[0].pagePath
 							});
-						} else{
+						} else {
 							uni.showToast({
 								icon: 'none',
 								title: '当前系统没有可用菜单',
@@ -228,6 +252,15 @@
 			},
 			setPageMenu: function(tempMenu) {
 				var tempA = [];
+				// tempA.push({
+				// 	text: "更多",
+				// 	pagePath: "/pages/more/index",
+				// 	iconPath: '../../static/tabbar/more.png',
+				// 	selectedIconPath: '../../static/tabbar/more_select.png',
+				// 	img_href: "../../img/schapp_work/kaoqin_tab.png",
+				// 	url: 'schappUni_CoursePractice',
+				// 	childList: []
+				// });
 				for (var i = 0; i < tempMenu.length; i++) { //一级菜单循环
 					var web_first_item = tempMenu[i];
 					for (var a = 0; a < this.pageArray.length; a++) {
@@ -255,6 +288,10 @@
 						}
 					}
 				}
+				for (var i = 0; i < tempA.length; i++) {
+					let tempM = tempA[i];
+					tempM.index = i;
+				}
 				console.log('tempA:' + JSON.stringify(tempA));
 				if (tempA.length > 5) {
 					var tempArrayM = tempA.slice(4);
@@ -263,22 +300,33 @@
 					tempA = tempA.slice(0, 4);
 					tempA.push({
 						text: "更多",
+						index: 4,
 						pagePath: "/pages/more/index",
-						iconPath: '../../static/logo.png',
-						selectedIconPath: '../../static/logo.png',
+						iconPath: '../../static/tabbar/more.png',
+						selectedIconPath: '../../static/tabbar/more_select.png',
 						img_href: "../../img/schapp_work/kaoqin_tab.png",
 						url: 'schappUni_CoursePractice',
 						childList: []
 					});
-				}else{
+				} else {
 					util.setMenuMore([]);
 				}
 				this.showArray = [].concat(tempA);
 				util.setMenu(this.showArray);
+				if (this.showArray.length > 0) {
+					util.setTabbarMenu(this.showArray[0]);
+				}
 				this.gotoPage();
 			}
 		},
-		onLoad: function() {}
+		onLoad: function() {
+			var tempInfo = util.getPersonal();
+			if (tempInfo.userName0) {
+				this.uname = tempInfo.userName0;
+				this.passw = tempInfo.passWord0;
+				this.login();
+			}
+		}
 	}
 </script>
 
@@ -291,7 +339,7 @@
 	} */
 
 	.mui-checkbox input[type='checkbox']:checked:before {
-		color: #00bbb1;
+		color: #00CFBD;
 	}
 
 	.RememberPass {
@@ -330,11 +378,12 @@
 	.titletal {
 		margin-top: 90upx;
 		height: 75px;
+		text-align: center;
 	}
 
 	.title {
 		/* font-size: 36upx; */
-		color: mediumaquamarine;
+		color: #00CFBD;
 		font-size: 150%;
 	}
 
@@ -360,21 +409,21 @@
 	/*输入框*/
 	.nameImage,
 	.keyImage {
-		margin-top: 15px;
+		margin-top: 25px;
 		margin-left: 0px;
 		width: 22px;
 		height: 22px;
 	}
 
 	.loginLab {
-		margin: 15px 15px 15px 10px;
+		margin: 0px 15px 15px 10px;
 		color: #545454;
 		font-size: 18px;
 	}
 
 	.inputText {
-		flex: block;
-		float: right;
+		/* flex: block;
+		float: right; */
 		text-align: left;
 		margin-right: 22px;
 		margin-top: 15px;
@@ -404,7 +453,7 @@
 	.loginBtn {
 		width: 80%;
 		margin-top: 50px;
-		background-color: mediumaquamarine;
+		background-color: #00CFBD;
 		color: aliceblue;
 	}
 </style>
