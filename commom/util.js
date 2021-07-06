@@ -2,36 +2,7 @@
  * APP 工具类
  */
 import Vue from 'vue'
-import moment from 'moment'
 
-
-/**
- * 根据指定key 给数组去重
- * @param {Object} arr 数组
- * @param {Object} key 数组中对象含有的key
- */
-function unique(arr,key){
-	let n = [arr[0]];
-	for(let i = 1; i < arr.length; i++) {
-		if(key === undefined) {
-			if(n.indexOf(arr[i]) == -1) n.push(arr[i]);
-		} else {
-			inner: {
-				var has = false;
-				for(let j = 0; j < n.length; j++) {
-					if(arr[i][key] == n[j][key]) {
-						has = true;
-						break inner;
-					}
-				}
-			}
-			if(!has) {
-				n.push(arr[i]);
-			}
-		}
-	}
-	return n;
-}
 
 /**
  * 获取有层级关系的部门数组  
@@ -218,23 +189,21 @@ function getPermissionByPosition(op_codes,index_code,callback){
 //获取设备
 module.exports = {
 	getDptTree: getDptTree,
-	unique: unique,
 	setPersonal:setPersonal,
 	getPersonal:getPersonal,
 	removePersonal:removePersonal,
 	setMenu:setMenu,
 	getMenu:getMenu,
+	removeMenu:removeMenu,
 	setMenuMore:setMenuMore,
 	getMenuMore:getMenuMore,
-	removeMenu:removeMenu,
+	setTabbarMenu:setTabbarMenu,
+	getTabbarMenu:getTabbarMenu,
 	clearStorage:clearStorage,
 	getDeviceId:getDeviceId,
 	getBroswerId:getBroswerId,
 	openwithData:openwithData,
 	getPageData:getPageData,
-	setTabbarMenu:setTabbarMenu,
-	getMenu:getMenu,
-	getTabbarMenu:getTabbarMenu,
 	showToast:showToast,
 	getPermissionByPosition:getPermissionByPosition
 	
