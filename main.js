@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import {post,get} from 'commom/request/request.js'
 import uView from './third-ui/uview-ui'
+import util from './commom/util.js'
 Vue.use(uView);
 //配置项开始
 const COMMON = {};//参数对象 用于存全局公共参数
@@ -92,7 +93,7 @@ Vue.prototype.meunListMore="MENULISTMORE"//登录用户菜单信息存入storage
 Vue.prototype.tabbarMenu="TABBARMENU"//点击tabbar时，传菜单内容
 Vue.prototype.post=post //引入全局请求
 Vue.prototype.get=get //引入全局请求
-
+Vue.prototype.showToast=util.showToast
 Vue.config.productionTip = false //不知道啥用
 App.mpType = 'app'
 const app = new Vue({

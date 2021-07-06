@@ -150,7 +150,15 @@
 				util.openwithData('./detail-show',item)
 			},
 			clickTest(item){
-				util.openwithData('./detail-practice',item)
+				let that=this
+				util.openwithData('./detail-practice',item,{
+					refresh(data){
+						that.showLoading()
+						that.canload=true
+						that.page_number=1
+						that.getPageList()
+					}
+				})
 			}
 		},
 		onLoad() {

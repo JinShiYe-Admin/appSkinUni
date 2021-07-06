@@ -13,7 +13,8 @@
 		}, { //课程学习
 			"path": "pages/course_study/index",
 			"style": {
-				"navigationBarTitleText": "课程学习",
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationBarTextStyle": "white",
 				"enablePullDownRefresh": false
 			}
 		}, { //练习

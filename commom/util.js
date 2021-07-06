@@ -171,6 +171,28 @@ function getPageData(option){
 	
 }
 
+/**
+ * Toast弹窗
+ * @param {Object} title
+ */
+var timeTask=null
+function showToast(title){
+	if(timeTask){clearTimeout(timeTask)}
+	timeTask=setTimeout(()=>{
+		//#ifdef APP-PLUS
+			plus.nativeUI.toast(title);
+		//#endif
+		//#ifndef APP-PLUS
+			uni.showToast({
+				icon:'none',
+				title:title,
+				position:'bottom',
+				duration:2000,
+			});
+		//#endif
+	},50)
+}
+
 //获取设备
 module.exports = {
 	getDptTree: getDptTree,
@@ -191,5 +213,7 @@ module.exports = {
 	getPageData:getPageData,
 	setTabbarMenu:setTabbarMenu,
 	getMenu:getMenu,
-	getTabbarMenu:getTabbarMenu
+	getTabbarMenu:getTabbarMenu,
+	showToast:showToast
+	
 }
