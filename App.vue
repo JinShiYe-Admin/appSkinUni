@@ -16,7 +16,7 @@
 </script>
 
 <style lang="scss">
-	@import "./third-ui/uview-ui/index.scss";
+	// @import "./third-ui/uview-ui/index.scss";
 	@import "./commom/uni.css";
 </style>
 

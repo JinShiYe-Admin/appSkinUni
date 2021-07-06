@@ -3,6 +3,8 @@
 		<view class="u-tabbar__content safe-area-inset-bottom" :style="{
 			height: $u.addUnit(height),
 			backgroundColor: bgColor,
+			border:'1px solid #e5e5e5',
+			marginLeft:'-1px'
 		}" :class="{
 			'u-border-top': borderTop
 		}">
@@ -239,12 +241,13 @@
 		box-sizing: content-box;
 		/* #endif */
 	}
-
+	.u-tabbar__content__item__text{
+		bottom: 15px !important;
+	}
 	.u-tabbar {
-
 		&__content {
 			@include vue-flex;
-			align-items: center;
+			// align-items: center;
 			position: relative;
 			position: fixed;
 			bottom: 0;
@@ -280,7 +283,7 @@
 				padding: 12rpx 0;
 				@include vue-flex;
 				flex-direction: column;
-				align-items: center;
+				// align-items: center;
 				position: relative;
 
 				&__button {
@@ -317,7 +320,7 @@
 					border-radius: 100%;
 					@include vue-flex;
 					justify-content: center;
-					align-items: center;
+					// align-items: center;
 					position: absolute;
 					background-color: #ffffff;
 					top: -40rpx;

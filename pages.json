@@ -7,6 +7,7 @@
 		{
 			"path": "pages/login/login",
 			"style": {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
@@ -14,19 +15,10 @@
 			"path": "pages/course_study/index",
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "课程学习",
 				"enablePullDownRefresh": false
 			}
-		}, 
-		{ //考试
-			"path": "pages/course_examination/index",
-			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTextStyle": "white",
-				"enablePullDownRefresh": false
-			}
-		}, 
-		{ //练习
+		}, { //练习
 			"path": "pages/course_practice/index",
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
@@ -36,18 +28,12 @@
 		}, {
 			"path": "pages/more/index",
 			"style": {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
 		}, { //课程学习 详情
 			"path": "pages/course_study/detail",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		},
-		{ //考试 详情
-			"path": "pages/course_examination/detail",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
@@ -69,6 +55,35 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
+            
+        }
+        ,{
+            "path" : "pages/more/m_navBar",
+            "style" :                                                                                    
+            {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/register/index",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "查询资料",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/register/index1",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
         }
     ],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
@@ -101,9 +116,6 @@
 			},
 			{
 				"pagePath": "pages/course_study/index"
-			},
-			{
-				"pagePath": "pages/course_examination/index"
 			},
 			{
 				"pagePath": "pages/more/index"
