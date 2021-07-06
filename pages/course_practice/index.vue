@@ -48,6 +48,7 @@
 	export default {
 		data() {
 			return {
+				index_code:'',
 				queryData:{},//查询栏得到的数据
 				pageData:[],//页面列表数据
 				
@@ -102,7 +103,7 @@
 			getTermList(){
 				let comData={
 					stu_code:personal.user_code,
-					index_code:"CoursePractice:Index",
+					index_code:this.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/query',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
@@ -132,7 +133,7 @@
 					sys_grd_code: this.tremArray[this.tremIndex].sys_grd_code?this.tremArray[this.tremIndex].sys_grd_code:'',
 					term_code: this.tremArray[this.tremIndex].term_code?this.tremArray[this.tremIndex].term_code:'',
 					stu_code:personal.user_code,
-					index_code:"CoursePractice:Index",
+					index_code:this.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/page',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
@@ -147,10 +148,12 @@
 				})
 			},
 			clickLook(item){
+				item.index_code=this.index_code
 				util.openwithData('./detail-show',item)
 			},
 			clickTest(item){
 				let that=this
+				item.index_code=this.index_code
 				util.openwithData('./detail-practice',item,{
 					refresh(data){
 						that.showLoading()
@@ -163,9 +166,19 @@
 		},
 		onLoad() {
 			this.tabbar = util.getMenu();
+			let tempMenu;
+			if (util.getMenuMore().length==0) {
+				tempMenu = util.getTabbarMenu();
+			} else{
+				tempMenu = util.getPageData(option);
+			}
+			console.log('tempMenu:' + JSON.stringify(tempMenu));
+			this.index_code=tempMenu.access.split("#")[1]
 			this.showLoading()
 			this.getTermList()
 			this.getPageList()
+			console.log(process.env.NODE_ENV);
+			console.log(this.moment().format('YYYY-MM-DD'));
 		},
 		onReachBottom() {
 			if(this.canload){

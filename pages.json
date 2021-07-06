@@ -17,7 +17,16 @@
 				"navigationBarTextStyle": "white",
 				"enablePullDownRefresh": false
 			}
-		}, { //练习
+		}, 
+		{ //考试
+			"path": "pages/course_examination/index",
+			"style": {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationBarTextStyle": "white",
+				"enablePullDownRefresh": false
+			}
+		}, 
+		{ //练习
 			"path": "pages/course_practice/index",
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
@@ -32,6 +41,13 @@
 			}
 		}, { //课程学习 详情
 			"path": "pages/course_study/detail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{ //考试 详情
+			"path": "pages/course_examination/detail",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
@@ -53,7 +69,6 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
-            
         }
     ],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
@@ -86,6 +101,9 @@
 			},
 			{
 				"pagePath": "pages/course_study/index"
+			},
+			{
+				"pagePath": "pages/course_examination/index"
 			},
 			{
 				"pagePath": "pages/more/index"

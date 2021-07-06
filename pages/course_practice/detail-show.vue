@@ -84,7 +84,7 @@
 				let comData={
 					test_id: this.itemData.test_id,
 					stu_code:personal.user_code,
-					index_code:"CoursePractice:Index",
+					index_code:this.itemData.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/show',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
