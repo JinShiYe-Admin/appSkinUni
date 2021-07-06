@@ -79,7 +79,7 @@
 					childList: []
 				}, 
 				{
-					text: "考试123", //考试
+					text: "考试", //考试
 					pagePath: "/pages/course_examination/index",
 					iconPath: '../../static/tabbar/study.png',
 					selectedIconPath: '../../static/tabbar/study_select.png',
