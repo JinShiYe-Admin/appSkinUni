@@ -1,18 +1,29 @@
 <template>
 	<view class="tabs">
-		<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
-			<view v-for="(tab,index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
-				<text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text>
-			</view>
-		</scroll-view>
-		<view class="line-h"></view>
+		<view class="example-body">
+			<uni-notice-bar :show-icon="true" text="考试安排：本学期考试安排如下，请同学们按时参加考试。" />
+		</view>
 		<uni-row class="demo-uni-row">
-		    <uni-col :xs="12" :sm="12" :md="6" :lg="4" :xl="4" v-for="item in dataList">
-		       <uni-card-study mode="style" :is-shadow="true" :thumbnail="item.book_img_url" @click="toDetail(item)" class="u-card">
-					<text class="text">{{ item.sub_name }}</text>
-		       </uni-card-study>
+		    <uni-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-for="item in pageData">
+		       <uni-card-examination mode="style" :is-shadow="true" :thumbnail="item.img_url?item.img_url:'http://jbsch-pb.zhuxue101.net/develop/hr/student/2vsr68c0jn_1616635382610.png'" class="u-card">
+					<uni-tag v-if="item.test_status==2" text="未开始" size="small" type="warning" class="tag-right"/>
+					<uni-tag v-else-if="item.test_status==0 && item.answer_number && item.answer_number !== 0" :text="`已提交: ${item.answer_number}/${item.question_count}`" size="small" type="error" class="tag-right"/>
+					<uni-tag v-else-if="item.test_status==0 && item.answer_number && item.answer_number === 0" text="考试中" size="small" type="error" class="tag-right"/>
+					<uni-tag v-else-if="item.test_status==3" text="已评" size="small" type="primary" class="tag-right"/>
+					<uni-tag v-else-if="item.test_status==4 || item.test_status==5" text="考试结束" size="small" type="primary" class="tag-right"/>
+					
+					<view ><text class="text">{{ item.test_name }}</text></view>
+					<view style="margin-top: 10px;color: #4f4f4f;"><text class="text-mini">满分：{{parseInt(item.score)}} 分</text></view>
+					<view style="margin-top: 7px; color: #4f4f4f;"><text class="text-mini">学期：{{item.grd_name}}{{item.term_name}}</text></view>
+					<view style="margin-top: 7px; color: #4f4f4f;"><text class="text-mini">时间：{{item.start_time.substring(0, 16)}} - {{item.end_time.substring(0, 16)}}</text></view>
+					<view style="margin-top: 7px; color: #4f4f4f;">
+						<uni-col :span="12"><text class="text-mini">时长：{{item.duration}} 天</text></uni-col>
+						<uni-col :span="12" style="text-align: right;" v-if="item.test_status==0"><button class="mini-btn mini-btn-design" type="primary" size="mini" @click="toDetail(item)" >答题</button></uni-col>
+					</view> 
+		       </uni-card-examination> 
 		    </uni-col> 
-		</uni-row> 
+		</uni-row>  
+		<uni-load-more :status="status" :icon-size="17" :content-text="contentText" />
 		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
@@ -24,57 +35,52 @@
 		data() {
 			return {
 				index_code:'',
-				dataList: [],
-				cacheTab: [],
-				tabIndex: 0,
-				tabBars: [],
-				scrollInto: "",
+				pageData:[],//页面列表数据
+				
+				
+				page_number:1,//页码
+				status:'more',//加载更多的状态
+				contentText: {
+					contentdown: '',//上滑加载更多
+					contentrefresh: '加载中',
+					contentnomore: ''//没有更多
+				},
+				canload:true,//是否加载更多
+				
+				
 				tabbar: []
 			}
 		},
 		methods: {
-			ontabtap(e) {
-			    let index = e.target.dataset.current || e.currentTarget.dataset.current;
-				this.showLoading();
-				this.getList(index,this.tabBars[index].id)
-				this.tabIndex=index
-			},
-			getTabList(){//获取tab栏列表 2.1学期列表
-				let comData={
-					stu_code:personal.user_code,
-					index_code:this.index_code,
-				}
-				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/termList',comData,response=>{
-						if(response.list&&response.list.length>0){
-							response.list.map(item=>{
-								item.name=item.grd_name+item.term_name
-								item.id=item.sys_grd_code+'_'+item.term_code
-							})
-							this.tabBars=response.list
-							this.getList(0,response.list[0].id)
-						}
-				})
-			},
-			getList(index,id) {//2.2课程列表
+			getList() {
 			   let comData={
-			    sys_grd_code:id.split("_")[0],
-			    term_code:id.split("_")[1],
 			   	stu_code:personal.user_code,
+				page_size: 12,
 			   	index_code:this.index_code,
 			   }
-			   this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/list',comData,response=>{
-					this.dataList=response.list
-				    this.hideLoading()
+			   this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/exam/page',comData,response=>{
+				   response.list.map(item=>{
+					   const days=this.moment(item.end_time).diff(this.moment(item.start_time),'day')
+					   item.duration=days
+				   })
+					this.pageData=this.pageData.concat(response.list)
+					if(this.page_number>=response.total_page){
+						this.status = 'noMore';
+						this.canload=false
+					}else{
+						this.status = 'more';
+					}
+					this.hideLoading()
 			   })
 			},
 			toDetail(item){
-				let tabData=this.tabBars[this.tabIndex]
-				console.log("tabData: " + JSON.stringify(tabData));
-				item.term_name=tabData.name
 				item.index_code=this.index_code
 				util.openwithData('./detail',item,{
-					callParent:data=>{
-						console.log("data: " + JSON.stringify(data));
+					refreshPage(data){
+						that.showLoading()
+						that.canload=true
+						that.page_number=1
+						that.getList()
 					}
 				})
 			}
@@ -87,12 +93,15 @@
 			} else{
 				tempMenu = util.getPageData(option);
 			}
-			console.log('tempMenu:' + JSON.stringify(tempMenu));
 			this.index_code=tempMenu.access.split("#")[1]
-			setTimeout(()=>{
-				this.showLoading();
-				this.getTabList();
-			},350)
+			this.getList()
+		},
+		onReachBottom() {
+			if(this.canload){
+				this.status = 'loading';
+				this.page_number=this.page_number+1
+				this.getList()
+			}
 		},
 	}
 </script>
@@ -113,88 +122,32 @@
         overflow: hidden;
         background-color: #EEF0F2;
     }
-
-    .scroll-h {
-        width: 750rpx;
-		/* #ifdef H5 */
-		width:100%;
-		/* #endif */
-		height: 80rpx;
-		background-color: #FFFFFF;
-        flex-direction: row;
-        /* #ifndef APP-PLUS */
-        white-space: nowrap;
-        /* #endif */
-     
-    }
-
-    .line-h {
-        height: 1rpx;
-        background-color: #cccccc;
-    }
-
-    .uni-tab-item {
-        /* #ifndef APP-PLUS */
-        display: inline-block;
-        /* #endif */
-        flex-wrap: nowrap;
-        padding-left: 34rpx;
-        padding-right: 34rpx;
-    }
-
-    .uni-tab-item-title {
-        color: #555;
-        font-size: 30rpx;
-        height: 80rpx;
-        line-height: 80rpx;
-        flex-wrap: nowrap;
-        /* #ifndef APP-PLUS */
-        white-space: nowrap;
-        /* #endif */
-    }
-
-    .uni-tab-item-title-active {
-        color: #007AFF;
-    }
- 
-	 
-	 .example {
-	 	padding: 0 15px 15px;
-	 }
-	 
-	 .example-info {
-	 	padding: 15px;
-	 	color: #3b4144;
-	 	background: #ffffff;
-	 }
-	 
+	  
 	 .text {
-	 	font-size: 26rpx;
+	 	font-size: 24rpx;
 	 	margin-top: 10rpx;
+		word-break: break-all;
 	 }
 	 
-	 .grid-dynamic-box {
-	 	margin-bottom: 15px;
-	 }
-	 
-	 .grid-item-box {
-	 	flex: 1;
-	 	/* #ifndef APP-NVUE */
-	 	display: flex;
-	 	/* #endif */
-	 	flex-direction: column;
-	 	align-items: center;
-	 	justify-content: center;
-	 	padding: 15px 0;
-	 }
-	 
-	 .grid-dot {
-	 	position: absolute;
-	 	top: 5px;
-	 	right: 15px;
+	 .text-mini{
+		 font-size: 20rpx;
+		 word-break: break-all;
 	 }
 	 
 	 .u-card{
 		 margin: 4px 7px;
+	 }
+	 
+	 .tag-right{
+	 	position: absolute;
+	 	left: 0;
+	 	margin-top: -12px;
+	 	font-size: 12px;
+	 	height: 22px;
+	 }
+	 
+	 .mini-btn-design{
+		 margin: -4px -5px 0 0;
+		 padding: 0 1.1em;
 	 }
 </style>

@@ -1,9 +1,11 @@
 <template>
 	<view>
 		<view class="tabs">
+			<uni-title class="h4" style="align-items: center;padding: 3px 0;" type="h4" title="剩余时间"></uni-title>
+			<uni-title class="h5" style="align-items: center;padding: 3px 0;" color="#F5222D" type="h5" title="2021-07-06 16:05:17"></uni-title>
 			<progress  :percent="percent" show-info border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5" :stroke-width="10"/>
 		</view>
-		<view style="margin-top:60px;z-index: 5;"></view>
+		<view style="margin-top:95px;z-index: 5;"></view>
 		<view v-for="(curr_question,index) in question_list">
 			<template v-if="curr_question.is_que">
 				<uni-card style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
@@ -64,7 +66,7 @@
 					stu_code:personal.user_code,
 					index_code:this.itemData.index_code,
 				}
-				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/detail',comData,response=>{
+				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/exam/detail',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
 					this.answer_list=response.answer_list
 					this.question_list=response.question_list
@@ -235,10 +237,17 @@
 			},
 			cancel(){
 				 uni.navigateBack();
+			},
+			startInterval(){
+				
+			},
+			clearInterval(){
+				
 			}
 		},
 		onLoad: function(option) {
 			const itemData = util.getPageData(option);
+			console.log("itemDataa啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊: " + JSON.stringify(itemData));
 			uni.setNavigationBarTitle({title: itemData.test_name})
 			this.itemData=itemData
 			this.showLoading()
@@ -262,7 +271,7 @@
 	    background-color: #FFFFFF;
 		padding: 10px;
 		z-index: 10;
-		height: 50px;
+		height: 85px;
 	}
 	
 	.uni-list-cell {

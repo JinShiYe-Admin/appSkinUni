@@ -177,8 +177,6 @@
 			this.showLoading()
 			this.getTermList()
 			this.getPageList()
-			console.log(process.env.NODE_ENV);
-			console.log(this.moment().format('YYYY-MM-DD'));
 		},
 		onReachBottom() {
 			if(this.canload){
