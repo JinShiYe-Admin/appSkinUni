@@ -77,7 +77,20 @@
 					img_href: "../../img/schapp_work/kaoqin_tab.png",
 					url: 'schappUni_CourseStudy',
 					childList: []
-				}, ],
+				}, 
+				{
+					text: "考试123", //考试
+					pagePath: "/pages/course_examination/index",
+					iconPath: '../../static/tabbar/study.png',
+					selectedIconPath: '../../static/tabbar/study_select.png',
+					count: 0,
+					isDot: false,
+					customIcon: false,
+					img_href: "../../img/schapp_work/kaoqin_tab.png",
+					url: 'schappUni_CourseTest',
+					childList: []
+				}, 
+				],
 			}
 		},
 		components: {

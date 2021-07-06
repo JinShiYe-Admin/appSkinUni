@@ -100,7 +100,7 @@
 					sys_grd_code:itemData.sys_grd_code,
 					term_code:itemData.term_code,
 					book_id:itemData.book_id,
-					index_code:"CourseStudy:Index",
+					index_code:this.itemData.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/detail',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
@@ -146,7 +146,6 @@
 					ltimeStr+=(''+response.learn_time/60).split(".")[0]+' 分钟 '+response.learn_time%60+' 秒'
 					response.video_timesStr=timeStr
 					response.learn_timeStr=ltimeStr
-					console.log("responseresponseresponseresponse" + JSON.stringify(response));
 					response.percent=0
 					if(response.video_times>0){
 						response.percent=(response.learn_time/response.video_times)*100
@@ -157,7 +156,7 @@
 			getCatalogFile(book_catalog_id,callback){
 				const comData={
 					book_catalog_id:book_catalog_id,
-					index_code:"CourseStudy:Index",
+					index_code:this.itemData.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/getCatalogFile',comData,response=>{
 					console.log("respons: " + JSON.stringify(response));
@@ -177,7 +176,7 @@
 					book_catalog_id:book_catalog_id,
 					book_catalog_file_id:book_catalog_file_id,
 					stu_code:personal.user_code,
-					index_code:"CourseStudy:Index",
+					index_code:this.itemData.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/getVideoLearnInfo',comData,response=>{
 					console.log("responsea: " + JSON.stringify(response));
@@ -245,10 +244,10 @@
 						sub_code:this.itemData.sub_code,
 						stu_code:personal.user_code,
 						stu_catalog_file_id:this.pageData.learnInfo.id,
-						start_time:util.getDate('YYYY-MM-DD HH:mm:ss'),
+						start_time:this.moment().format('YYYY-MM-DD HH:mm:ss'),
 						current_time:curr_time,
 						play_time:play_time,
-						index_code:"CourseStudy:Index",
+						index_code:this.itemData.index_code,
 					}
 					if(this.videoData.log_id){
 						comData.log_id=this.videoData.log_id
@@ -298,10 +297,10 @@
 					sub_code:this.itemData.sub_code,
 					stu_code:personal.user_code,
 					stu_catalog_file_id:this.pageData.learnInfo.id,
-					start_time:util.getDate('YYYY-MM-DD HH:mm:ss'),
+					start_time:this.moment().format('YYYY-MM-DD HH:mm:ss'),
 					current_time:curr_time,
 					play_time:play_time,
-					index_code:"CourseStudy:Index",
+					index_code:this.itemData.index_code,
 				}
 				if(this.videoData.log_id){
 					comData.log_id=this.videoData.log_id
