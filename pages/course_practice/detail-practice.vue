@@ -51,6 +51,7 @@
 	export default {
 		data() {
 			return {
+				canSubmit:true,
 				itemData:{},
 				percent:0,
 				answer_list:[],
@@ -190,7 +191,11 @@
 				if(showDialog){
 					this.$refs.alertDialog.open()
 				}else{
-					this.submitData()
+					if(this.canSubmit){
+						this.canSubmit=false
+						setTimeout(()=>{this.canSubmit=true},1000)
+						this.submitData()
+					}
 				}
 			},
 			dialogConfirm(){
@@ -198,7 +203,7 @@
 			},
 			submitData(){
 				let score=0
-				this.showLoading();
+				// this.showLoading();
 				this.answer_list.map(item=>{
 					score+=parseFloat(item.score)
 				})
@@ -213,12 +218,12 @@
 				console.log("comData: " + JSON.stringify(comData));
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/submit',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
-					this.hideLoading()
 					this.showToast("交卷成功")
 					setTimeout(()=>{
 						const eventChannel = this.getOpenerEventChannel()
 						eventChannel.emit('refresh', {data: 'test'});
 						uni.navigateBack();
+						this.hideLoading()
 					},1000)
 				})
 			},

@@ -53,6 +53,7 @@
 	export default {
 		data() {
 			return {
+				canSubmit:true,
 				interval:'',//倒计时相关
 				timeTitle:'',//倒计时相关
 				
@@ -196,7 +197,11 @@
 				if(showDialog){
 					this.$refs.alertDialog.open()
 				}else{
-					this.submitData()
+					if(this.canSubmit){
+						this.canSubmit=false
+						setTimeout(()=>{this.canSubmit=true},1000)
+						this.submitData()
+					}
 				}
 			},
 			dialogConfirm(){
@@ -219,12 +224,12 @@
 				console.log("comData: " + JSON.stringify(comData));
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/exam/submit',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
-					this.hideLoading()
 					this.showToast("交卷成功")
 					setTimeout(()=>{
 						const eventChannel = this.getOpenerEventChannel()
 						eventChannel.emit('refreshPage', {data: 'test'});
 						uni.navigateBack();
+						this.hideLoading()
 					},1000)
 				})
 			},
