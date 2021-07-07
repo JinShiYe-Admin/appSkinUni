@@ -246,7 +246,6 @@
 				let diffs=this.itemData.diffSeconds
 				this.interval=setInterval(()=>{
 					let num=--diffs
-					console.log("num: ",num);
 					if((num/60)===30){
 							this.showToast("距离考试结束还有 30 分钟！")
 					}else if((num/60)===15){
@@ -316,7 +315,13 @@
 		background-color: #EEF0F2;
 	}
 	.tabs {
+		/* #ifndef APP-PLUS */
 		top: 44px;
+		/* #endif */
+		/* #ifdef APP-PLUS */
+		top: -1px;
+		/* #endif */
+		
 		position: sticky;
 	    overflow: hidden;
 	    background-color: #FFFFFF;
@@ -347,6 +352,7 @@
 		font-size: 15px;
 		height: 50px;
 		padding-top: 6px;
+		 background-color:#00CFBD !important;
 	}
 	.test-btn0{
 		width: 30%;

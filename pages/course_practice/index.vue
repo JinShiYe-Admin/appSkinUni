@@ -32,7 +32,7 @@
 					<uni-row style="margin-top: 10px;">
 						<uni-col :span="24" style="text-align: right;">
 							 <button v-if="item.stu_test_status!=1" class="mini-btn" type="default" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;"  @click="clickLook(item)">查看</button>
-							 <button v-if="item.stu_test_status!=3" class="mini-btn" type="primary" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;"  @click="clickTest(item)">答题</button>
+							 <button v-if="item.stu_test_status!=3" class="mini-btn" type="primary" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;background-color: #00CFBD;"  @click="clickTest(item)">答题</button>
 						</uni-col>
 					</uni-row>
 				</uni-card>
@@ -201,15 +201,20 @@
 </script>
 
 <style>
-	page {
+	/* page {
 	    width: 100%;
 	    min-height: 100%;
 	    display: flex;
 		flex-direction: column;
 		background-color: #EEF0F2;
-	}
+	} */
 	.tabs {
-		top: 44px;
+		/* #ifndef APP-PLUS */
+		top: 44px; 
+		/* #endif */
+		/* #ifdef APP-PLUS */
+		top: 72px;
+		/* #endif */
 		position: sticky;
 	    display: flex;
 	    flex-direction: row;

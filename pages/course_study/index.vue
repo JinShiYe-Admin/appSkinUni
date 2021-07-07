@@ -9,7 +9,7 @@
 			</scroll-view>
 			<view class="line-h"></view>
 			<uni-row class="demo-uni-row">
-			    <uni-col :xs="12" :sm="12" :md="6" :lg="4" :xl="4" v-for="item in dataList">
+			    <uni-col class="card-list" :xs="12" :sm="12" :md="6" :lg="4" :xl="4" v-for="item in dataList">
 			       <uni-card-study mode="style" :is-shadow="true" :thumbnail="item.book_img_url" @click="toDetail(item)" class="u-card">
 						<text class="text">{{ item.sub_name }}</text>
 			       </uni-card-study>
@@ -55,6 +55,7 @@
 					index_code:this.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/termList',comData,response=>{
+					console.log("response: " + JSON.stringify(response));
 						if(response.list&&response.list.length>0){
 							response.list.map(item=>{
 								item.name=item.grd_name+item.term_name
@@ -111,32 +112,27 @@
 
 <style>
    /* #ifndef APP-PLUS */
-    page {
+  /*  page {
         width: 100%;
         min-height: 100%;
         display: flex;
-    }
-
+    } */
     /* #endif */
 
     .tabs {
         flex: 1;
         flex-direction: column;
         overflow: hidden;
-        background-color: #EEF0F2;
+        background-color: #FFFFFF;
     }
 
     .scroll-h {
         width: 750rpx;
-		/* #ifdef H5 */
 		width:100%;
-		/* #endif */
 		height: 80rpx;
 		background-color: #FFFFFF;
         flex-direction: row;
-        /* #ifndef APP-PLUS */
         white-space: nowrap;
-        /* #endif */
      
     }
 
@@ -146,9 +142,7 @@
     }
 
     .uni-tab-item {
-        /* #ifndef APP-PLUS */
         display: inline-block;
-        /* #endif */
         flex-wrap: nowrap;
         padding-left: 34rpx;
         padding-right: 34rpx;
@@ -160,13 +154,11 @@
         height: 80rpx;
         line-height: 80rpx;
         flex-wrap: nowrap;
-        /* #ifndef APP-PLUS */
         white-space: nowrap;
-        /* #endif */
     }
 
     .uni-tab-item-title-active {
-        color: #007AFF;
+        color: #00CFBD;
     }
  
 	 
@@ -207,6 +199,12 @@
 	 }
 	 
 	 .u-card{
-		 margin: 4px 7px;
+		 margin: 4px 4px;
+	 }
+	 
+	 .card-list{
+	 		 /* #ifdef APP-PLUS */
+	 		  margin-top: -10px;
+	 		  /* #endif */
 	 }
 </style>

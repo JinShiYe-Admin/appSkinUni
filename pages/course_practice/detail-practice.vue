@@ -256,13 +256,18 @@
 		background-color: #EEF0F2;
 	}
 	.tabs {
-		top: 44px;
+		 /* #ifndef APP-PLUS */
+		 top: 44px;
+		 /* #endif */
+		 /* #ifdef APP-PLUS */
+		 top: -1px;
+		 /* #endif */
 		position: sticky;
 	    overflow: hidden;
 	    background-color: #FFFFFF;
 		padding: 10px;
 		z-index: 10;
-		height: 50px;
+		height: 20px;
 	}
 	
 	.uni-list-cell {
@@ -283,10 +288,10 @@
 		width: 30%;
 		border-radius: 0;
 		color: #FFFFFF;
-		background-color: #00cfbd;
 		font-size: 15px;
 		height: 50px;
 		padding-top: 6px;
+		background-color: #00CFBD !important;
 	}
 	.test-btn0{
 		width: 30%;
