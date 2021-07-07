@@ -92,7 +92,7 @@
 							}
 						})
 						let num=(answers/questions.length)*100
-						this.percent=num
+						this.percent=parseInt(num)
 					}
 					questions.map(question_item=>{
 						question_item.optionObjs=[]
@@ -242,7 +242,7 @@
 					}
 				})
 				let num=(answers/this.question_list.questions.length)*100
-				this.percent=num
+				this.percent=parseInt(num)
 			},
 			cancel(){
 				 uni.navigateBack();
