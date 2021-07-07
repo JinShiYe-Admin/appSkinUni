@@ -194,8 +194,7 @@
 							user_type: '', //用户类型
 							user_name: this.curPage.user_name, //姓名
 							phone: this.curPage.phone, //电话
-							password: md5.hex_md5(this.globaData.PWD_ENCRYPTION + this
-							.confirmpassword), //密码,秘钥+密码再MD5加密
+							password: md5.hex_md5(this.PWD_ENCRYPTION + this.confirmpassword), //密码,秘钥+密码再MD5加密
 							msg_token: this.curPage.msg_token,
 							msg: this.curPage.msg,
 						};

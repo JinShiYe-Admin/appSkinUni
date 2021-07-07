@@ -109,7 +109,13 @@
             "https" : false
         },
         "domain" : "",
-        "title" : "教宝校园"
+        "title" : "大学校园",
+        "router" : {
+            "base" : "/develop/jsyWechatUnv/202107071530/"
+        },
+        "sdkConfigs" : {
+            "maps" : {}
+        }
     },
     "mp-qq" : {
         "uniStatistics" : {

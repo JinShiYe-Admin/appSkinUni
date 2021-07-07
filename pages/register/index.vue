@@ -6,7 +6,7 @@
 					用户姓名
 				</view>
 				<view class="uni-list-cell-db">
-					<input :disabled="disabledFlag==0?false:true" v-model="userName" style="height: 40px;"
+					<input :disabled="disabledFlag==0?false:true" v-model="userName" style="height: 50px;"
 						maxlength="10" type="text" placeholder="请输入姓名" />
 				</view>
 			</view>
@@ -15,7 +15,7 @@
 					用户电话
 				</view>
 				<view class="uni-list-cell-db">
-					<input :disabled="disabledFlag==0?false:true" v-model="userPhone" style="height: 40px;"
+					<input :disabled="disabledFlag==0?false:true" v-model="userPhone" style="height: 50px;"
 						type="number" maxlength="11" placeholder="请输入电话" />
 				</view>
 			</view>
@@ -25,13 +25,12 @@
 				</view>
 				<view class="uni-list-cell-db">
 					<input :disabled="disabledFlag==2?true:false" v-model="yanzm"
-						style="height: 40px;float: left;width: 120px;" type="number" maxlength="6"
+						style="height: 50px;float: left;width: 120px;" type="number" maxlength="6"
 						placeholder="请输入验证码" />
 					<button v-if="yanZMTime==60" :disabled="disabledFlag==2?true:false" @click="getYanzm"
-						style="float: left;height: 36px;font-size: 15px;margin-top: 2px;" :class="disabledFlag==2?'btnDis1':'btnDis0'"
-						class="mini-btn" type="default">获取验证码</button>
-					<button v-if="yanZMTime<60" :disabled="yanZMTime<60?true:false" style="float: left;height: 36px;font-size: 15px;margin-top: 2px;" class="mini-btn"
-						type="default">{{yanZMTime}}秒后重新获取</button>
+						style="float: left;height: 36px;font-size: 15px;margin-top: 7px;" :class="disabledFlag==2?'btnDis1':'btnDis0'"
+						class="mini-btn">获取验证码</button>
+					<button v-if="yanZMTime<60" :disabled="yanZMTime<60?true:false" style="float: left;height: 36px;font-size: 15px;margin-top: 7px;" class="mini-btn" >{{yanZMTime}}秒后重新获取</button>
 					<!-- <button v-if="yanZMTime==60" @click='sendYanzm()' :disabled="yanZMTime<60||disabledFlag==2?true:false" :class="yanZMTime<60||disabledFlag==2?'btnDis0':'btnDis1'" style="border-color: white;margin-right: 10px;width: 100px;margin-top: 1px;">获取验证码</button>
 					<button v-if="yanZMTime<60" :disabled="yanZMTime<60||disabledFlag==2?true:false" :class="yanZMTime<60||disabledFlag==2?'btnDis0':'btnDis1'" style="border-color: white;margin-right: 10px;width: 130px;margin-top: 1px;">{{yanZMTime}}秒后重新获取</button> -->
 				</view>
