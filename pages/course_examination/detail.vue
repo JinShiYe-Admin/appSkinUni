@@ -2,10 +2,10 @@
 	<view>
 		<view class="tabs">
 			<uni-title class="h4" style="align-items: center;padding: 3px 0;" type="h4" title="剩余时间"></uni-title>
-			<uni-title class="h5" style="align-items: center;padding: 3px 0;" color="#F5222D" type="h5" title="2021-07-06 16:05:17"></uni-title>
+			<uni-title class="h5" style="align-items: center;padding: 3px 0;" color="#F5222D" type="h5" :title="timeTitle"></uni-title>
 			<progress  :percent="percent" show-info border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5" :stroke-width="10"/>
 		</view>
-		<view style="margin-top:95px;z-index: 5;"></view>
+		<view style="z-index: 5;"></view>
 		<view v-for="(curr_question,index) in question_list">
 			<template v-if="curr_question.is_que">
 				<uni-card style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
@@ -53,6 +53,10 @@
 	export default {
 		data() {
 			return {
+				interval:'',//倒计时相关
+				timeTitle:'',//倒计时相关
+				
+				
 				itemData:{},
 				percent:0,
 				answer_list:[],
@@ -213,13 +217,13 @@
 					index_code:this.itemData.index_code,
 				}
 				console.log("comData: " + JSON.stringify(comData));
-				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/submit',comData,response=>{
+				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/exam/submit',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
 					this.hideLoading()
 					this.showToast("交卷成功")
 					setTimeout(()=>{
 						const eventChannel = this.getOpenerEventChannel()
-						eventChannel.emit('refresh', {data: 'test'});
+						eventChannel.emit('refreshPage', {data: 'test'});
 						uni.navigateBack();
 					},1000)
 				})
@@ -239,20 +243,67 @@
 				 uni.navigateBack();
 			},
 			startInterval(){
-				
+				let diffs=this.itemData.diffSeconds
+				this.interval=setInterval(()=>{
+					let num=--diffs
+					console.log("num: ",num);
+					if((num/60)===30){
+							this.showToast("距离考试结束还有 30 分钟！")
+					}else if((num/60)===15){
+							this.showToast("距离考试结束还有 15 分钟！")
+					}else if((num/60)===5){
+							this.showToast("距离考试结束还有 5 分钟！")
+					}else if((num/60)===1){
+							this.showToast("距离考试结束还有 1 分钟！即将自动交卷")
+					}else if((num/60)===0){
+						this.clearInterval()
+						this.submitData()
+					}
+					this.setTimeTitle(num)
+				},1000)
+			},
+			setTimeTitle(duration){
+				const day = Math.floor(duration / ( 60 * 60 * 24))
+				const hour = Math.floor((duration - day *  60 * 60 * 24) / ( 60 * 60))
+				const minuter = Math.floor((duration - day *  60 * 60 * 24 - hour *  60 * 60) / (60))
+				const seconds = Math.floor(duration - day *  60 * 60 * 24 - hour *  60 * 60 - minuter *  60)
+				if(day>0){
+					this.timeTitle=day+' 天 '+hour+' 小时 '+minuter+' 分钟 '+seconds+' 秒'
+				}else if(hour>0){
+					this.timeTitle=hour+' 小时 '+minuter+' 分钟 '+seconds+' 秒'
+				}else if(minuter>0){
+					this.timeTitle=minuter+' 分钟 '+seconds+' 秒'
+				}else if(seconds>0){
+					this.timeTitle=seconds+' 秒'
+				}else if(day===0&&hour===0&&minuter===0&&seconds===0){
+					this.timeTitle="本场考试已结束"
+				}
 			},
 			clearInterval(){
-				
+				clearInterval(this.interval)
 			}
 		},
 		onLoad: function(option) {
 			const itemData = util.getPageData(option);
-			console.log("itemDataa啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊: " + JSON.stringify(itemData));
 			uni.setNavigationBarTitle({title: itemData.test_name})
 			this.itemData=itemData
-			this.showLoading()
-			this.getPageList()
+			const diffs=this.moment(this.itemData.end_time).diff(this.moment(),'seconds')
+			if(diffs<=0){
+				this.showToast("本场考试已结束")
+				const eventChannel = this.getOpenerEventChannel()
+				eventChannel.emit('refreshPage', {data: 'test'});
+				uni.navigateBack();
+			}else{
+				this.setTimeTitle(diffs)
+				this.showLoading()
+				this.getPageList()
+				this.itemData.diffSeconds=diffs
+				this.startInterval()
+			}
 		},
+		onUnload(){
+			this.clearInterval(this.interval)
+		}
 	}
 </script>
 
@@ -265,13 +316,13 @@
 		background-color: #EEF0F2;
 	}
 	.tabs {
-		width: 100%;
-		position: fixed;
+		top: 44px;
+		position: sticky;
 	    overflow: hidden;
 	    background-color: #FFFFFF;
 		padding: 10px;
 		z-index: 10;
-		height: 85px;
+		height: 65px;
 	}
 	
 	.uni-list-cell {

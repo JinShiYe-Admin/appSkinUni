@@ -1,36 +1,46 @@
 <template>
-	<view class="tabs">
-		<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
-			<view v-for="(tab,index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
-				<text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text>
-			</view>
-		</scroll-view>
-		<view class="line-h"></view>
-		<uni-row class="demo-uni-row">
-		    <uni-col :xs="12" :sm="12" :md="6" :lg="4" :xl="4" v-for="item in dataList">
-		       <uni-card-study mode="style" :is-shadow="true" :thumbnail="item.book_img_url" @click="toDetail(item)" class="u-card">
-					<text class="text">{{ item.sub_name }}</text>
-		       </uni-card-study>
-		    </uni-col> 
-		</uni-row> 
+	<view>
+		<mynavBar :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
+		<view class="tabs">
+			<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false" :scroll-into-view="scrollInto">
+				<view v-for="(tab,index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
+					<text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text>
+				</view>
+			</scroll-view>
+			<view class="line-h"></view>
+			<uni-row class="demo-uni-row">
+			    <uni-col :xs="12" :sm="12" :md="6" :lg="4" :xl="4" v-for="item in dataList">
+			       <uni-card-study mode="style" :is-shadow="true" :thumbnail="item.book_img_url" @click="toDetail(item)" class="u-card">
+						<text class="text">{{ item.sub_name }}</text>
+			       </uni-card-study>
+			    </uni-col> 
+			</uni-row> 
+		</view>
 		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
 
 <script>
 	import util from '../../commom/util.js'
+	import mynavBar from '../../components/my-navBar/m-navBar';
 	const personal=util.getPersonal();
 	export default {
 		data() {
 			return {
+				personInfo: {},
+				tabbar: [],
+				tabBarItem: {},
+						
 				index_code:'',
 				dataList: [],
 				cacheTab: [],
 				tabIndex: 0,
 				tabBars: [],
 				scrollInto: "",
-				tabbar: []
 			}
+		},
+		components: {
+			mynavBar
 		},
 		methods: {
 			ontabtap(e) {
@@ -81,6 +91,7 @@
 		},
 		onLoad:function(){
 			this.tabbar = util.getMenu();
+			this.personInfo = util.getPersonal();
 			let tempMenu;
 			if (util.getMenuMore().length==0) {
 				tempMenu = util.getTabbarMenu();
@@ -88,6 +99,7 @@
 				tempMenu = util.getPageData(option);
 			}
 			console.log('tempMenu:' + JSON.stringify(tempMenu));
+			this.tabBarItem = tempMenu;
 			this.index_code=tempMenu.access.split("#")[1]
 			setTimeout(()=>{
 				this.showLoading();
