@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<mynavBar :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
 		<view class="tabs">
 			<picker class="flex-box" @change="termClick" :value="tremIndex" :range="tremArray" range-key="name">
 				<uni-easyinput suffixIcon="arrowdown" :styles="styles" disabled :value="tremArray[tremIndex].name" ></uni-easyinput>
@@ -44,10 +45,17 @@
 
 <script>
 	import util from '../../commom/util.js'
+	import mynavBar from '../../components/my-navBar/m-navBar';
 	const personal =util.getPersonal();
 	export default {
 		data() {
 			return {
+				personInfo: {},
+				tabbar: [],
+				tabBarItem: {},
+				
+				
+				
 				index_code:'',
 				queryData:{},//查询栏得到的数据
 				pageData:[],//页面列表数据
@@ -73,6 +81,9 @@
 				tabbar: [],
 				styles: {borderColor:'rgba(204,198,204,0.4)',borderRadius: '10px',margin: '0 1px 0'}
 			}
+		},
+		components: {
+			mynavBar
 		},
 		methods: {
 			termClick:function(e){
@@ -166,13 +177,14 @@
 		},
 		onLoad() {
 			this.tabbar = util.getMenu();
+			this.personInfo = util.getPersonal();
 			let tempMenu;
 			if (util.getMenuMore().length==0) {
 				tempMenu = util.getTabbarMenu();
 			} else{
 				tempMenu = util.getPageData(option);
 			}
-			console.log('tempMenu:' + JSON.stringify(tempMenu));
+			this.tabBarItem = tempMenu;
 			this.index_code=tempMenu.access.split("#")[1]
 			this.showLoading()
 			this.getTermList()
@@ -197,7 +209,8 @@
 		background-color: #EEF0F2;
 	}
 	.tabs {
-		position: fixed;
+		top: 44px;
+		position: sticky;
 	    display: flex;
 	    flex-direction: row;
 	    overflow: hidden;
@@ -209,7 +222,6 @@
 		 flex: 1;
 	}
 	.content-body{
-		margin-top:50px
 	}
 	
 	.tag-right{

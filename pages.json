@@ -36,7 +36,6 @@
 		{ //考试详情
 			"path": "pages/course_examination/detail",
 			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
 				"navigationBarTitleText": "考试详情",
 				"enablePullDownRefresh": false
 			}

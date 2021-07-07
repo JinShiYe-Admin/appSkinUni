@@ -1,39 +1,49 @@
 <template>
-	<view class="tabs">
-		<view class="example-body">
-			<uni-notice-bar :show-icon="true" text="考试安排：本学期考试安排如下，请同学们按时参加考试。" />
+	<view class="">
+		<mynavBar :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
+		<view class="tabs">
+			<view class="example-body">
+				<uni-notice-bar :show-icon="true" text="考试安排：本学期考试安排如下，请同学们按时参加考试。" />
+			</view>
+			<uni-row class="demo-uni-row">
+			    <uni-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-for="item in pageData">
+			       <uni-card-examination mode="style" :is-shadow="true" :thumbnail="item.img_url?item.img_url:'http://jbsch-pb.zhuxue101.net/develop/hr/student/2vsr68c0jn_1616635382610.png'" class="u-card">
+						<uni-tag v-if="item.test_status==2" text="未开始" size="small" type="warning" class="tag-right"/>
+						<uni-tag v-else-if="item.test_status==0 && item.answer_number && item.answer_number !== 0" :text="`已提交: ${item.answer_number}/${item.question_count}`" size="small" type="error" class="tag-right"/>
+						<uni-tag v-else-if="item.test_status==0 && item.answer_number && item.answer_number === 0" text="考试中" size="small" type="error" class="tag-right"/>
+						<uni-tag v-else-if="item.test_status==3" text="已评" size="small" type="primary" class="tag-right"/>
+						<uni-tag v-else-if="item.test_status==4 || item.test_status==5" text="考试结束" size="small" type="primary" class="tag-right"/>
+						
+						<view ><text class="text">{{ item.test_name }}</text></view>
+						<view style="margin-top: 10px;color: #4f4f4f;"><text class="text-mini">满分：{{parseInt(item.score)}} 分</text></view>
+						<view style="margin-top: 7px; color: #4f4f4f;"><text class="text-mini">学期：{{item.grd_name}}{{item.term_name}}</text></view>
+						<view style="margin-top: 7px; color: #4f4f4f;"><text class="text-mini">时间：{{item.start_time.substring(0, 16)}} - {{item.end_time.substring(0, 16)}}</text></view>
+						<view style="margin-top: 7px; color: #4f4f4f;">
+							<uni-col :span="12"><text class="text-mini">时长：{{item.duration}} 天</text></uni-col>
+							<uni-col :span="12" style="text-align: right;" v-if="item.test_status==0"><button class="mini-btn mini-btn-design" type="primary" size="mini" @click="toDetail(item)" >答题</button></uni-col>
+						</view> 
+			       </uni-card-examination> 
+			    </uni-col> 
+			</uni-row>  
+			<uni-load-more :status="status" :icon-size="17" :content-text="contentText" />
 		</view>
-		<uni-row class="demo-uni-row">
-		    <uni-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-for="item in pageData">
-		       <uni-card-examination mode="style" :is-shadow="true" :thumbnail="item.img_url?item.img_url:'http://jbsch-pb.zhuxue101.net/develop/hr/student/2vsr68c0jn_1616635382610.png'" class="u-card">
-					<uni-tag v-if="item.test_status==2" text="未开始" size="small" type="warning" class="tag-right"/>
-					<uni-tag v-else-if="item.test_status==0 && item.answer_number && item.answer_number !== 0" :text="`已提交: ${item.answer_number}/${item.question_count}`" size="small" type="error" class="tag-right"/>
-					<uni-tag v-else-if="item.test_status==0 && item.answer_number && item.answer_number === 0" text="考试中" size="small" type="error" class="tag-right"/>
-					<uni-tag v-else-if="item.test_status==3" text="已评" size="small" type="primary" class="tag-right"/>
-					<uni-tag v-else-if="item.test_status==4 || item.test_status==5" text="考试结束" size="small" type="primary" class="tag-right"/>
-					
-					<view ><text class="text">{{ item.test_name }}</text></view>
-					<view style="margin-top: 10px;color: #4f4f4f;"><text class="text-mini">满分：{{parseInt(item.score)}} 分</text></view>
-					<view style="margin-top: 7px; color: #4f4f4f;"><text class="text-mini">学期：{{item.grd_name}}{{item.term_name}}</text></view>
-					<view style="margin-top: 7px; color: #4f4f4f;"><text class="text-mini">时间：{{item.start_time.substring(0, 16)}} - {{item.end_time.substring(0, 16)}}</text></view>
-					<view style="margin-top: 7px; color: #4f4f4f;">
-						<uni-col :span="12"><text class="text-mini">时长：{{item.duration}} 天</text></uni-col>
-						<uni-col :span="12" style="text-align: right;" v-if="item.test_status==0"><button class="mini-btn mini-btn-design" type="primary" size="mini" @click="toDetail(item)" >答题</button></uni-col>
-					</view> 
-		       </uni-card-examination> 
-		    </uni-col> 
-		</uni-row>  
-		<uni-load-more :status="status" :icon-size="17" :content-text="contentText" />
 		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
 
 <script>
 	import util from '../../commom/util.js'
+	import mynavBar from '../../components/my-navBar/m-navBar';
 	const personal=util.getPersonal();
 	export default {
 		data() {
 			return {
+				personInfo: {},
+				tabbar: [],
+				tabBarItem: {},
+				
+				
+				
 				index_code:'',
 				pageData:[],//页面列表数据
 				
@@ -51,10 +61,14 @@
 				tabbar: []
 			}
 		},
+		components: {
+			mynavBar
+		},
 		methods: {
 			getList() {
 			   let comData={
 			   	stu_code:personal.user_code,
+				page_number:this.page_number,
 				page_size: 12,
 			   	index_code:this.index_code,
 			   }
@@ -74,6 +88,7 @@
 			   })
 			},
 			toDetail(item){
+				let that =this
 				item.index_code=this.index_code
 				util.openwithData('./detail',item,{
 					refreshPage(data){
@@ -87,12 +102,14 @@
 		},
 		onLoad:function(){
 			this.tabbar = util.getMenu();
+			this.personInfo = util.getPersonal();
 			let tempMenu;
 			if (util.getMenuMore().length==0) {
 				tempMenu = util.getTabbarMenu();
 			} else{
 				tempMenu = util.getPageData(option);
 			}
+			this.tabBarItem = tempMenu;
 			this.index_code=tempMenu.access.split("#")[1]
 			this.getList()
 		},
@@ -115,8 +132,8 @@
     }
 
     /* #endif */
-
     .tabs {
+		 
         flex: 1;
         flex-direction: column;
         overflow: hidden;
@@ -147,7 +164,10 @@
 	 }
 	 
 	 .mini-btn-design{
-		 margin: -4px -5px 0 0;
+		 margin:0px -5px 0 0;
 		 padding: 0 1.1em;
+		 position: absolute;
+		 right: 10px;
+		 bottom: 3px;
 	 }
 </style>

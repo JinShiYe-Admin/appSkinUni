@@ -3,7 +3,7 @@
 		<view class="tabs">
 			<progress  :percent="percent" show-info border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5" :stroke-width="10"/>
 		</view>
-		<view style="margin-top:60px;z-index: 5;"></view>
+		<view style="z-index: 5;"></view>
 		<view v-for="(curr_question,index) in question_list">
 			<template v-if="curr_question.is_que">
 				<uni-card style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
@@ -256,8 +256,8 @@
 		background-color: #EEF0F2;
 	}
 	.tabs {
-		width: 100%;
-		position: fixed;
+		top: 44px;
+		position: sticky;
 	    overflow: hidden;
 	    background-color: #FFFFFF;
 		padding: 10px;

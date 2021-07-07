@@ -41,10 +41,10 @@
 					</uni-col>
 					<uni-col :span="10" style="text-align: right;">
 						<uni-row>
-							<uni-col :span="10">
+							<uni-col :span="14">
 								<uni-tag text="得分:" custom-style="background-color: #E5E5E5; color: #383838;"></uni-tag>
 							</uni-col>
-							<uni-col :span="14">
+							<uni-col :span="10">
 								<uni-title class="h5" style="align-items: center;" type="h5" :title="`${curr_answer.score==undefined?'0.00':curr_answer.score} 分`"></uni-title>
 							</uni-col>
 						</uni-row>
