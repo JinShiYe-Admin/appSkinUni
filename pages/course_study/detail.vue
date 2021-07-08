@@ -49,7 +49,6 @@
 			 <ly-tree v-if="treeLoadReady"  :tree-data="treeData" node-key="id" @node-click="handleNodeClick" :props="props" showNodeIcon
 			 :default-checked-keys="checkedKeys"
 			 defaultExpandAll
-			 iconClass="noIcon"
 			 highlightCurrent
 			  ></ly-tree>
 		</view>
@@ -375,7 +374,7 @@
 
 <style>
 	.noIcon{
-		display: none;
+		/* display: none; */
 	}
 	.line-h{
 		margin-top: 10px;
