@@ -64,6 +64,9 @@
 							this.tabBars=response.list
 							this.getList(0,response.list[0].id)
 						}else{
+							setTimeout(function () {
+								uni.stopPullDownRefresh();
+							}, 1000);
 							this.showToast("暂无学期")
 							this.hideLoading()
 						}
@@ -77,6 +80,9 @@
 			   	index_code:this.index_code,
 			   }
 			   this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/list',comData,response=>{
+				   setTimeout(function () {
+				   	uni.stopPullDownRefresh();
+				   }, 1000);
 					this.dataList=response.list
 				    this.hideLoading()
 			   })
@@ -110,6 +116,13 @@
 				this.getTabList();
 			},350)
 		},
+		onPullDownRefresh() {
+			this.showLoading()
+			this.getList(this.tabIndex,this.tabBars[this.tabIndex].id)
+			setTimeout(function () {
+				uni.stopPullDownRefresh();
+			}, 5000);
+		}
 	}
 </script>
 

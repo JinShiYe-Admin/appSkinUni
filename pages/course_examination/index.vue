@@ -46,7 +46,7 @@
 				personInfo: {},
 				tabbar: [],
 				tabBarItem: {},
-				
+				loadFlag:0,//0 刷新 1加载更多
 				
 				
 				index_code:'',
@@ -83,7 +83,11 @@
 					   const days=this.moment(item.end_time).diff(this.moment(item.start_time),'day')
 					   item.duration=days
 				   })
-					this.pageData=this.pageData.concat(response.list)
+					if(this.loadFlag===0){
+						this.pageData=[].concat(response.list)
+					}else{
+						this.pageData=this.pageData.concat(response.list)
+					}
 					if(this.pageData.length===0){
 						this.show=true
 					}
@@ -93,6 +97,9 @@
 					}else{
 						this.status = 'more';
 					}
+					setTimeout(function () {
+						uni.stopPullDownRefresh();
+					}, 1000);
 					this.hideLoading()
 			   })
 			},
@@ -101,6 +108,7 @@
 				item.index_code=this.index_code
 				util.openwithData('./detail',item,{
 					refreshPage(data){
+						this.loadFlag=0
 						that.showLoading()
 						that.canload=true
 						that.page_number=1
@@ -124,11 +132,22 @@
 		},
 		onReachBottom() {
 			if(this.canload){
+				this.loadFlag=1
 				this.status = 'loading';
 				this.page_number=this.page_number+1
 				this.getList()
 			}
 		},
+		onPullDownRefresh() {
+			this.loadFlag=0
+			this.showLoading()
+			this.canload=true
+			this.page_number=1
+			this.getList()
+			setTimeout(function () {
+				uni.stopPullDownRefresh();
+			}, 5000);
+		}
 	}
 </script>
 

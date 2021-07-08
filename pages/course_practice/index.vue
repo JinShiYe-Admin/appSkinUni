@@ -133,11 +133,7 @@
 						})
 						this.tremArray=[{name:'全部',value:''}].concat(response.list)
 					}else{
-						uni.showToast({
-							icon:'none',
-							title:'暂无学期',
-							duration:1500
-						});
+						this.showToast('暂无学期')
 					}
 				})
 			},
@@ -166,6 +162,9 @@
 					}else{
 						this.status = 'more';
 					}
+					setTimeout(function () {
+						uni.stopPullDownRefresh();
+					}, 1000);
 					this.hideLoading()
 				})
 			},
@@ -210,6 +209,16 @@
 				this.getPageList()
 			}
 		},
+		onPullDownRefresh() {
+			this.loadFlag=0
+			this.showLoading()
+			this.canload=true
+			this.page_number=1
+			this.getPageList()
+			setTimeout(function () {
+				uni.stopPullDownRefresh();
+			}, 5000);
+		}
 	}
 </script>
 

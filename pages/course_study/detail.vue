@@ -305,7 +305,6 @@
 			if(!this.pageData.learnInfo.pass){
 				let curr_time=Math.round(this.videoData.curr_time)
 				let play_time=this.videoData.play_time
-				console.log("播放时长实际上是这样的: ",after_time,curr_time,play_time);
 				if(play_time>0){//播放时间有效才请求
 					const comData={
 						per_code:this.pageData.learnInfo.per_code,
