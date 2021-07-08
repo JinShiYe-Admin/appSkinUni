@@ -7,7 +7,7 @@
 
 <script>
 	import util from '../../commom/util.js';
-	import mynavBar from '../../components/my-navBar/m-navBar';
+	import mynavBar from '@/components/my-navBar/m-navBar';
 	export default {
 		data() {
 			return {

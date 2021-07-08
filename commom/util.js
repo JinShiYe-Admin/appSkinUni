@@ -26,16 +26,16 @@ function getDptTree(dptList) {
 
 //设置登录用户的信息
 function setPersonal(data){
-	uni.setStorageSync(Vue.prototype.personal,JSON.stringify(data))
+	uni.setStorageSync(Vue.prototype.personal+Vue.prototype.globaData.UNITCODE,JSON.stringify(data))
 }
 //获取登录用户的信息
 function getPersonal(){
-	const _value=uni.getStorageSync(Vue.prototype.personal)
+	const _value=uni.getStorageSync(Vue.prototype.personal+Vue.prototype.globaData.UNITCODE)
 	if(_value){return JSON.parse(_value)}else{return {}}
 }
 //清除登录用户的信息
 function removePersonal(){
-	uni.removeStorageSync(Vue.prototype.personal);
+	uni.removeStorageSync(Vue.prototype.personal+Vue.prototype.globaData.UNITCODE);
 }
 
 //设置登录用户的菜单信息

@@ -115,8 +115,14 @@
         "devServer" : {
             "https" : false
         },
-        "domain" : "",
-        "title" : "教宝校园"
+        "domain" : "http://jbsch-pb.zhuxue101.net",
+        "title" : "大学校园",
+        "router" : {
+            "base" : "/develop/jsyWechatUnv/100001/202107071645/"
+        },
+        "sdkConfigs" : {
+            "maps" : {}
+        }
     },
     "mp-qq" : {
         "uniStatistics" : {

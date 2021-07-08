@@ -9,8 +9,8 @@
 				</view>
 				<view style="text-align: center;margin-top: 10px;">{{personInfo.user_name}}</view>
 				<uni-list style="margin-top: 20px;">
-					<uni-list-item title="修改头像" link to=''></uni-list-item>
-					<uni-list-item title="修改密码" link to=''></uni-list-item>
+					<!-- <uni-list-item title="修改头像" link to=''></uni-list-item> -->
+					<uni-list-item @click="gotoModifyPswd()" title="修改密码" link to=''></uni-list-item>
 				</uni-list>
 				<view class="uni-padding-wrap uni-common-mt">
 					<button @click="tuichu()" type="warn">退出登录</button>
@@ -45,10 +45,16 @@
 		},
 		methods: {
 			clickLeftImg() {
-				this.$refs.showPersonInfo.open();
+				if(this.navItem.index == 0){
+					this.$refs.showPersonInfo.open();
+				}
 			},
 			closeDrawer() {
 				this.$refs.showPersonInfo.close();
+			},
+			gotoModifyPswd:function(){
+				this.$refs.showPersonInfo.close();
+				util.openwithData('/pages/more/modifyPswd');
 			},
 			tuichu(){
 				var personal = util.getPersonal();
@@ -66,6 +72,7 @@
 					this.post(this.globaData.INTERFACE_SSO_SKIN + 'session/removeSession', comData0, data => {
 						this.hideLoading();
 						util.setPersonal({});
+						this.$refs.showPersonInfo.close();
 						util.openwithData('/pages/login/login');
 					});
 				}

@@ -10,22 +10,28 @@ const GLOBALDATA = {};//参数对象 用于存全局公共参数
 const EnvKey = 3; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
 switch (EnvKey) {
 	case 1:
+		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
 		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.UNITCODE ='100004' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =15;//七牛appid
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 	case 2:
+		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
 		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.UNITCODE ='100004' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =15;//七牛appid
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 	case 3:
+		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0003';//平台代码
 		GLOBALDATA.APPCODE ='schappUni#';//应用系统代码
+		GLOBALDATA.UNITCODE ='100001' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.INTERFACE_SSO_SKIN ='http://nwifapp.jiaobaowang.net/ssotoskin/api/skin/';//单点登录,供PC外皮及APP用户登录,管理
 		GLOBALDATA.INTERFACE_SSO_HR ='http://nwifapp.jiaobaowang.net/ssotohr/api/hr/';//单点登录,供人事系统使用
@@ -40,28 +46,35 @@ switch (EnvKey) {
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 	case 4:
+		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
 		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.UNITCODE ='100004' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =16;//七牛appid
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 	case 5:
+		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0001' ;//平台代码
 		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.UNITCODE ='100001' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =17;//七牛appid
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 	case 6:
+		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
 		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.UNITCODE ='100001' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =16;//七牛appid
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 }
-Vue.prototype.PRIVACE='http://www.jiaobao.net/dl/jiaobaoxiaoyuan/jbxyPrivacy.htm';//用户隐私政策地址
+Vue.prototype.APPORWECHAT =1;//app为1，微信里面是2
+Vue.prototype.PRIVACE='http://www.jiaobao.net/dl/jiaobaoxiaoyuan/jbdxyPrivacy.htm';//用户隐私政策地址
 Vue.prototype.QN_PV_NAME ='jbsch-pv';//七牛私有空间名
 Vue.prototype.QN_PB_NAME ='jbsch-pb';//七牛公有空间名
 Vue.prototype.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
