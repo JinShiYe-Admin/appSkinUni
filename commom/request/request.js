@@ -19,7 +19,7 @@ import utils from '../util.js'
  */
 function post(url, data, callback, ecallback) {
 	let personal = utils.getPersonal();
-	console.log('post.personal:'+JSON.stringify(personal));
+	// console.log('post.personal:'+JSON.stringify(personal));
 	let signData = addSign({
 		app_code: personal.app_code,
 		platform_code: personal.platform_code,
@@ -39,7 +39,7 @@ function post(url, data, callback, ecallback) {
 		success: res => { //接口调用成功的回调函数
 			if (res.statusCode === 200) {
 				if (res.data.state === 'fail') {
-					console.log('failfailfail:'+JSON.stringify(res.data));
+					// console.log('failfailfail:'+JSON.stringify(res.data));
 					uni.hideLoading()
 					if (res.data.code === 'sup_0015') {
 						showToast(res.data.msg)
@@ -61,7 +61,7 @@ function post(url, data, callback, ecallback) {
 						//令牌续订
 						post(this.globaData.INTERFACE_SSO_SKIN + 'token/refresh', tempToken, (tempD,
 							data1) => {
-								console.log('refreshToken:'+JSON.stringify(data1));
+								// console.log('refreshToken:'+JSON.stringify(data1));
 								if (data1.code == 0) {
 									var tempInfo00 = utils.getPersonal();
 									tempInfo00.access_token = data1.data.access_token;
@@ -73,7 +73,7 @@ function post(url, data, callback, ecallback) {
 									tempData.access_token = data1.data.access_token;
 									delete tempData.sign;
 									post(url, tempData, (dataT,data2)=> {
-										console.log('data2data2:'+JSON.stringify(data2));
+										// console.log('data2data2:'+JSON.stringify(data2));
 										// data2 = modifyParameter(url, data2);
 										// callback(data2);
 										callback(data2.data, data2);
@@ -86,7 +86,7 @@ function post(url, data, callback, ecallback) {
 						showToast(res.data.msg);
 					}
 				} else {
-					console.log('success:'+JSON.stringify(res.data));
+					// console.log('success:'+JSON.stringify(res.data));
 					if (res.data.code === '0000') {
 						callback(res.data.data, res.data)
 					} else {
