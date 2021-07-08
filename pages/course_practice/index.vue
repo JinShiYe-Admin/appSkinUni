@@ -223,7 +223,7 @@
 		top: 44px; 
 		/* #endif */
 		/* #ifdef APP-PLUS */
-		top: 72px;
+		top: 71px;
 		/* #endif */
 		position: sticky;
 	    display: flex;

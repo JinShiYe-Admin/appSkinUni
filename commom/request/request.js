@@ -57,8 +57,11 @@ function post(url,data,callback,ecallback) {
 			}
 	 	},
 	 	fail: (e) => {//接口调用失败的回调函数
-	 		console.log('fail',e);
+			console.log("e: " + JSON.stringify(e));
 			uni.hideLoading()
+			if(ecallback){
+				ecallback(e)
+			}
 			showToast('网络请求失败')
 	 	},
 		complete: () => {

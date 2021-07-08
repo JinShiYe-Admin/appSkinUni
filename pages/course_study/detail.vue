@@ -2,18 +2,18 @@
 	<view>
 		<view style="flex: 1;">
 			<template v-if="videoData">
-				<video style="width: 100%;height: 200px;" :src="videoData.url" 
+				<video id="myVideo" style="width: 100%;height: 200px;" :src="videoData.url" 
 					:initial-time="videoData.curr_time"
 					@error="videoErrorCallback" 
 					@play="onPlay"  
 					@timeupdate="onTimeupdate"
 					@pause="onPause" 
+					@ended="onEnded"
 					@waiting="onWaiting"
-					:show-fullscreen-btn="false"
+					:show-fullscreen-btn="true"
 					:show-play-btn="true"
 					:enable-progress-gesture="false"
 					:show-mute-btn="true"
-					play-btn-position="center"
 					:show-center-play-btn="true"
 					:controls="true"> 
 					<!-- @ended="onEnded"  播放结束时，end和pause会同时触发，看上去end好像没有必要存在了-->
@@ -60,7 +60,6 @@
 	export default {
 		data() {
 			return {
-				
 				treeLoadReady:false,
 				props: {label: 'name',icon: 'img',},
 				
@@ -71,7 +70,6 @@
 				checkedKeys:[],//选中的树形菜单节点
 				times:'',//页面计时器对象
 				timesPlay:'',//页面计时器对象
-				resetAfterTime:'',//是否需要重置起始时间
 			}
 		},
 		methods: {
@@ -80,7 +78,9 @@
 				if(obj.childNodesId.length===0){//如果>0说明是父节点，不管
 					this.showLoading()
 					if(obj.data.url){//如果是视频，获取学习此视频的信息
-						this.clearInterval()
+						this.clearIntervals()
+						this.videoData.play_time=Math.round(this.videoData.curr_time-this.videoData.after_time)
+						this.videoData.after_time=this.videoData.curr_time
 						this.updateCurrentTime();
 						this.getVideoLearnInfo(obj.parentId,obj.data.id,obj.data)
 					}else{//如果不是视频，获取目录下的视频列表
@@ -202,37 +202,108 @@
 				})
 			},
 			videoErrorCallback(e){
-				uni.showModal({
-					content: e.target.errMsg,
-					showCancel: false
-				})
+				 this.showToast("视频播放异常")
 			},
 			onPlay(e){
-				  this.setInterval();
+				 console.log("onPlay:");
+				 this.setInterval()
 			},
 			onPause(e){
 				  console.log("onPause:" + JSON.stringify(e));
 				   //暂停计时并更新时间
-				   this.clearInterval()
-				   this.updateCurrentTime();
+				   this.clearIntervals()
+				   this.videoData.play_time=Math.round(this.videoData.curr_time-this.videoData.after_time)
 				   this.videoData.after_time=this.videoData.curr_time
+				   this.updateCurrentTime();
 			},
-			onTimeupdate(e){
-				this.videoData.curr_time=parseInt((""+(e.detail.currentTime+0.1)).split(".")[0])
-				if(this.resetAfterTime){
-					 this.resetAfterTime=false
-					 this.videoData.after_time=parseInt((""+(e.detail.currentTime+0.1)).split(".")[0])
-				}
+			onEnded(e){
+				 console.log("onEnded:" + JSON.stringify(e));
+				//#ifdef APP-PLUS
+				//暂停计时并更新时间
+				this.clearIntervals()
+				this.videoData.play_time=Math.round(this.videoData.curr_time-this.videoData.after_time)
+				this.videoData.after_time=this.videoData.curr_time
+				this.updateCurrentTime();
+				//#endif
 			},
 			onWaiting(e){
-				  console.log("onWaiting:" + JSON.stringify(e));
-				  this.setInterval();
-				  this.resetAfterTime=true
+				console.log("onWaiting:" + JSON.stringify(e));
+				// this.videoContext.pause();
+				this.setInterval()
+				this.videoData.play_time=Math.round(this.videoData.curr_time-this.videoData.after_time)
+				this.videoData.after_time=this.videoData.curr_time
+				this.updateCurrentTime();
+			},
+			onTimeupdate(e){
+				console.log("e.detail.currentTime: " + e.detail.currentTime);
+				this.videoData.curr_time=e.detail.currentTime
+				this.videoData.play_time=Math.round(e.detail.currentTime-this.videoData.after_time)
 			},
 			updateCurrentTime(){
-				let after_time=this.videoData.after_time
-				let curr_time=this.videoData.curr_time
-				let play_time=curr_time-after_time
+				if(!this.pageData.learnInfo.pass){
+					let curr_time=Math.round(this.videoData.curr_time)
+					let play_time=this.videoData.play_time
+					if(play_time>0){//播放时间有效才请求
+						const comData={
+							per_code:this.pageData.learnInfo.per_code,
+							coll_code:this.pageData.learnInfo.coll_code,
+							major_code:this.pageData.learnInfo.major_code,
+							sys_grd_code:this.pageData.learnInfo.sys_grd_code,
+							term_code:this.itemData.term_code,
+							sub_code:this.itemData.sub_code,
+							stu_code:personal.user_code,
+							stu_catalog_file_id:this.pageData.learnInfo.id,
+							start_time:this.moment().format('YYYY-MM-DD HH:mm:ss'),
+							current_time:curr_time,
+							play_time:play_time,
+							index_code:this.itemData.index_code,
+						}
+						if(this.videoData.log_id){
+							comData.log_id=this.videoData.log_id
+						}
+						console.log(JSON.stringify(comData))
+						this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/updateCurrentTime',comData,response=>{
+							console.log("responsea: " + JSON.stringify(response));
+							this.videoData.after_time=this.videoData.curr_time
+							if(response.log_id){
+								this.videoData.log_id=response.log_id
+							}
+						},()=>{
+							this.clearIntervals()
+						})
+					}
+				}
+			},
+			setInterval(){//更新视频进度计时器
+				if(this.times){
+					this.clearIntervals()
+				}
+				this.times=setInterval(()=>{
+					this.updateCurrentTime();
+				},15000)
+			},  
+			clearIntervals(){
+				clearInterval(this.times)
+				this.times=null
+			},
+		},
+		onLoad: function(option) {
+			uni.setNavigationBarTitle({title: "详情"})
+			const itemData = util.getPageData(option);
+			console.log("itemData: " + JSON.stringify(itemData));
+			this.treeLoadReady=true
+			this.itemData=itemData
+			this.getDetailById(itemData)
+		},
+		onReady: function(res) {
+		        // #ifndef MP-ALIPAY
+		        this.videoContext = uni.createVideoContext('myVideo',this)
+		        // #endif
+		},
+		onUnload:function(){
+			if(!this.pageData.learnInfo.pass){
+				let curr_time=Math.round(this.videoData.curr_time)
+				let play_time=this.videoData.play_time
 				console.log("播放时长实际上是这样的: ",after_time,curr_time,play_time);
 				if(play_time>0){//播放时间有效才请求
 					const comData={
@@ -252,7 +323,6 @@
 					if(this.videoData.log_id){
 						comData.log_id=this.videoData.log_id
 					}
-					console.log(JSON.stringify(comData))
 					this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/updateCurrentTime',comData,response=>{
 						console.log("responsea: " + JSON.stringify(response));
 						if(response.log_id){
@@ -260,59 +330,8 @@
 						}
 					})
 				}
-			},
-			setInterval(){//更新视频进度计时器
-				if(this.times){
-					this.clearInterval()
-				}
-				this.times=setInterval(()=>{
-					this.updateCurrentTime();
-				},15000)
-			}, 
-			clearInterval(){
-				clearInterval(this.times)
-				this.times=null
-			},
-		},
-		onLoad: function(option) {
-			uni.setNavigationBarTitle({title: "详情"})
-			const itemData = util.getPageData(option);
-			console.log("itemData: " + JSON.stringify(itemData));
-			this.treeLoadReady=true
-			this.itemData=itemData
-			this.getDetailById(itemData)
-		},
-		onUnload:function(){
-			let after_time=this.videoData.after_time
-			let curr_time=this.videoData.curr_time
-			let play_time=curr_time-after_time
-			console.log("播放时长实际上是这样的: ",play_time);
-			if(play_time>0){//播放时间有效才请求
-				const comData={
-					per_code:this.pageData.learnInfo.per_code,
-					coll_code:this.pageData.learnInfo.coll_code,
-					major_code:this.pageData.learnInfo.major_code,
-					sys_grd_code:this.pageData.learnInfo.sys_grd_code,
-					term_code:this.itemData.term_code,
-					sub_code:this.itemData.sub_code,
-					stu_code:personal.user_code,
-					stu_catalog_file_id:this.pageData.learnInfo.id,
-					start_time:this.moment().format('YYYY-MM-DD HH:mm:ss'),
-					current_time:curr_time,
-					play_time:play_time,
-					index_code:this.itemData.index_code,
-				}
-				if(this.videoData.log_id){
-					comData.log_id=this.videoData.log_id
-				}
-				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/updateCurrentTime',comData,response=>{
-					console.log("responsea: " + JSON.stringify(response));
-					if(response.log_id){
-						this.videoData.log_id=response.log_id
-					}
-				})
 			}
-			this.clearInterval()
+			this.clearIntervals()
 		}
 	}
 	//获取多维数组第一个最下级目录的第一个节点对象
