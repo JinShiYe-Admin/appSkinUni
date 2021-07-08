@@ -88,6 +88,7 @@
             "path" : "pages/register/index1",
             "style" :                                                                                    
             {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
@@ -106,6 +107,15 @@
             "style" :                                                                                    
             {
 				"navigationBarTitleText": "修改密码",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/more/privace",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
             

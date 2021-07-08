@@ -45,7 +45,9 @@
 		},
 		methods: {
 			clickLeftImg() {
-				this.$refs.showPersonInfo.open();
+				if(this.navItem.index == 0){
+					this.$refs.showPersonInfo.open();
+				}
 			},
 			closeDrawer() {
 				this.$refs.showPersonInfo.close();

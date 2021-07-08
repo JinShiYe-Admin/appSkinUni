@@ -108,10 +108,10 @@
         "devServer" : {
             "https" : false
         },
-        "domain" : "",
+        "domain" : "http://jbsch-pb.zhuxue101.net",
         "title" : "大学校园",
         "router" : {
-            "base" : "/develop/jsyWechatUnv/202107071530/"
+            "base" : "/develop/jsyWechatUnv/100001/202107071645/"
         },
         "sdkConfigs" : {
             "maps" : {}

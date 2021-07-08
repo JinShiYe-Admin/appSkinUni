@@ -107,11 +107,7 @@
 			searchInfo: function() {
 				console.log('searchInfo');
 				if (this.yanzm.length != 6) {
-					uni.showToast({
-						icon: 'none',
-						title: '请输入正确的验证码',
-						duration: 1500
-					})
+					this.showToast('请输入正确的验证码');
 				} else {
 					var comData0 = {
 						platform_code: this.globaData.PLATFORMCODE, //平台代码
@@ -134,11 +130,7 @@
 							this.userList = data.data.list;
 						} else {
 							this.disabledFlag = 1;
-							uni.showToast({
-								icon: 'none',
-								title: data.msg,
-								duration: 1500
-							})
+							this.showToast(data.msg);
 						}
 					});
 				}
@@ -146,23 +138,11 @@
 			getYanzm: function() {
 				console.log('getYanzm');
 				if (this.userName == '') {
-					uni.showToast({
-						icon: 'none',
-						title: '请输入用户姓名',
-						duration: 1500
-					})
+					this.showToast('请输入用户姓名');
 				} else if (this.userPhone == '') {
-					uni.showToast({
-						icon: 'none',
-						title: '请输入用户电话',
-						duration: 1500
-					})
+					this.showToast('请输入用户电话');
 				} else if (!isPhone(this.userPhone)) {
-					uni.showToast({
-						icon: 'none',
-						title: '请输入正确的用户电话',
-						duration: 1500
-					})
+					this.showToast('请输入正确的用户电话');
 				} else {
 					var comData0 = {
 						platform_code: this.globaData.PLATFORMCODE, //平台代码
@@ -184,11 +164,7 @@
 							this.countDown();
 						} else {
 							this.disabledFlag = 0;
-							uni.showToast({
-								icon: 'none',
-								title: data.msg,
-								duration: 1500
-							})
+							this.showToast(data.msg);
 						}
 					});
 				}

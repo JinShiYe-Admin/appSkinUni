@@ -1,6 +1,7 @@
 <template>
 	<view>
-		<navigation-bar :title="navTitle" background-color="#00CFBD" />
+		<!-- <navigation-bar :title="navTitle" background-color="#00CFBD" /> -->
+		<uniNavBar :title="navTitle" left-icon="back" backgroundColor='#00CFBD' fixed='true' statusBar='true' color='white' @clickLeft='clickLeft()'></uniNavBar>
 		<view style="background-color: white;height: 10px;"></view>
 		<h4 style="margin-left: 20px;margin-right: 20px;text-align: center;">{{curPage.user_info}}</h4>
 		<view style="background-color: white;height: 20px;"></view>
@@ -61,6 +62,7 @@
 <script>
 	import util from '../../commom/util.js';
 	import md5 from '../../commom/encrypt/md5.js';
+	import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
 	let _this;
 	export default {
 		data() {
@@ -74,6 +76,9 @@
 				yanZMTime: 600,
 				tempStr: '',
 			}
+		},
+		components: {
+			uniNavBar
 		},
 		onLoad: function(option) {
 			_this = this;
@@ -102,6 +107,11 @@
 			}, 1000);
 		},
 		methods: {
+			clickLeft:function(){
+				let eventChannel = _this.getOpenerEventChannel();
+				eventChannel.emit('refresh', {});
+				uni.navigateBack();
+			},
 			refresh: function() {
 				setTimeout(function() {
 					let eventChannel = _this.getOpenerEventChannel();
@@ -111,7 +121,7 @@
 			},
 			clickPrivace: function() {
 				console.log('clickPrivace')
-				// utils.mOpenWithData("../../html/login/privace.html", {});
+				util.openwithData('/pages/more/privace');
 			},
 			clickFlag: function(flag) {
 				if (flag == 0) {
@@ -131,60 +141,24 @@
 			submit: function() { //提交数据
 				console.log(this.utype_value)
 				if (this.uaccount == '') {
-					uni.showToast({
-						icon: 'none',
-						title: '请输入用户账号',
-						duration: 1500
-					})
+					this.showToast('请输入用户账号');
 				} else if (escape(this.uaccount).indexOf("%u") >= 0) {
-					uni.showToast({
-						icon: 'none',
-						title: '用户账号不能输入汉字',
-						duration: 1500
-					})
+					this.showToast('用户账号不能输入汉字');
 				} else if (this.uaccount.length > 18 || this.uaccount.length < 4) {
-					uni.showToast({
-						icon: 'none',
-						title: '字符长度不能超过18位',
-						duration: 1500
-					})
+					this.showToast('字符长度不能超过');
 				} else if (this.upassword == '') {
-					uni.showToast({
-						icon: 'none',
-						title: '请输入用户密码',
-						duration: 1500
-					})
+					this.showToast('请输入用户密码');
 				} else if (this.confirmpassword == '') {
-					uni.showToast({
-						icon: 'none',
-						title: '请确认密码',
-						duration: 1500
-					})
+					this.showToast('请确认密码');
 				} else if (!(this.upassword === this.confirmpassword)) {
-					uni.showToast({
-						icon: 'none',
-						title: '两次输入的密码不一致',
-						duration: 1500
-					})
+					this.showToast('两次输入的密码不一致');
 				} else if (!checkPass(this.confirmpassword)) {
-					uni.showToast({
-						icon: 'none',
-						title: '密码需为数字和字母的组合',
-						duration: 1500
-					})
+					this.showToast('密码需为数字和字母的组合');
 				} else if (this.confirmpassword.length > 18 || this.confirmpassword.length < 6) {
-					uni.showToast({
-						icon: 'none',
-						title: '密码需为6到18位数字和字母的组合',
-						duration: 1500
-					})
+					this.showToast('密码需为6到18位数字和字母的组合');
 				} else {
 					if (this.curPage.status == 0 && this.privaceFlag == 0) {
-						uni.showToast({
-							icon: 'none',
-							title: '请先同意隐私政策',
-							duration: 1500
-						})
+						this.showToast('请先同意隐私政策');
 					} else {
 						var comData0 = {
 							platform_code: this.globaData.PLATFORMCODE, //平台代码
@@ -207,11 +181,7 @@
 							this.post(this.globaData.INTERFACE_HR_SKIN + tempUrl, comData0, (data0, data) => {
 								console.log('register:' + JSON.stringify(data));
 								this.hideLoading();
-								uni.showToast({
-									icon: 'none',
-									title: data.msg,
-									duration: 1500
-								})
+								this.showToast(data.msg);
 								this.refresh();
 							});
 						} else {
@@ -240,18 +210,10 @@
 										console.log('register:' + JSON.stringify(data));
 										this.hideLoading();
 										if (data.code == 0) {
-											uni.showToast({
-												icon: 'none',
-												title: data.msg,
-												duration: 1500
-											})
+											this.showToast(data.msg);
 											this.refresh();
 										} else {
-											uni.showToast({
-												icon: 'none',
-												title: data.msg,
-												duration: 1500
-											})
+											this.showToast(data.msg);
 										}
 									});
 							});

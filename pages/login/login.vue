@@ -1,32 +1,47 @@
 <template>
 	<view>
 		<uniNavBar title='登录' backgroundColor='#00CFBD' fixed='true' statusBar='true' color='white' @clickLeft='clickLeft()'></uniNavBar>
-		<view class="titletal">
-			<text class="title">{{title}}</text>
+		
+		<view v-if="showInput == 1">
+			<view class="titletal">
+				<text class="title">{{title}}</text>
+			</view>
+			<!-- <view class="uni-list"> -->
+			<view class="uni-list-cell" style="height: 60px;">
+				<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
+					<image class="nameImage" src="../../static/login/name.png"></image>
+					<label class="loginLab">账号</label>
+				</view>
+				<view class="uni-list-cell-db">
+					<!-- <input v-model="upassword" password type="text" placeholder="请输入密码" /> -->
+					<input class="inputText" type="text" placeholder="请输入账号" value="user" v-model="uname" />
+				</view>
+			</view>
+			<view class="uni-list-cell">
+				<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
+					<image class="keyImage" src="../../static/login/key.png"></image>
+					<label class="loginLab">密码</label>
+				</view>
+				<view class="uni-list-cell-db">
+					<!-- <input v-model="confirmpassword" password style="" type="text" placeholder="请确认密码" /> -->
+					<input class="inputText" password="true" type="text" placeholder="请输入密码" value="pass" v-model="passw" />
+				</view>
+			</view>
+			<view class="loginBtnView"><button class="loginBtn" @click="login()">登录</button></view>
+			<view @click="zhuce" style="margin-top: 30px;float: left;margin-left: 40px;color: #00CFBD;">账号注册/找回密码</view>
 		</view>
-		<!-- <view class="uni-list"> -->
-		<view class="uni-list-cell" style="height: 60px;">
-			<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
-				<image class="nameImage" src="../../static/login/name.png"></image>
-				<label class="loginLab">账号</label>
+		<view v-if="showInput == 2">
+			<view class="uni-list-cell" style="height: 60px;">
+				<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
+					<image class="nameImage" src="../../static/login/name.png"></image>
+					<label class="loginLab">密码</label>
+				</view>
+				<view class="uni-list-cell-db">
+					<input class="inputText" password type="text" placeholder="请输入密码" value="user" v-model="pagePswd" />
+				</view>
 			</view>
-			<view class="uni-list-cell-db">
-				<!-- <input v-model="upassword" password type="text" placeholder="请输入密码" /> -->
-				<input class="inputText" type="text" placeholder="请输入账号" value="user" v-model="uname" />
-			</view>
+			<view class="loginBtnView"><button class="loginBtn" @click="sure()">确定</button></view>
 		</view>
-		<view class="uni-list-cell">
-			<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
-				<image class="keyImage" src="../../static/login/key.png"></image>
-				<label class="loginLab">密码</label>
-			</view>
-			<view class="uni-list-cell-db">
-				<!-- <input v-model="confirmpassword" password style="" type="text" placeholder="请确认密码" /> -->
-				<input class="inputText" password="true" type="text" placeholder="请输入密码" value="pass" v-model="passw" />
-			</view>
-		</view>
-		<view class="loginBtnView"><button class="loginBtn" @tap="login">登录</button></view>
-		<view @click="zhuce" style="margin-top: 30px;float: left;margin-left: 40px;color: #00CFBD;">账号注册/找回密码</view>
 	</view>
 </template>
 
@@ -37,6 +52,8 @@
 	export default {
 		data() {
 			return {
+				showInput:0,//正式环境，直接显示注册,1，非正式环境，如果是微信页面，显示输入密码,2，app直接显示注册,1
+				pagePswd:'',
 				loginInfo: {},
 				title: '教宝校园大学',
 				uname: '',
@@ -97,6 +114,19 @@
 			uniNavBar
 		},
 		methods: {
+			sure:function(){
+				if(this.pagePswd == 'jsy@123654'){
+					this.showInput = 1;
+					var tempInfo = util.getPersonal();
+					if (tempInfo.userName0) {
+						this.uname = tempInfo.userName0;
+						this.passw = tempInfo.passWord0;
+						this.login();
+					}
+				}else{
+					this.showToast('请输入正确的密码');
+				}
+			},
 			clickLeft:function(){
 				console.log('clickLeft');
 			},
@@ -105,11 +135,7 @@
 			},
 			toPage: function() {
 				if (this.jsonData.length === 0) {
-					uni.showToast({
-						icon: 'none',
-						title: '请先登录',
-						duration: 1500
-					})
+					this.showToast('请先登录');
 				} else {
 					util.openwithData('./detail', this.jsonData, {
 						test1: function(data) {
@@ -127,10 +153,7 @@
 				// 	url: '/pages/test/index'
 				// });
 				if (this.uname.length <= 0 || this.passw.length <= 0) {
-					uni.showToast({
-						title: '账号或密码不能为空',
-						icon: 'none'
-					});
+					this.showToast('账号或密码不能为空');
 					return;
 				} else {
 					this.showLoading()
@@ -139,7 +162,7 @@
 					let comData = {
 						platform_code: this.globaData.PLATFORMCODE, //平台代码
 						app_code: this.globaData.APPCODE, //应用系统代码
-						unit_code: '-1', //单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
+						unit_code: this.globaData.UNITCODE, //单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 						uuid: deviceId, //设备唯一识别码,防同一应用在不同机器上登录互串,验证码校检用
 						webid: broswerId, //浏览器识别码,防不同浏览器登录同一应用互串,验证码校检用（web用浏览器类型加版本，app用操作系统+版本））
 						shaketype: '1', //
@@ -165,7 +188,7 @@
 								device_type: '1', //登录设备类型，0：WEB、1：APP、2：客户端
 								platform_code: this.globaData.PLATFORMCODE, //平台代码
 								app_code: this.globaData.APPCODE, //应用系统代码
-								unit_code: '-1', //单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
+								unit_code: this.globaData.UNITCODE, //单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 								verify_code: ''
 							};
 							this.post(this.globaData.INTERFACE_SSO_SKIN + 'login', comData,
@@ -189,28 +212,16 @@
 												if (data4.data.list.length > 0) {
 													this.setPageMenu(data4.data.list[0].childList);
 												} else {
-													uni.showToast({
-														icon: 'none',
-														title: '应用系统无权限，请联系管理员',
-														duration: 1500
-													})
+													this.showToast('应用系统无权限，请联系管理员');
 												}
 											} else {
-												uni.showToast({
-													icon: 'none',
-													title: data4.msg,
-													duration: 1500
-												})
+												this.showToast(data4.msg);
 											}
 										})
 
 								}, '正在登录...')
 						} else {
-							uni.showToast({
-								icon: 'none',
-								title: '获取秘钥失败',
-								duration: 1500
-							});
+							this.showToast('获取秘钥失败');
 						}
 					})
 				}
@@ -254,11 +265,7 @@
 								url: tempArray[0].pagePath
 							});
 						} else {
-							uni.showToast({
-								icon: 'none',
-								title: '当前系统没有可用菜单',
-								duration: 1500
-							});
+							this.showToast('当前系统没有可用菜单');
 						}
 					}
 				}
@@ -333,12 +340,34 @@
 			}
 		},
 		onLoad: function() {
-			var tempInfo = util.getPersonal();
-			if (tempInfo.userName0) {
-				this.uname = tempInfo.userName0;
-				this.passw = tempInfo.passWord0;
-				this.login();
+			// var tempInfo = util.getPersonal();
+			// if (tempInfo.userName0) {
+			// 	this.uname = tempInfo.userName0;
+			// 	this.passw = tempInfo.passWord0;
+			// 	this.login();
+			// }
+			if(this.globaData.EnvKey == 5){
+				this.showInput = 1;
+				var tempInfo = util.getPersonal();
+				if (tempInfo.userName0) {
+					this.uname = tempInfo.userName0;
+					this.passw = tempInfo.passWord0;
+					this.login();
+				}
+			}else{
+				if (this.APPORWECHAT == 1) {
+					this.showInput = 1;
+					var tempInfo = util.getPersonal();
+					if (tempInfo.userName0) {
+						this.uname = tempInfo.userName0;
+						this.passw = tempInfo.passWord0;
+						this.login();
+					}
+				} else{
+					this.showInput = 2;
+				}
 			}
+			console.log('this.showInput:'+this.showInput);
 		}
 	}
 </script>
