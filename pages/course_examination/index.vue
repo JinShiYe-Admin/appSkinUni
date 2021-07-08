@@ -1,12 +1,11 @@
 <template>
 	<view class="">
 		<mynavBar :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
-		<view class="tabs" v-if="pageData.lenth>0">
+		<view class="tabs">
 			<view class="example-body">
 				<uni-notice-bar :show-icon="true" text="考试安排：本学期考试安排如下，请同学们按时参加考试。" />
 			</view>
 			<uni-row class="demo-uni-row">
-				<template v-if="pageData.lenth>0">
 					<uni-col class="card-list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-for="item in pageData">
 					   <uni-card-examination mode="style" :is-shadow="true" :thumbnail="item.img_url?item.img_url:'http://jbsch-pb.zhuxue101.net/develop/hr/student/2vsr68c0jn_1616635382610.png'" class="u-card">
 							<uni-tag v-if="item.test_status==2" text="未开始" size="small" type="warning" class="tag-right"/>
@@ -24,16 +23,10 @@
 								<uni-col :span="12" style="text-align: right;" v-if="item.test_status==0"><button class="mini-btn mini-btn-design" type="primary" size="mini" @click="toDetail(item)" >答题</button></uni-col>
 							</view> 
 					   </uni-card-examination> 
-					</uni-col> 
-				</template>
+					</uni-col>
 			</uni-row>  
 			<uni-load-more :status="status" :icon-size="17" :content-text="contentText" />
 		</view>
-		<template v-else>
-			<view>
-				<uni-title class="h4" style="align-items: center;padding: 3px 0;" color="#F5222D" type="h4" title="暂无考试安排"></uni-title>
-			</view>
-		</template>
 		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
