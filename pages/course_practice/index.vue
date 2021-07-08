@@ -32,7 +32,7 @@
 					<uni-row style="margin-top: 10px;">
 						<uni-col :span="24" style="text-align: right;">
 							 <button v-if="item.stu_test_status!=1" class="mini-btn" type="default" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;"  @click="clickLook(item)">查看</button>
-							 <button v-if="item.stu_test_status!=3" class="mini-btn" type="primary" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;"  @click="clickTest(item)">答题</button>
+							 <button v-if="item.stu_test_status!=3" class="mini-btn" type="primary" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;background-color: #00CFBD;"  @click="clickTest(item)">答题</button>
 						</uni-col>
 					</uni-row>
 				</uni-card>
@@ -77,6 +77,7 @@
 					contentnomore: ''//没有更多
 				},
 				canload:true,//是否加载更多
+				loadFlag:0,//0 刷新 1加载更多
 				
 				tabbar: [],
 				styles: {borderColor:'rgba(204,198,204,0.4)',borderRadius: '10px',margin: '0 1px 0'}
@@ -93,6 +94,7 @@
 					this.subArray=[{sub_name:'全部',sub_code:''}].concat(term.sub_list)
 				}
 				this.showLoading()
+				this.loadFlag=0
 				this.canload=true
 				this.page_number=1
 				this.getPageList()
@@ -100,6 +102,7 @@
 			courseClick:function(e){
 				this.subIndex=e.detail.value
 				this.showLoading()
+				this.loadFlag=0
 				this.canload=true
 				this.page_number=1
 				this.getPageList()
@@ -107,6 +110,7 @@
 			statusClick:function(e){
 				this.statusIndex=e.detail.value
 				this.showLoading()
+				this.loadFlag=0
 				this.canload=true
 				this.page_number=1
 				this.getPageList()
@@ -148,7 +152,11 @@
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/page',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
-					this.pageData=this.pageData.concat(response.list)
+					if(this.loadFlag===0){
+						this.pageData=[].concat(response.list)
+					}else{
+						this.pageData=this.pageData.concat(response.list)
+					}
 					if(this.page_number>=response.total_page){
 						this.status = 'noMore';
 						this.canload=false
@@ -167,6 +175,7 @@
 				item.index_code=this.index_code
 				util.openwithData('./detail-practice',item,{
 					refresh(data){
+						this.loadFlag=0
 						that.showLoading()
 						that.canload=true
 						that.page_number=1
@@ -192,6 +201,7 @@
 		},
 		onReachBottom() {
 			if(this.canload){
+				this.loadFlag=1
 				this.status = 'loading';
 				this.page_number=this.page_number+1
 				this.getPageList()
@@ -201,15 +211,20 @@
 </script>
 
 <style>
-	page {
+	/* page {
 	    width: 100%;
 	    min-height: 100%;
 	    display: flex;
 		flex-direction: column;
 		background-color: #EEF0F2;
-	}
+	} */
 	.tabs {
-		top: 44px;
+		/* #ifndef APP-PLUS */
+		top: 44px; 
+		/* #endif */
+		/* #ifdef APP-PLUS */
+		top: 71px;
+		/* #endif */
 		position: sticky;
 	    display: flex;
 	    flex-direction: row;

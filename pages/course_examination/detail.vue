@@ -53,6 +53,7 @@
 	export default {
 		data() {
 			return {
+				canSubmit:true,
 				interval:'',//倒计时相关
 				timeTitle:'',//倒计时相关
 				
@@ -91,7 +92,7 @@
 							}
 						})
 						let num=(answers/questions.length)*100
-						this.percent=num
+						this.percent=parseInt(num)
 					}
 					questions.map(question_item=>{
 						question_item.optionObjs=[]
@@ -196,7 +197,11 @@
 				if(showDialog){
 					this.$refs.alertDialog.open()
 				}else{
-					this.submitData()
+					if(this.canSubmit){
+						this.canSubmit=false
+						setTimeout(()=>{this.canSubmit=true},1000)
+						this.submitData()
+					}
 				}
 			},
 			dialogConfirm(){
@@ -219,12 +224,12 @@
 				console.log("comData: " + JSON.stringify(comData));
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/exam/submit',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
-					this.hideLoading()
 					this.showToast("交卷成功")
 					setTimeout(()=>{
 						const eventChannel = this.getOpenerEventChannel()
 						eventChannel.emit('refreshPage', {data: 'test'});
 						uni.navigateBack();
+						this.hideLoading()
 					},1000)
 				})
 			},
@@ -237,7 +242,7 @@
 					}
 				})
 				let num=(answers/this.question_list.questions.length)*100
-				this.percent=num
+				this.percent=parseInt(num)
 			},
 			cancel(){
 				 uni.navigateBack();
@@ -246,7 +251,6 @@
 				let diffs=this.itemData.diffSeconds
 				this.interval=setInterval(()=>{
 					let num=--diffs
-					console.log("num: ",num);
 					if((num/60)===30){
 							this.showToast("距离考试结束还有 30 分钟！")
 					}else if((num/60)===15){
@@ -316,7 +320,13 @@
 		background-color: #EEF0F2;
 	}
 	.tabs {
+		/* #ifndef APP-PLUS */
 		top: 44px;
+		/* #endif */
+		/* #ifdef APP-PLUS */
+		top: -1px;
+		/* #endif */
+		
 		position: sticky;
 	    overflow: hidden;
 	    background-color: #FFFFFF;
@@ -347,6 +357,7 @@
 		font-size: 15px;
 		height: 50px;
 		padding-top: 6px;
+		 background-color:#00CFBD !important;
 	}
 	.test-btn0{
 		width: 30%;

@@ -191,13 +191,13 @@
 		border-radius: 0;
 	}
 	uni-button[disabled][type=primary]{
-		background-color: #b1b1b1;
+		background-color: #b1b1b1 !important;
 	}
 	.test-btn{
 		width: 100%;
 		border-radius: 0;
 		color: #FFFFFF;
-		background-color: #00cfbd;
+		background-color: #00cfbd !important;
 		font-size: 15px;
 		height: 50px;
 		padding-top: 6px;

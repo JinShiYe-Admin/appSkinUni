@@ -51,6 +51,7 @@
 	export default {
 		data() {
 			return {
+				canSubmit:true,
 				itemData:{},
 				percent:0,
 				answer_list:[],
@@ -85,7 +86,7 @@
 							}
 						})
 						let num=(answers/questions.length)*100
-						this.percent=num
+						this.percent=parseInt(num)
 					}
 					questions.map(question_item=>{
 						question_item.optionObjs=[]
@@ -190,7 +191,11 @@
 				if(showDialog){
 					this.$refs.alertDialog.open()
 				}else{
-					this.submitData()
+					if(this.canSubmit){
+						this.canSubmit=false
+						setTimeout(()=>{this.canSubmit=true},1000)
+						this.submitData()
+					}
 				}
 			},
 			dialogConfirm(){
@@ -198,7 +203,7 @@
 			},
 			submitData(){
 				let score=0
-				this.showLoading();
+				// this.showLoading();
 				this.answer_list.map(item=>{
 					score+=parseFloat(item.score)
 				})
@@ -213,12 +218,12 @@
 				console.log("comData: " + JSON.stringify(comData));
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/submit',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
-					this.hideLoading()
 					this.showToast("交卷成功")
 					setTimeout(()=>{
 						const eventChannel = this.getOpenerEventChannel()
 						eventChannel.emit('refresh', {data: 'test'});
 						uni.navigateBack();
+						this.hideLoading()
 					},1000)
 				})
 			},
@@ -231,7 +236,7 @@
 					}
 				})
 				let num=(answers/this.question_list.questions.length)*100
-				this.percent=num
+				this.percent=parseInt(num)
 			},
 			cancel(){
 				 uni.navigateBack();
@@ -256,13 +261,18 @@
 		background-color: #EEF0F2;
 	}
 	.tabs {
-		top: 44px;
+		 /* #ifndef APP-PLUS */
+		 top: 44px;
+		 /* #endif */
+		 /* #ifdef APP-PLUS */
+		 top: -1px;
+		 /* #endif */
 		position: sticky;
 	    overflow: hidden;
 	    background-color: #FFFFFF;
 		padding: 10px;
 		z-index: 10;
-		height: 50px;
+		height: 20px;
 	}
 	
 	.uni-list-cell {
@@ -283,10 +293,10 @@
 		width: 30%;
 		border-radius: 0;
 		color: #FFFFFF;
-		background-color: #00cfbd;
 		font-size: 15px;
 		height: 50px;
 		padding-top: 6px;
+		background-color: #00CFBD !important;
 	}
 	.test-btn0{
 		width: 30%;
