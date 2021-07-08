@@ -37,7 +37,7 @@
 				<progress :percent="pageData.percent" border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5"/>
 			</view>
 			<view style="display: flex;flex: 1;height: 1px;background-color: rgba(230,230,230,08);margin: 8px -15px 3px;"></view>
-			<uni-title class="h5" type="h5" :title="`视频：${videoData.name}`"></uni-title>
+			<uni-title class="h5" type="h5" :title="`视频：${videoData.name?videoData.name:'请选择视频'}`"></uni-title>
 			<uni-title class="h5" type="h5" :title="`本视频时长：${pageData.timesStr?pageData.timesStr:'请选择视频'}`"></uni-title>
 			<uni-title v-if="!itemData.ex_score" class="h5" type="h5" :title="`本视频已学时长：${pageData.video_learn_timeStr?pageData.video_learn_timeStr:'未开始学习'}`"></uni-title>
 		</view>
@@ -268,6 +268,7 @@
 							this.videoData.after_time=this.videoData.curr_time
 							if(response.log_id){
 								this.videoData.log_id=response.log_id
+								this.pageData.learnInfo.pass=response.pass
 							}
 						},()=>{
 							this.clearIntervals()
