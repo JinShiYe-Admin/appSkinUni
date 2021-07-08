@@ -73,7 +73,9 @@
 						this.hideLoading();
 						util.setPersonal({});
 						this.$refs.showPersonInfo.close();
-						util.openwithData('/pages/login/login');
+						uni.reLaunch({
+						    url:'/pages/login/login'
+						});
 					});
 				}
 			}

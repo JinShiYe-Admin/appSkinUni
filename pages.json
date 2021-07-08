@@ -66,16 +66,6 @@
             
         }
         ,{
-            "path" : "pages/more/m_navBar",
-            "style" :                                                                                    
-            {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
             "path" : "pages/register/index",
             "style" :                                                                                    
             {
