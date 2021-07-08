@@ -3,9 +3,9 @@
 		<uniNavBar title='登录' backgroundColor='#00CFBD' fixed='true' statusBar='true' color='white' @clickLeft='clickLeft()'></uniNavBar>
 		
 		<view v-if="showInput == 1">
-			<view class="titletal">
+			<!-- <view class="titletal">
 				<text class="title">{{title}}</text>
-			</view>
+			</view> -->
 			<!-- <view class="uni-list"> -->
 			<view class="uni-list-cell" style="height: 60px;">
 				<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
