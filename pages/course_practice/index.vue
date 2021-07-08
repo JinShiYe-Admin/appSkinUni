@@ -231,13 +231,7 @@
 		background-color: #EEF0F2;
 	} */
 	.tabs {
-		/* #ifndef APP-PLUS */
 		top: 44px; 
-		/* #endif */
-		/* #ifdef APP-PLUS */
-		top: 71px;
-		/* #endif */
-		position: sticky;
 	    display: flex;
 	    flex-direction: row;
 	    overflow: hidden;
@@ -248,9 +242,9 @@
 	.flex-box{
 		 flex: 1;
 	}
-	.content-body{
+	.uni-easyinput__content-input{
+		line-height: 1 !important;
 	}
-	
 	.tag-right{
 		position: absolute;
 		right: 10px;

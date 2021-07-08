@@ -165,7 +165,7 @@
         flex: 1;
         flex-direction: column;
         overflow: hidden;
-        background-color: #EEF0F2;
+        background-color: #FFFFFF;
     }
 	  
 	 .text {
