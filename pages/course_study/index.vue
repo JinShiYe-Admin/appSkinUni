@@ -63,6 +63,9 @@
 							})
 							this.tabBars=response.list
 							this.getList(0,response.list[0].id)
+						}else{
+							this.showToast("暂无学期")
+							this.hideLoading()
 						}
 				})
 			},

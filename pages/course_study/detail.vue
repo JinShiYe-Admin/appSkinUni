@@ -4,6 +4,7 @@
 			<template v-if="videoData">
 				<video id="myVideo" style="width: 100%;height: 200px;" :src="videoData.url" 
 					:initial-time="videoData.curr_time"
+					:title="videoData.name"
 					@error="videoErrorCallback" 
 					@play="onPlay"  
 					@timeupdate="onTimeupdate"
@@ -16,7 +17,6 @@
 					:show-mute-btn="true"
 					:show-center-play-btn="true"
 					:controls="true"> 
-					<!-- @ended="onEnded"  播放结束时，end和pause会同时触发，看上去end好像没有必要存在了-->
 				</video>
 			</template>
 			<template v-else>
@@ -36,6 +36,8 @@
 			<view v-if="!itemData.ex_score">
 				<progress :percent="pageData.percent" border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5"/>
 			</view>
+			<view style="display: flex;flex: 1;height: 1px;background-color: rgba(230,230,230,08);margin: 8px -15px 3px;"></view>
+			<uni-title class="h5" type="h5" :title="`视频：${videoData.name}`"></uni-title>
 			<uni-title class="h5" type="h5" :title="`本视频时长：${pageData.timesStr?pageData.timesStr:'请选择视频'}`"></uni-title>
 			<uni-title v-if="!itemData.ex_score" class="h5" type="h5" :title="`本视频已学时长：${pageData.video_learn_timeStr?pageData.video_learn_timeStr:'未开始学习'}`"></uni-title>
 		</view>
