@@ -31,7 +31,7 @@ switch (EnvKey) {
 		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0003';//平台代码
 		GLOBALDATA.APPCODE ='schappUni#';//应用系统代码
-		GLOBALDATA.UNITCODE ='100001' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
+		GLOBALDATA.UNITCODE ='-1' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.INTERFACE_SSO_SKIN ='http://nwifapp.jiaobaowang.net/ssotoskin/api/skin/';//单点登录,供PC外皮及APP用户登录,管理
 		GLOBALDATA.INTERFACE_SSO_HR ='http://nwifapp.jiaobaowang.net/ssotohr/api/hr/';//单点登录,供人事系统使用

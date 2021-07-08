@@ -354,7 +354,9 @@
 	}
 	
 	.ly-tree-node__label {
-		font-size: 26rpx
+		font-size: 26rpx;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	
 	.ly-tree-node__loading-icon {

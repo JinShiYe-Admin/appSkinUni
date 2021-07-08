@@ -16,7 +16,7 @@
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
 				"navigationBarTitleText": "课程学习",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 		}, { //课程学习 详情
 			"path": "pages/course_study/detail",
@@ -30,7 +30,7 @@
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
 				"navigationBarTitleText": "考试",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 		}, 
 		{ //考试详情
@@ -45,7 +45,7 @@
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
 				"navigationBarTextStyle": "white",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 		} 
 	    ,{//练习 详情
@@ -109,7 +109,24 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		//更新相关
+		{
+			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
+			"style": {
+				"disableScroll": true,
+				"app-plus": {
+					"backgroundColorTop": "transparent",
+					"background": "transparent",
+					"titleNView": false,
+					"scrollIndicator": false,
+					"popGesture": "none",
+					"animationType": "fade-in",
+					"animationDuration": 200
+	
+				}
+			}
+		}
     ],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
 	"globalStyle": {

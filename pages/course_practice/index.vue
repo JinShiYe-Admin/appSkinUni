@@ -18,7 +18,10 @@
 					<uni-tag v-if="item.stu_test_status==2" text="已做" size="small" type="warning" class="tag-right"/>
 					<uni-tag v-else-if="item.stu_test_status==1" text="未做" size="small" type="error" class="tag-right"/>
 					<uni-tag v-else-if="item.stu_test_status==3" text="已评" size="small" type="primary" class="tag-right"/>
-					<uni-title class="h4" type="h4" :title="item.test_name"></uni-title>
+					
+					<uni-row>
+						<uni-col :span="20"><uni-title class="h4" type="h4" :title="item.test_name"></uni-title></uni-col>
+					</uni-row>
 					<uni-row style="margin-top: 5px;">
 						<uni-col :span="10" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><text style="font-size: 22rpx;">学期: {{item.grd_name}}{{item.term_name}}</text></uni-col>
 						<uni-col :span="10"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><text style="font-size: 22rpx;">课程: {{item.sub_name}}</text></uni-col>
@@ -68,7 +71,7 @@
 				statusIndex:0,
 				tremArray: [{name:'全部',value:''}],
 				subArray: [{sub_name:'全部',sub_code:''}],
-				statusArray: [{name:'全部',value:''},{name:'未评',value:1},{name:'已做',value:2},{name:'已评',value:3}],
+				statusArray: [{name:'全部',value:''},{name:'未做',value:1},{name:'已做',value:2},{name:'已评',value:3}],
 
 				status:'more',//加载更多的状态
 				contentText: {
@@ -130,11 +133,7 @@
 						})
 						this.tremArray=[{name:'全部',value:''}].concat(response.list)
 					}else{
-						uni.showToast({
-							icon:'none',
-							title:'暂无学期',
-							duration:1500
-						});
+						this.showToast('暂无学期')
 					}
 				})
 			},
@@ -163,6 +162,9 @@
 					}else{
 						this.status = 'more';
 					}
+					setTimeout(function () {
+						uni.stopPullDownRefresh();
+					}, 1000);
 					this.hideLoading()
 				})
 			},
@@ -207,6 +209,16 @@
 				this.getPageList()
 			}
 		},
+		onPullDownRefresh() {
+			this.loadFlag=0
+			this.showLoading()
+			this.canload=true
+			this.page_number=1
+			this.getPageList()
+			setTimeout(function () {
+				uni.stopPullDownRefresh();
+			}, 5000);
+		}
 	}
 </script>
 
