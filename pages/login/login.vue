@@ -1,501 +1,347 @@
 <template>
-	<view>
-		<uniNavBar title='登录' backgroundColor='#00CFBD' fixed='true' statusBar='true' color='white' @clickLeft='clickLeft()'></uniNavBar>
-		
-		<view v-if="showInput == 1">
-			<view class="titletal">
-				<text class="title">{{title}}</text>
-			</view>
-			<!-- <view class="uni-list"> -->
-			<view class="uni-list-cell" style="height: 60px;">
-				<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
-					<image class="nameImage" src="../../static/login/name.png"></image>
-					<label class="loginLab">账号</label>
-				</view>
-				<view class="uni-list-cell-db">
-					<!-- <input v-model="upassword" password type="text" placeholder="请输入密码" /> -->
-					<input class="inputText" type="text" placeholder="请输入账号" value="user" v-model="uname" />
-				</view>
-			</view>
-			<view class="uni-list-cell">
-				<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
-					<image class="keyImage" src="../../static/login/key.png"></image>
-					<label class="loginLab">密码</label>
-				</view>
-				<view class="uni-list-cell-db">
-					<!-- <input v-model="confirmpassword" password style="" type="text" placeholder="请确认密码" /> -->
-					<input class="inputText" password="true" type="text" placeholder="请输入密码" value="pass" v-model="passw" />
-				</view>
-			</view>
-			<view class="loginBtnView"><button class="loginBtn" @click="login()">登录</button></view>
-			<view @click="zhuce" style="margin-top: 30px;float: left;margin-left: 40px;color: #00CFBD;">账号注册/找回密码</view>
+	<view class="login-box">
+		<view class="admin-logo">
+			<image :src="logo" mode="heightFix"></image>
 		</view>
-		<view v-if="showInput == 2">
-			<view class="uni-list-cell" style="height: 60px;">
-				<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
-					<image class="nameImage" src="../../static/login/name.png"></image>
-					<label class="loginLab">密码</label>
+		<view class="uni-header no-padding">
+			<view class="uni-title">系统登录</view>
+		</view>
+		<view class="uni-container">
+			<uni-forms ref="form" v-model="formData" :rules="rules" @submit="submit">
+				<uni-forms-item left-icon="uni-icons-person-filled" name="username" labelWidth="35">
+					<input ref="usernameInput" @confirm="submitForm" class="uni-input-border" type="text"
+						placeholder="账户" v-model="formData.username" />
+				</uni-forms-item>
+				<uni-forms-item left-icon="uni-icons-locked-filled" class="icon-container" name="password"
+					labelWidth="35">
+					<input ref="passwordInput" @confirm="submitForm" class="uni-input-border" :password="showPassword"
+						placeholder="密码" v-model="formData.password" />
+					<text class="uni-icon-password-eye pointer" :class="[!showPassword ? 'uni-eye-active' : '']"
+						@click="changePassword">&#xe568;</text>
+				</uni-forms-item>
+				<uni-forms-item v-if="needCaptcha" left-icon="uni-icons-person-filled" class="icon-container"
+					name="captcha" labelWidth="35">
+					<input ref="captchaInput" @confirm="submitForm" class="uni-input-border" type="text"
+						placeholder="验证码" v-model="formData.captcha" />
+					<view class="admin-captcha-img pointer" @click="createCaptcha">
+						<i v-if="captchaLoading" class="uni-loading"></i>
+						<img v-else :src="captchaBase64" width="100%" height="100%"></img>
+					</view>
+				</uni-forms-item>
+				<view class="uni-button-group">
+					<button class="uni-button uni-button-full" type="primary" :loading="loading" :disabled="loading"
+						@click="submitForm">登录</button>
 				</view>
-				<view class="uni-list-cell-db">
-					<input class="inputText" password type="text" placeholder="请输入密码" value="user" v-model="pagePswd" />
-				</view>
+			</uni-forms>
+			<view class="uni-tips">
+				<text class="uni-tips-text" @click="initAdmin">如无管理员账号，请先创建管理员...</text>
 			</view>
-			<view class="loginBtnView"><button class="loginBtn" @click="sure()">确定</button></view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import util from '../../commom/util.js'
-	import RSAKey from '../../commom/encrypt/rsa.js'
-	import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
+	import {
+		mapMutations,
+		mapActions
+	} from 'vuex'
+	import config from '@/admin.config.js'
+	import {
+		getDeviceUUID
+	} from '@/js_sdk/uni-admin/util.js'
+
+	const captchaOptions = {
+		deviceId: getDeviceUUID(),
+		scene: 'login'
+	}
+
 	export default {
 		data() {
 			return {
-				showInput:0,//正式环境，直接显示注册,1，非正式环境，如果是微信页面，显示输入密码,2，app直接显示注册,1
-				pagePswd:'',
-				loginInfo: {},
-				title: '教宝校园大学',
-				uname: '',
-				passw: '',
-				jsonData: [],
-				showArray: [],
-				pageArray: [{
-					// 非凸起按钮未激活的图标，可以是uView内置图标名或自定义扩展图标库的图标
-					// 或者png图标的【绝对路径】，建议尺寸为80px * 80px
-					// 如果是中间凸起的按钮，只能使用图片，且建议为120px * 120px的png图片
-					iconPath: "../../static/tabbar/practive.png",
-					// 激活(选中)的图标，同上
-					selectedIconPath: "../../static/tabbar/practive_select.png",
-					// 显示的提示文字
-					text: '练习',
-					// 红色角标显示的数字，如果需要移除角标，配置此参数为0即可
-					count: 0,
-					// 如果配置此值为true，那么角标将会以红点的形式显示
-					isDot: false,
-					// 如果使用自定义扩展的图标库字体，需配置此值为true
-					// 自定义字体图标库教程：https://www.uviewui.com/guide/customIcon.html
-					customIcon: false,
-					// 如果是凸起按钮项，需配置此值为true
-					midButton: false,
-					// 点击某一个item时，跳转的路径，此路径必须是pagees.json中tabBar字段中定义的路径
-					pagePath: '/pages/course_practice/index', // 1.5.6新增，路径需要以"/"开头
-					img_href: "../../img/schapp_work/kaoqin_tab.png",
-					url: 'schappUni_CoursePractice',
-					childList: []
-				}, {
-					text: "课程学习", //课程学习
-					pagePath: "/pages/course_study/index",
-					iconPath: '../../static/tabbar/study.png',
-					selectedIconPath: '../../static/tabbar/study_select.png',
-					count: 0,
-					isDot: false,
-					customIcon: false,
-					img_href: "../../img/schapp_work/kaoqin_tab.png",
-					url: 'schappUni_CourseStudy',
-					childList: []
-				}, 
-				{
-					text: "考试", //考试
-					pagePath: "/pages/course_examination/index",
-					iconPath: '../../static/tabbar/study.png',
-					selectedIconPath: '../../static/tabbar/study_select.png',
-					count: 0,
-					isDot: false,
-					customIcon: false,
-					img_href: "../../img/schapp_work/kaoqin_tab.png",
-					url: 'schappUni_CourseTest',
-					childList: []
-				}, 
-				],
+				...config.navBar,
+				indexPage: config.index.url,
+				showPassword: true,
+				loading: false,
+				formData: {
+					username: '',
+					password: '',
+					captcha: '',
+				},
+				captchaLoading: false,
+				needCaptcha: false,
+				captchaBase64: '',
+				rules: {
+					// 对name字段进行必填验证
+					username: {
+						rules: [{
+								required: true,
+								errorMessage: '请输入账户',
+							},
+							{
+								minLength: 1,
+								maxLength: 30,
+								errorMessage: '账户长度在{minLength}到{maxLength}个字符',
+							}
+						]
+					},
+					// 对email字段进行必填验证
+					password: {
+						rules: [{
+								required: true,
+								errorMessage: '请输入正确的密码',
+							},
+							{
+								minLength: 6,
+								errorMessage: '密码长度大于{minLength}个字符',
+							}
+						]
+					},
+					// 对email字段进行必填验证
+					captcha: {
+						rules: [{
+							required: true,
+							errorMessage: '请输入验证码',
+						}]
+					}
+				}
 			}
 		},
-		components: {
-			uniNavBar
+		mounted() {
+			// #ifdef H5
+			this.focus()
+			// #endif
+			const self = this
+			uni.getStorage({
+				key: "lastUsername",
+				success: function(res) {
+					self.formData.username = res.data
+				}
+			})
+			// this.getNeedCaptcha()
 		},
 		methods: {
-			sure:function(){
-				if(this.pagePswd == 'jsy@123654'){
-					this.showInput = 1;
-					var tempInfo = util.getPersonal();
-					if (tempInfo.userName0) {
-						this.uname = tempInfo.userName0;
-						this.passw = tempInfo.passWord0;
-						this.login();
-					}
-				}else{
-					this.showToast('请输入正确的密码');
+			...mapActions({
+				init: 'app/init'
+			}),
+			...mapMutations({
+				setToken(commit, tokenInfo) {
+					commit('user/SET_TOKEN', tokenInfo)
 				}
-			},
-			clickLeft:function(){
-				console.log('clickLeft');
-			},
-			zhuce: function() {
-				util.openwithData('/pages/register/index');
-			},
-			toPage: function() {
-				if (this.jsonData.length === 0) {
-					this.showToast('请先登录');
-				} else {
-					util.openwithData('./detail', this.jsonData, {
-						test1: function(data) {
-							console.log(data);
-						},
-						test2: function(data) {
-							console.log(data);
+			}),
+			submit(event) {
+				if (this.loading) {
+					return
+				}
+				const {
+					errors,
+					value
+				} = event.detail
+				if (errors) {
+					return
+				}
+				// #ifdef H5
+				this.$refs.usernameInput.$refs.input.blur()
+				this.$refs.passwordInput.$refs.input.blur()
+				this.$refs.captchaInput && this.$refs.captchaInput.$refs.input.blur()
+				// #endif
+				this.loading = true
+				this.$request('login', {
+					...value,
+					captchaOptions
+				}, {
+					functionName: 'uni-id-cf',
+					showModal: false
+				}).then(res => {
+					this.setToken({
+						token: res.token,
+						tokenExpired: res.tokenExpired
+					})
+					return this.init().then(() => {
+						uni.showToast({
+							title: '登录成功',
+							icon: 'none'
+						})
+						uni.setStorage({
+							key: 'lastUsername',
+							data: value.username
+						});
+						uni.redirectTo({
+							url: this.indexPage,
+						})
+					})
+				}).catch(err => {
+					console.log(4444, err);
+					if (err.needCaptcha) {
+						this.formData.captcha = ''
+						this.createCaptcha()
+						this.needCaptcha = true
+					}
+					const that = this
+					uni.showModal({
+						content: err.message || '请求服务失败',
+						showCancel: false,
+						success: function() {
+							if (err.code === 10101 && that.$refs.usernameInput) {
+								that.$refs.usernameInput.$refs.input.focus()
+							}
+							if (err.code === 10102 && that.$refs.passwordInput) {
+								that.$refs.passwordInput.$refs.input.focus()
+							}
+							if (err.code === 10002 && that.$refs.captchaInput) {
+								that.$refs.captchaInput.$refs.input.focus()
+							}
 						}
 					})
-				}
-			},
-			login: function() {
-				console.log('login');
-				// uni.switchTab({
-				// 	url: '/pages/test/index'
-				// });
-				if (this.uname.length <= 0 || this.passw.length <= 0) {
-					this.showToast('账号或密码不能为空');
-					return;
-				} else {
-					this.showLoading()
-					let deviceId = util.getDeviceId();
-					let broswerId = util.getBroswerId();
-					let comData = {
-						platform_code: this.globaData.PLATFORMCODE, //平台代码
-						app_code: this.globaData.APPCODE, //应用系统代码
-						unit_code: this.globaData.UNITCODE, //单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
-						uuid: deviceId, //设备唯一识别码,防同一应用在不同机器上登录互串,验证码校检用
-						webid: broswerId, //浏览器识别码,防不同浏览器登录同一应用互串,验证码校检用（web用浏览器类型加版本，app用操作系统+版本））
-						shaketype: '1', //
-					};
-					console.log('response.comData:' + JSON.stringify(comData));
-					this.post(this.globaData.INTERFACE_SSO_SKIN + 'login/getEncryptKey', comData, (response0,
-						response) => {
-						console.log('response:' + JSON.stringify(response));
-						if (response.code === '0000') {
-							let data = response.data
-							let ConsultPublicKey = {
-								n: String(data.Modulus),
-								e: String(data.Exponent)
-							}
-							let rsaPublicKey = new RSAKey()
-							rsaPublicKey.setPublicString(JSON.stringify(ConsultPublicKey))
-							let comData = {
-								uuid: deviceId, //设备唯一识别码,防同一应用在不同机器上登录互串,验证码校检用
-								webid: broswerId, //浏览器识别码,防不同浏览器登录同一应用互串,验证码校检用（web用浏览器类型加版本，app用操作系统+版本））
-								shaketype: '1', //
-								login_name: rsaPublicKey.encrypt(this.uname), //登录名
-								password: rsaPublicKey.encrypt(this.passw), //
-								device_type: '1', //登录设备类型，0：WEB、1：APP、2：客户端
-								platform_code: this.globaData.PLATFORMCODE, //平台代码
-								app_code: this.globaData.APPCODE, //应用系统代码
-								unit_code: this.globaData.UNITCODE, //单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
-								verify_code: ''
-							};
-							this.post(this.globaData.INTERFACE_SSO_SKIN + 'login', comData,
-								response => {
-									console.log('login:' + JSON.stringify(response));
-									this.loginInfo = response;
-									//1.4获取菜单
-									//不需要加密的数据
-									var comData4 = {
-										platform_code: this.globaData.PLATFORMCODE, //平台代码
-										app_code: this.globaData.APPCODE, //应用系统代码
-										unit_code: response.user.unit_code,
-										index_code: 'index',
-										access_token: response.access_token //用户令牌
-									};
-									this.post(this.globaData.INTERFACE_SSO_SKIN + 'acl/menu',
-										comData4, (data1, data4) => {
-											this.hideLoading();
-											console.log("data4: " + JSON.stringify(data4));
-											if (data4.code == 0) {
-												if (data4.data.list.length > 0) {
-													this.setPageMenu(data4.data.list[0].childList);
-												} else {
-													this.showToast('应用系统无权限，请联系管理员');
-												}
-											} else {
-												this.showToast(data4.msg);
-											}
-										})
+				}).finally(err => {
+					this.loading = false
+				})
 
-								}, '正在登录...')
-						} else {
-							this.showToast('获取秘钥失败');
-						}
-					})
-				}
 			},
-			gotoPage: function() {
-				let tempData = this.loginInfo;
-				//将personal 中的key更改为指定的值
-				tempData.user_name = tempData.user.user_name;
-				tempData.sex = tempData.user.sex;
-				tempData.pid = tempData.user.pid;
-				tempData.unit_name = tempData.user.unit_name;
-				tempData.login_name = tempData.user.login_name;
-				tempData.platform_code = tempData.user.platform_code;
-				tempData.user_code = tempData.user.user_code;
-				tempData.img_url = tempData.user.img_url;
-				tempData.platform_name = tempData.user.platform_name;
-				tempData.unit_code = tempData.user.unit_code;
-				tempData.id = tempData.user.id;
-				tempData.type_code = tempData.user.type_code;
-				tempData.app_code = tempData.user.app_code;
-				tempData.userName0 = this.uname;
-				tempData.passWord0 = this.passw;
-				delete tempData['user'];
-				console.log('new tempData:' + JSON.stringify(tempData));
-				util.setPersonal(tempData)
-				if ('111111a' == '123456') {
-					var tempModel = {
-						flag: 1 //0是主动修改密码，1是判断是默认密码，自动让修改
+
+			createCaptcha() {
+				this.captchaLoading = true
+				this.$request('createCaptcha', captchaOptions, {
+					functionName: 'uni-id-cf'
+				}).then(res => {
+					if (res.code === 0) {
+						this.captchaBase64 = res.captchaBase64
 					}
-					// util.mOpenWithData("../../html/mine/modifyPassword.html", tempModel);
-				} else {
-					if (tempData.user_code == '0') { //无权限
-						// util.hrefSessionStorage('../../html/login/index2.html', {});
-					} else {
-						// util.hrefSessionStorage('../../html/login/index.html', {});
-						console.log("跳转页面吧");
-						this.jsonData = tempData;
-						var tempArray = util.getMenu();
-						if (tempArray.length > 0) {
-							uni.switchTab({
-								url: tempArray[0].pagePath
-							});
-						} else {
-							this.showToast('当前系统没有可用菜单');
-						}
-					}
-				}
+				}).catch(err => {}).finally(err => {
+					this.captchaLoading = false
+				})
 			},
-			setPageMenu: function(tempMenu) {
-				var tempA = [];
-				// tempA.push({
-				// 	text: "更多",
-				// 	pagePath: "/pages/more/index",
-				// 	iconPath: '../../static/tabbar/more.png',
-				// 	selectedIconPath: '../../static/tabbar/more_select.png',
-				// 	img_href: "../../img/schapp_work/kaoqin_tab.png",
-				// 	url: 'schappUni_CoursePractice',
-				// 	childList: []
-				// });
-				for (var i = 0; i < tempMenu.length; i++) { //一级菜单循环
-					var web_first_item = tempMenu[i];
-					for (var a = 0; a < this.pageArray.length; a++) {
-						var local_first_item = this.pageArray[a];
-						if (local_first_item.url == web_first_item.url) {
-							local_first_item.text = web_first_item.name;
-							local_first_item.access = web_first_item.access;
-							local_first_item.redspot_url = web_first_item.redspot_url;
-							let childList = []
-							for (var b = 0; b < web_first_item.childList.length; b++) { //二级菜单循环
-								var web_second_item = web_first_item.childList[b];
-								for (var c = 0; c < local_first_item.childList.length; c++) {
-									var local_second_item = local_first_item.childList[c];
-									if (local_second_item.url == web_second_item.url) {
-										local_second_item.access = web_second_item.access;
-										local_second_item.redspot_url = web_second_item.redspot_url;
-										local_second_item.childList = web_second_item.childList;
-										local_second_item.text = web_second_item.name;
-										childList.push(local_second_item)
-									}
-								}
-							}
-							local_first_item.childList = childList
-							tempA.push(local_first_item);
-						}
-					}
-				}
-				for (var i = 0; i < tempA.length; i++) {
-					let tempM = tempA[i];
-					tempM.index = i;
-				}
-				console.log('tempA:' + JSON.stringify(tempA));
-				if (tempA.length > 5) {
-					var tempArrayM = tempA.slice(4);
-					util.setMenuMore(tempArrayM);
-					// store.set(window.storageKeyName.MOREMENU, tempArrayM);
-					tempA = tempA.slice(0, 4);
-					tempA.push({
-						text: "更多",
-						index: 4,
-						pagePath: "/pages/more/index",
-						iconPath: '../../static/tabbar/more.png',
-						selectedIconPath: '../../static/tabbar/more_select.png',
-						img_href: "../../img/schapp_work/kaoqin_tab.png",
-						url: 'schappUni_CoursePractice',
-						childList: []
-					});
-				} else {
-					util.setMenuMore([]);
-				}
-				this.showArray = [].concat(tempA);
-				util.setMenu(this.showArray);
-				if (this.showArray.length > 0) {
-					util.setTabbarMenu(this.showArray[0]);
-				}
-				this.gotoPage();
-			}
-		},
-		onLoad: function() {
-			// var tempInfo = util.getPersonal();
-			// if (tempInfo.userName0) {
-			// 	this.uname = tempInfo.userName0;
-			// 	this.passw = tempInfo.passWord0;
-			// 	this.login();
-			// }
-			if(this.globaData.EnvKey == 5){
-				this.showInput = 1;
-				var tempInfo = util.getPersonal();
-				if (tempInfo.userName0) {
-					this.uname = tempInfo.userName0;
-					this.passw = tempInfo.passWord0;
-					this.login();
-				}
-			}else{
-				if (this.APPORWECHAT == 1) {
-					this.showInput = 1;
-					var tempInfo = util.getPersonal();
-					if (tempInfo.userName0) {
-						this.uname = tempInfo.userName0;
-						this.passw = tempInfo.passWord0;
-						this.login();
-					}
-				} else{
-					this.showInput = 2;
-				}
-			}
-			console.log('this.showInput:'+this.showInput);
+
+			confirmForm(name, value) {
+				// this.binddata(name, value)
+				this.submitForm()
+			},
+			submitForm() {
+				this.$refs.form.submit()
+			},
+			initAdmin() {
+				uni.redirectTo({
+					url: '/pages/demo/init/init'
+				})
+			},
+			changePassword: function() {
+				this.showPassword = !this.showPassword;
+			},
+			// #ifdef H5
+			focus: function() {
+				this.$refs.usernameInput.$refs.input.focus()
+			},
+			// #endif
 		}
 	}
 </script>
 
 <style>
-	/* .content {
+	page {
+		width: 100%;
+		height: 100%;
 		display: flex;
-		flex-flow: column nowrap;
+		justify-content: center;
+		background-color: #fff;
+	}
+
+	.login-box {
+		position: relative;
+		max-width: 350px;
+		flex: 1;
+		padding: 140px 35px 0;
+		margin: 0 auto;
+		overflow: hidden;
+		/* background-color: #F5F5F5; */
+	}
+
+
+	.underline:hover {
+		text-decoration: underline;
+	}
+
+	.uni-tips {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 15px;
+	}
+
+	.uni-tips-text {
+		cursor: pointer;
+		text-decoration: underline;
+		font-size: 13px;
+		color: #007AFF;
+		opacity: 0.8;
+	}
+
+	.no-padding {
+		padding: 0;
+	}
+
+	.admin-logo {
+		display: flex;
+		justify-content: center;
+		margin-bottom: 30px;
+	}
+
+	.admin-logo image {
+		height: 40px;
+	}
+
+	.admin-captcha-img {
+		position: absolute;
+		top: 1px;
+		right: 0;
+		display: flex;
 		justify-content: center;
 		align-items: center;
-	} */
-
-	.mui-checkbox input[type='checkbox']:checked:before {
-		color: #00CFBD;
-	}
-
-	.RememberPass {
-		color: #adadad;
-
-		margin-top: 5px;
-	}
-
-	.RememberCheck {
-		margin-left: -50%;
-		margin-top: 10px;
-		color: #adadad;
-	}
-
-	.content {
-		text-align: center;
-		height: 400upx;
-	}
-
-	.backlogo {
-		padding-bottom: 0px;
-		position: absolute;
-		bottom: 0px;
-		left: 0px;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-	}
-
-	.logo {
-		height: 200upx;
-		width: 200upx;
-		margin-top: 200upx;
-	}
-
-	.titletal {
-		margin-top: 90upx;
-		height: 75px;
-		text-align: center;
-	}
-
-	.title {
-		/* font-size: 36upx; */
-		color: #00CFBD;
-		font-size: 150%;
-	}
-
-	.text {
-		border: 1, solid, black;
-	}
-
-	.login-from {
-		/* margin-top: 30%; */
-
-		flex: auto;
-		height: 100%;
-		width: 100%;
-	}
-
-	.inputView {
 		background-color: #fff;
-		line-height: 50px;
-		border-width: 1px;
-		border-bottom: 2dp;
+		width: 100px;
+		height: 33px;
+		border: 1px #E5E5E5 solid;
+		border-radius: 0 5px 5px 0;
+		background-color: #f9f9f9;
 	}
 
-	/*输入框*/
-	.nameImage,
-	.keyImage {
-		margin-top: 25px;
-		margin-left: 0px;
-		width: 22px;
-		height: 22px;
+	.admin-captcha-img img {
+		border-radius: 5px;
 	}
 
-	.loginLab {
-		margin: 0px 15px 15px 10px;
-		color: #545454;
-		font-size: 18px;
+	.uni-loading:before {
+		background: rgba(0, 0, 0, 0) url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHBhdGggZmlsbD0ibm9uZSIgZD0iTTAgMGgxMDB2MTAwSDB6Ii8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMjAiIHg9IjQ2LjUiIHk9IjQwIiBmaWxsPSIjRTlFOUU5IiByeD0iNSIgcnk9IjUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTMwKSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjIwIiB4PSI0Ni41IiB5PSI0MCIgZmlsbD0iIzk4OTY5NyIgcng9IjUiIHJ5PSI1IiB0cmFuc2Zvcm09InJvdGF0ZSgzMCAxMDUuOTggNjUpIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMjAiIHg9IjQ2LjUiIHk9IjQwIiBmaWxsPSIjOUI5OTlBIiByeD0iNSIgcnk9IjUiIHRyYW5zZm9ybT0icm90YXRlKDYwIDc1Ljk4IDY1KSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjIwIiB4PSI0Ni41IiB5PSI0MCIgZmlsbD0iI0EzQTFBMiIgcng9IjUiIHJ5PSI1IiB0cmFuc2Zvcm09InJvdGF0ZSg5MCA2NSA2NSkiLz48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSIyMCIgeD0iNDYuNSIgeT0iNDAiIGZpbGw9IiNBQkE5QUEiIHJ4PSI1IiByeT0iNSIgdHJhbnNmb3JtPSJyb3RhdGUoMTIwIDU4LjY2IDY1KSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjIwIiB4PSI0Ni41IiB5PSI0MCIgZmlsbD0iI0IyQjJCMiIgcng9IjUiIHJ5PSI1IiB0cmFuc2Zvcm09InJvdGF0ZSgxNTAgNTQuMDIgNjUpIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMjAiIHg9IjQ2LjUiIHk9IjQwIiBmaWxsPSIjQkFCOEI5IiByeD0iNSIgcnk9IjUiIHRyYW5zZm9ybT0icm90YXRlKDE4MCA1MCA2NSkiLz48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSIyMCIgeD0iNDYuNSIgeT0iNDAiIGZpbGw9IiNDMkMwQzEiIHJ4PSI1IiByeT0iNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTE1MCA0NS45OCA2NSkiLz48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSIyMCIgeD0iNDYuNSIgeT0iNDAiIGZpbGw9IiNDQkNCQ0IiIHJ4PSI1IiByeT0iNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTEyMCA0MS4zNCA2NSkiLz48cmVjdCB3aWR0aD0iNyIgaGVpZ2h0PSIyMCIgeD0iNDYuNSIgeT0iNDAiIGZpbGw9IiNEMkQyRDIiIHJ4PSI1IiByeT0iNSIgdHJhbnNmb3JtPSJyb3RhdGUoLTkwIDM1IDY1KSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjIwIiB4PSI0Ni41IiB5PSI0MCIgZmlsbD0iI0RBREFEQSIgcng9IjUiIHJ5PSI1IiB0cmFuc2Zvcm09InJvdGF0ZSgtNjAgMjQuMDIgNjUpIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iMjAiIHg9IjQ2LjUiIHk9IjQwIiBmaWxsPSIjRTJFMkUyIiByeD0iNSIgcnk9IjUiIHRyYW5zZm9ybT0icm90YXRlKC0zMCAtNS45OCA2NSkiLz48L3N2Zz4=") no-repeat
 	}
 
-	.inputText {
-		/* flex: block;
-		float: right; */
-		text-align: left;
-		margin-right: 22px;
-		margin-top: 15px;
-		color: #000000;
-		font-size: 18px;
+	.uni-loading {
+		margin: 0 auto;
+		width: 20px;
+		height: 20px;
+		display: inline-block;
+		vertical-align: middle;
+		-webkit-animation: uni-loading 1s steps(12) infinite;
+		animation: uni-loading 1s steps(12) infinite;
+		background-size: 100%
 	}
 
-	.line {
-		/* width: 100%; */
-		margin-left: 40px;
-		margin-right: 40px;
-		height: 1px;
-		background-color: #cccccc;
-		margin-top: 1px;
+	@-webkit-keyframes uni-loading {
+		0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg)
+		}
+
+		to {
+			-webkit-transform: rotate(1turn);
+			transform: rotate(1turn)
+		}
 	}
 
-	/*按钮*/
-	.loginBtnView {
-		width: 100%;
-		height: auto;
-		/* background-color:#FFFFFF; */
-		margin-top: 20px;
-		margin-bottom: 0px;
-		padding-bottom: 0px;
-	}
+	@keyframes uni-loading {
+		0% {
+			-webkit-transform: rotate(0deg);
+			transform: rotate(0deg)
+		}
 
-	.loginBtn {
-		width: 80%;
-		margin-top: 50px;
-		background-color: #00CFBD;
-		color: aliceblue;
+		to {
+			-webkit-transform: rotate(1turn);
+			transform: rotate(1turn)
+		}
 	}
 </style>

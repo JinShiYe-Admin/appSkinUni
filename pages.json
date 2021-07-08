@@ -1,163 +1,170 @@
-//欲练此功，必先自宫：https://uniapp.dcloud.io/collocation/pages
 {
-	"easycom": {
-		"^u-(.*)": "@/third-ui/uview-ui/components/u-$1/u-$1.vue"
-	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/index/index"
+		}, {
 			"path": "pages/login/login",
 			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"topWindow": false,
+				"leftWindow": false,
+				"navigationBarTitleText": "登录"
 			}
-		}, { //课程学习
-			"path": "pages/course_study/index",
+		}, {
+			"path": "pages/error/404",
 			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTitleText": "课程学习",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "Not Found"
 			}
-		}, { //课程学习 详情
-			"path": "pages/course_study/detail",
+		}, {
+			"path": "pages/changepwd/changepwd",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "修改密码"
 			}
+
 		},
-		{ //考试
-			"path": "pages/course_examination/index",
-			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTitleText": "考试",
-				"enablePullDownRefresh": false
-			}
-		}, 
-		{ //考试详情
-			"path": "pages/course_examination/detail",
-			"style": {
-				"navigationBarTitleText": "考试详情",
-				"enablePullDownRefresh": false
-			}
-		}, 
-		{ //练习
-			"path": "pages/course_practice/index",
-			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTextStyle": "white",
-				"enablePullDownRefresh": false
-			}
-		} 
-	    ,{//练习 详情
-            "path" : "pages/course_practice/detail-show",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-        }
-        ,{//练习 做题
-            "path" : "pages/course_practice/detail-practice",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/more/m_navBar",
-            "style" :                                                                                    
-            {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/register/index",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "查询资料",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/register/index1",
-            "style" :                                                                                    
-            {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        },
 		{
-			"path": "pages/more/index",
+			"path": "uni_modules/uni-upgrade-center/pages/version/list",
 			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "版本列表"
+			}
+		}, {
+			"path": "uni_modules/uni-upgrade-center/pages/version/add",
+			"style": {
+				"navigationBarTitleText": "新版发布"
+			}
+		}, {
+			"path": "uni_modules/uni-upgrade-center/pages/version/detail",
+			"style": {
+				"navigationBarTitleText": "版本信息查看"
+			}
+		}, {
+			"path": "uni_modules/uni-upgrade-center/pages/app/list",
+			"style": {
+				"navigationBarTitleText": "应用列表"
+			}
+		}, {
+			"path": "uni_modules/uni-upgrade-center/pages/app/detail",
+			"style": {
+				"navigationBarTitleText": "应用信息查看"
+			}
+		}, {
+			"path": "uni_modules/uni-upgrade-center/pages/app/add",
+			"style": {
+				"navigationBarTitleText": "新增应用"
 			}
 		}
-        ,{
-            "path" : "pages/more/modifyPswd",
-            "style" :                                                                                    
-            {
-				"navigationBarTitleText": "修改密码",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/more/privace",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
-	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
+	],
+	"subPackages": [{
+		"root": "pages/system",
+		"pages": [{
+			"path": "menu/list",
+			"style": {
+				"navigationBarTitleText": "菜单管理"
+			}
+		}, {
+			"path": "menu/add",
+			"style": {
+				"navigationBarTitleText": "新增菜单",
+				"navigationStyle": "default"
+			}
+		}, {
+			"path": "menu/edit",
+			"style": {
+				"navigationBarTitleText": "修改菜单",
+				"navigationStyle": "default"
+			}
+		}, {
+			"path": "permission/list",
+			"style": {
+				"navigationBarTitleText": "权限管理"
+			}
+		}, {
+			"path": "permission/add",
+			"style": {
+				"navigationBarTitleText": "新增权限",
+				"navigationStyle": "default"
+			}
+		}, {
+			"path": "permission/edit",
+			"style": {
+				"navigationBarTitleText": "修改权限",
+				"navigationStyle": "default"
+			}
+		}, {
+			"path": "role/add",
+			"style": {
+				"navigationBarTitleText": "新增角色",
+				"navigationStyle": "default"
+			}
+		}, {
+			"path": "role/edit",
+			"style": {
+				"navigationBarTitleText": "修改角色",
+				"navigationStyle": "default"
+			}
+		}, {
+			"path": "role/list",
+			"style": {
+				"navigationBarTitleText": "角色管理"
+			}
+		}, {
+			"path": "user/add",
+			"style": {
+				"navigationBarTitleText": "新增用户",
+				"navigationStyle": "default"
+			}
+		}, {
+			"path": "user/edit",
+			"style": {
+				"navigationBarTitleText": "修改用户",
+				"navigationStyle": "default"
+			}
+		}, {
+			"path": "user/list",
+			"style": {
+				"navigationBarTitleText": "用户管理"
+			}
+		}]
+	}, {
+		"root": "pages/demo",
+		"pages": [{
+			"path": "init/init",
+			"style": {
+				"topWindow": false,
+				"leftWindow": false,
+				"navigationBarTitleText": "创建超级管理员"
+			}
+		}, {
+			"path": "icons/icons",
+			"style": {
+				"navigationBarTitleText": "图标"
+			}
+		}, {
+			"path": "table/table",
+			"style": {
+				"navigationBarTitleText": "表格"
+			}
+		}]
+	}],
 	"globalStyle": {
-		//"navigationStyle":"custom",//屏蔽原生导航栏，使用自定义导航栏NavBar https://uniapp.dcloud.io/collocation/pages?id=customnav   https://ask.dcloud.net.cn/article/34921
-		"pageOrientation": "portrait",
-		"navigationBarTitleText": "教宝校园",
-		"navigationBarTextStyle": "white",
-		"navigationBarBackgroundColor": "#00CFBD",
-		"backgroundColor": "#F8F8F8", //窗口的背景色 微信小程序、百度小程序、字节跳动小程序
-		"backgroundColorTop": "#F4F5F6", //顶部窗口的背景色（bounce回弹区域） 仅 iOS 平台
-		"backgroundColorBottom": "#F4F5F6", //底部窗口的背景色（bounce回弹区域） 仅 iOS 平台
-		"h5": { //设置编译到 H5 平台的特定样式  H5
-			"maxWidth": 1190, //单位px，当浏览器可见区域宽度大于maxWidth时，两侧留白，当小于等于maxWidth时，页面铺满；不同页面支持配置不同的maxWidth；maxWidth = leftWindow(可选)+page(页面主体)+rightWindow(可选)   
-			"navigationBarTextStyle": "white", //导航栏标题颜色及状态栏前景颜色，仅支持 black/white	
-			"navigationBarBackgroundColor": "#00CFBD"
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "管理系统",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"topWindow": {
+		"path": "windows/topWindow",
+		"style": {
+			"height": "60px"
 		},
-		"usingComponents": {
-			"ly-tree-node": "/components/ly-tree/ly-tree-node"
+		"matchMedia": {
+			"minWidth": 0
 		}
 	},
-	"tabBar": {
-		"color": "#7A7E83",
-		"selectedColor": "#007AFF",
-		"borderStyle": "black",
-		"backgroundColor": "#F8F8F8",
-		"list": [
-			{
-				"pagePath": "pages/course_practice/index"
-			},
-			{
-				"pagePath": "pages/course_study/index"
-			},
-			{
-				"pagePath": "pages/course_examination/index"
-			},
-			{
-				"pagePath": "pages/more/index"
-			}
-		]
+	"leftWindow": {
+		"path": "windows/leftWindow",
+		"style": {
+			"width": "240px"
+		}
 	}
 }
