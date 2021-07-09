@@ -39,7 +39,6 @@
 <script>
 	import util from '../../commom/util.js'
 	import mynavBar from '../../components/my-navBar/m-navBar';
-	const personal=util.getPersonal();
 	export default {
 		data() {
 			return {
@@ -72,7 +71,7 @@
 		methods: {
 			getList() {
 			   let comData={
-			   	stu_code:personal.user_code,
+			   	stu_code:this.personInfo.user_code,
 				page_number:this.page_number,
 				page_size: 12,
 			   	index_code:this.index_code,

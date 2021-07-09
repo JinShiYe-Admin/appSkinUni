@@ -49,7 +49,6 @@
 <script>
 	import util from '../../commom/util.js'
 	import mynavBar from '../../components/my-navBar/m-navBar';
-	const personal =util.getPersonal();
 	export default {
 		data() {
 			return {
@@ -126,7 +125,7 @@
 			},
 			getTermList(){
 				let comData={
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/query',comData,response=>{
@@ -147,12 +146,12 @@
 				let comData={
 					page_number: this.page_number,
 					page_size: 15,
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					stu_test_status: this.statusArray[this.statusIndex].value,
 					sub_code: this.subArray[this.subIndex].sub_code?this.subArray[this.subIndex].sub_code:'',
 					sys_grd_code: this.tremArray[this.tremIndex].sys_grd_code?this.tremArray[this.tremIndex].sys_grd_code:'',
 					term_code: this.tremArray[this.tremIndex].term_code?this.tremArray[this.tremIndex].term_code:'',
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/page',comData,response=>{

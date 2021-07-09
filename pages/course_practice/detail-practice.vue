@@ -6,7 +6,7 @@
 		<view style="z-index: 5;"></view>
 		<view v-for="(curr_question,index) in question_list">
 			<template v-if="curr_question.is_que">
-				<uni-card-practice style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
+				<uni-card style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
 					<template v-if="curr_question.type=='2'"><!-- 多选 -->
 						<checkbox-group @change="checkboxChange($event,curr_question)">
 							<label class="uni-list-cell uni-list-cell-pd" v-for="item in curr_question.optionObjs" :key="item.value">
@@ -27,7 +27,7 @@
 							</label>
 						</radio-group>
 					</template>
-				</uni-card-practice>
+				</uni-card>
 			</template>
 			<template v-else>
 				<uni-section style="min-height:200rpx;" :title="curr_question.title" type="line"></uni-section>
@@ -47,10 +47,10 @@
 
 <script>
 	import util from '../../commom/util.js'
-	const personal =util.getPersonal();
 	export default {
 		data() {
 			return {
+				personInfo:{},
 				canSubmit:true,
 				itemData:{},
 				percent:0,
@@ -62,9 +62,10 @@
 			getPageList(){
 				let comData={
 					test_id: this.itemData.test_id,
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.itemData.index_code,
 				}
+				console.log("comData: " + JSON.stringify(comData));
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/detail',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
 					this.answer_list=response.answer_list
@@ -209,7 +210,7 @@
 				})
 				let comData={
 					test_id: this.itemData.test_id,
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					answer_list:this.answer_list,
 					total_score:score,
 					answer_number:this.answer_list.length,
@@ -243,9 +244,11 @@
 			}
 		},
 		onLoad: function(option) {
+			this.personInfo = util.getPersonal();
 			const itemData = util.getPageData(option);
-			uni.setNavigationBarTitle({title: itemData.test_name})
+			console.log("itemData: " + JSON.stringify(itemData));
 			this.itemData=itemData
+			uni.setNavigationBarTitle({title: itemData.test_name})
 			this.showLoading()
 			this.getPageList()
 		},

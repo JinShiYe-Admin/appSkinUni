@@ -58,13 +58,12 @@
 
 <script>
 	import util from '../../commom/util.js'
-	const personal =util.getPersonal()
 	export default {
 		data() {
 			return {
 				treeLoadReady:false,
 				props: {label: 'name',icon: 'img',},
-				
+				personInfo:{},
 				itemData:'',//列表项带过来的数据
 				pageData:'',//详情数据
 				treeData:[],//树形菜单
@@ -100,7 +99,7 @@
 			getDetailById(itemData){
 				this.showLoading()
 				const comData={
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					sub_code:itemData.sub_code,
 					sys_grd_code:itemData.sys_grd_code,
 					term_code:itemData.term_code,
@@ -180,7 +179,7 @@
 					book_id:this.itemData.book_id,
 					book_catalog_id:book_catalog_id,
 					book_catalog_file_id:book_catalog_file_id,
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.itemData.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/getVideoLearnInfo',comData,response=>{
@@ -258,7 +257,7 @@
 							sys_grd_code:this.pageData.learnInfo.sys_grd_code,
 							term_code:this.itemData.term_code,
 							sub_code:this.itemData.sub_code,
-							stu_code:personal.user_code,
+							stu_code:this.personInfo.user_code,
 							stu_catalog_file_id:this.pageData.learnInfo.id,
 							start_time:this.moment().format('YYYY-MM-DD HH:mm:ss'),
 							current_time:curr_time,
@@ -296,6 +295,7 @@
 			},
 		},
 		onLoad: function(option) {
+			this.personInfo = util.getPersonal();
 			uni.setNavigationBarTitle({title: "详情"})
 			const itemData = util.getPageData(option);
 			console.log("itemData: " + JSON.stringify(itemData));
@@ -320,7 +320,7 @@
 						sys_grd_code:this.pageData.learnInfo.sys_grd_code,
 						term_code:this.itemData.term_code,
 						sub_code:this.itemData.sub_code,
-						stu_code:personal.user_code,
+						stu_code:this.personInfo.user_code,
 						stu_catalog_file_id:this.pageData.learnInfo.id,
 						start_time:this.moment().format('YYYY-MM-DD HH:mm:ss'),
 						current_time:curr_time,
