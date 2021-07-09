@@ -107,6 +107,18 @@
 					url: 'schappUni_CourseTest',
 					childList: []
 				}, 
+				{
+					text: "消息", //消息
+					pagePath: "/pages/course_message/index",
+					iconPath: '../../static/tabbar/study.png',
+					selectedIconPath: '../../static/tabbar/study_select.png',
+					count: 0,
+					isDot: false,
+					customIcon: false,
+					img_href: "../../img/schapp_work/kaoqin_tab.png",
+					url: 'schappUni_Message2',
+					childList: []
+				}, 
 				],
 			}
 		},
@@ -219,7 +231,7 @@
 											}
 										})
 
-								}, '正在登录...')
+								})
 						} else {
 							this.showToast('获取秘钥失败');
 						}

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-import {post,get} from 'commom/request/request.js'
+import {post} from 'commom/request/request.js'
 import uView from './third-ui/uview-ui'
 import util from './commom/util.js'
 import moment from 'moment'
@@ -106,7 +106,6 @@ Vue.prototype.meunList="MENULIST"//登录用户菜单信息存入storage时key�
 Vue.prototype.meunListMore="MENULISTMORE"//登录用户菜单信息存入storage时key的名称
 Vue.prototype.tabbarMenu="TABBARMENU"//点击tabbar时，传菜单内容
 Vue.prototype.post=post //引入全局请求
-Vue.prototype.get=get //引入全局请求
 Vue.prototype.moment=moment;//全局时间插件
 Vue.prototype.getPermissionByPosition=util.getPermissionByPosition //全局获取按钮权限
 Vue.prototype.showToast=util.showToast //引入全局Toast

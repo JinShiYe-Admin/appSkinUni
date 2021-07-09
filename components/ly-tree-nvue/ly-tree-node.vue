@@ -13,7 +13,7 @@
 			<text v-if="node.isLeaf" 
 				class="ly-tree-node__expand-icon-holder">
 			</text>	
-			<text v-else 
+			<text 
 				class="ly-tree-node__expand-icon" 
 				@click.stop="handleExpandIconClick">
 				{{node.expanded ? iconExpand : iconCollapse}}

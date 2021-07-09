@@ -174,11 +174,20 @@ function getPermissionByPosition(op_codes,index_code,callback){
 		access_token: personal.access_token //用户令牌
 	};
 	Vue.prototype.post(Vue.prototype.globaData.INTERFACE_SSO_SUB+'acl/permissionByPosition',comData,response=>{
+		console.log("response: ",response);
 		let ins=op_codes.split(",");
 		let outs=response.result.split(",");
 		let result=[]
 		ins.map((initem,index)=>{
 			result.push({[initem]:outs[index]=="0"?false:true})
+		})
+		callback(result)
+	},error=>{
+		console.log("error: ",error);
+		let ins=op_codes.split(",");
+		let result=[]
+		ins.map((initem,index)=>{
+			result.push({[initem]:false})
 		})
 		callback(result)
 	})

@@ -13,7 +13,7 @@
 								<view style="margin: 0px 0;">
 									<checkbox :value="item.value" :checked="item.isCheck" color="#00CFBD" style="transform:scale(0.7)" />
 								</view>
-								<view>{{item.label}}</view>
+								<view style="word-break: break-all;">{{item.label}}</view>
 							</label>
 						</checkbox-group>
 					</template>
@@ -23,7 +23,7 @@
 								<view style="margin: 0px 0;">
 									<radio :value="item.value" :checked="item.isCheck" color="#00CFBD" style="transform:scale(0.7)"/>
 								</view>
-								<view>{{item.label}}</view>
+								<view style="word-break: break-all;">{{item.label}}</view>
 							</label>
 						</radio-group>
 					</template>
@@ -47,10 +47,10 @@
 
 <script>
 	import util from '../../commom/util.js'
-	const personal =util.getPersonal();
 	export default {
 		data() {
 			return {
+				personInfo:{},
 				canSubmit:true,
 				itemData:{},
 				percent:0,
@@ -62,9 +62,10 @@
 			getPageList(){
 				let comData={
 					test_id: this.itemData.test_id,
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.itemData.index_code,
 				}
+				console.log("comData: " + JSON.stringify(comData));
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/detail',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
 					this.answer_list=response.answer_list
@@ -209,7 +210,7 @@
 				})
 				let comData={
 					test_id: this.itemData.test_id,
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					answer_list:this.answer_list,
 					total_score:score,
 					answer_number:this.answer_list.length,
@@ -243,9 +244,11 @@
 			}
 		},
 		onLoad: function(option) {
+			this.personInfo = util.getPersonal();
 			const itemData = util.getPageData(option);
-			uni.setNavigationBarTitle({title: itemData.test_name})
+			console.log("itemData: " + JSON.stringify(itemData));
 			this.itemData=itemData
+			uni.setNavigationBarTitle({title: itemData.test_name})
 			this.showLoading()
 			this.getPageList()
 		},

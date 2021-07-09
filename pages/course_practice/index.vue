@@ -18,7 +18,7 @@
 					<uni-tag v-if="item.stu_test_status==2" text="已做" size="small" type="warning" class="tag-right"/>
 					<uni-tag v-else-if="item.stu_test_status==1" text="未做" size="small" type="error" class="tag-right"/>
 					<uni-tag v-else-if="item.stu_test_status==3" text="已评" size="small" type="primary" class="tag-right"/>
-					
+					 
 					<uni-row>
 						<uni-col :span="20"><uni-title class="h4" type="h4" :title="item.test_name"></uni-title></uni-col>
 					</uni-row>
@@ -49,7 +49,6 @@
 <script>
 	import util from '../../commom/util.js'
 	import mynavBar from '../../components/my-navBar/m-navBar';
-	const personal =util.getPersonal();
 	export default {
 		data() {
 			return {
@@ -91,36 +90,42 @@
 		},
 		methods: {
 			termClick:function(e){
-				this.tremIndex=e.detail.value
-				if(e.detail.value-1>=0){
-					let term=this.queryData.list[(e.detail.value-1)]
-					this.subArray=[{sub_name:'全部',sub_code:''}].concat(term.sub_list)
+				if(this.tremIndex!==e.detail.value){
+					this.tremIndex=e.detail.value
+					if(e.detail.value-1>=0){
+						let term=this.queryData.list[(e.detail.value-1)]
+						this.subArray=[{sub_name:'全部',sub_code:''}].concat(term.sub_list)
+					}
+					this.showLoading()
+					this.loadFlag=0
+					this.canload=true
+					this.page_number=1
+					this.getPageList()
 				}
-				this.showLoading()
-				this.loadFlag=0
-				this.canload=true
-				this.page_number=1
-				this.getPageList()
 			},
 			courseClick:function(e){
-				this.subIndex=e.detail.value
-				this.showLoading()
-				this.loadFlag=0
-				this.canload=true
-				this.page_number=1
-				this.getPageList()
+				if(this.subIndex!==e.detail.value){
+					this.subIndex=e.detail.value
+					this.showLoading()
+					this.loadFlag=0
+					this.canload=true
+					this.page_number=1
+					this.getPageList()
+				}
 			},
 			statusClick:function(e){
-				this.statusIndex=e.detail.value
-				this.showLoading()
-				this.loadFlag=0
-				this.canload=true
-				this.page_number=1
-				this.getPageList()
+				if(this.statusIndex!==e.detail.value){
+					this.statusIndex=e.detail.value
+					this.showLoading()
+					this.loadFlag=0
+					this.canload=true
+					this.page_number=1
+					this.getPageList()
+				}
 			},
 			getTermList(){
 				let comData={
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/query',comData,response=>{
@@ -141,12 +146,12 @@
 				let comData={
 					page_number: this.page_number,
 					page_size: 15,
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					stu_test_status: this.statusArray[this.statusIndex].value,
 					sub_code: this.subArray[this.subIndex].sub_code?this.subArray[this.subIndex].sub_code:'',
 					sys_grd_code: this.tremArray[this.tremIndex].sys_grd_code?this.tremArray[this.tremIndex].sys_grd_code:'',
 					term_code: this.tremArray[this.tremIndex].term_code?this.tremArray[this.tremIndex].term_code:'',
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/page',comData,response=>{
@@ -241,9 +246,6 @@
 	}
 	.flex-box{
 		 flex: 1;
-	}
-	.uni-easyinput__content-input{
-		line-height: 1 !important;
 	}
 	.tag-right{
 		position: absolute;

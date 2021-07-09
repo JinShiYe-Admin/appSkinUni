@@ -108,13 +108,21 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
-            
         },{
 		    "path" : "pages/more/about",
 		    "style" :                                                                                    
 		    {
 		        "navigationBarTitleText": "关于",
 		        "enablePullDownRefresh": false
+		    }
+        },
+		{//消息
+		    "path" : "pages/course_message/index",
+		    "style" :                                                                                    
+		    {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": true
 		    }
 		},
 		//更新相关
@@ -169,6 +177,9 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [
+			{
+				"pagePath": "pages/course_message/index"
+			},
 			{
 				"pagePath": "pages/course_practice/index"
 			},

@@ -15,7 +15,8 @@
 					:show-play-btn="true"
 					:enable-progress-gesture="false"
 					:show-mute-btn="true"
-					:show-center-play-btn="true"
+					:show-center-play-btn="false"
+					x5-video-player-type='h5-page'
 					:controls="true"> 
 				</video>
 			</template>
@@ -31,15 +32,15 @@
 			<view class="uni-box">
 				<uni-title class="h4" type="h4" :title="itemData.sub_name"></uni-title>
 				<uni-title class="h5" type="h5" :title="`课程总时长：${pageData.video_timesStr?pageData.video_timesStr:'0'}`"></uni-title>
-				<uni-title v-if="!itemData.ex_score" class="h5" type="h5" :title="`已学总时长：${pageData.learn_timeStr?pageData.learn_timeStr:'未开始学习'}`"></uni-title>
+				<uni-title v-if="!pageData.ex_score" class="h5" type="h5" :title="`已学总时长：${pageData.learn_timeStr?pageData.learn_timeStr:'未开始学习'}`"></uni-title>
 			</view>
-			<view v-if="!itemData.ex_score">
+			<view v-if="!pageData.ex_score">
 				<progress :percent="pageData.percent" border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5"/>
 			</view>
 			<view style="display: flex;flex: 1;height: 1px;background-color: rgba(230,230,230,08);margin: 8px -15px 3px;"></view>
 			<uni-title class="h5" type="h5" :title="`视频：${videoData.name?videoData.name:'请选择视频'}`"></uni-title>
 			<uni-title class="h5" type="h5" :title="`本视频时长：${pageData.timesStr?pageData.timesStr:'请选择视频'}`"></uni-title>
-			<uni-title v-if="!itemData.ex_score" class="h5" type="h5" :title="`本视频已学时长：${pageData.video_learn_timeStr?pageData.video_learn_timeStr:'未开始学习'}`"></uni-title>
+			<uni-title v-if="!pageData.ex_score" class="h5" type="h5" :title="`本视频已学时长：${pageData.video_learn_timeStr?pageData.video_learn_timeStr:'未开始学习'}`"></uni-title>
 		</view>
 		<view class="line-h"></view>
 		<view class="uni-padding-wrap">
@@ -57,13 +58,12 @@
 
 <script>
 	import util from '../../commom/util.js'
-	const personal =util.getPersonal()
 	export default {
 		data() {
 			return {
 				treeLoadReady:false,
 				props: {label: 'name',icon: 'img',},
-				
+				personInfo:{},
 				itemData:'',//列表项带过来的数据
 				pageData:'',//详情数据
 				treeData:[],//树形菜单
@@ -83,7 +83,10 @@
 						this.videoData.play_time=Math.round(this.videoData.curr_time-this.videoData.after_time)
 						this.videoData.after_time=this.videoData.curr_time
 						this.updateCurrentTime();
-						this.getVideoLearnInfo(obj.parentId,obj.data.id,obj.data)
+						setTimeout(()=>{
+							this.videoData=''
+							this.getVideoLearnInfo(obj.parentId,obj.data.id,obj.data)
+						},600)
 					}else{//如果不是视频，获取目录下的视频列表
 						this.getCatalogFile(obj.data.id,video_list=>{
 							console.log("video_list: " + JSON.stringify(video_list));
@@ -96,7 +99,7 @@
 			getDetailById(itemData){
 				this.showLoading()
 				const comData={
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					sub_code:itemData.sub_code,
 					sys_grd_code:itemData.sys_grd_code,
 					term_code:itemData.term_code,
@@ -176,7 +179,7 @@
 					book_id:this.itemData.book_id,
 					book_catalog_id:book_catalog_id,
 					book_catalog_file_id:book_catalog_file_id,
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.itemData.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/getVideoLearnInfo',comData,response=>{
@@ -199,6 +202,8 @@
 					
 					this.videoData.after_time=response.curr_time
 					this.videoData.log_id=null
+					
+					this.videoContext = uni.createVideoContext('myVideo')
 					this.hideLoading()
 				})
 			},
@@ -252,7 +257,7 @@
 							sys_grd_code:this.pageData.learnInfo.sys_grd_code,
 							term_code:this.itemData.term_code,
 							sub_code:this.itemData.sub_code,
-							stu_code:personal.user_code,
+							stu_code:this.personInfo.user_code,
 							stu_catalog_file_id:this.pageData.learnInfo.id,
 							start_time:this.moment().format('YYYY-MM-DD HH:mm:ss'),
 							current_time:curr_time,
@@ -290,6 +295,7 @@
 			},
 		},
 		onLoad: function(option) {
+			this.personInfo = util.getPersonal();
 			uni.setNavigationBarTitle({title: "详情"})
 			const itemData = util.getPageData(option);
 			console.log("itemData: " + JSON.stringify(itemData));
@@ -299,7 +305,7 @@
 		},
 		onReady: function(res) {
 		        // #ifndef MP-ALIPAY
-		        this.videoContext = uni.createVideoContext('myVideo',this)
+		        this.videoContext = uni.createVideoContext('myVideo')
 		        // #endif
 		},
 		onUnload:function(){
@@ -314,7 +320,7 @@
 						sys_grd_code:this.pageData.learnInfo.sys_grd_code,
 						term_code:this.itemData.term_code,
 						sub_code:this.itemData.sub_code,
-						stu_code:personal.user_code,
+						stu_code:this.personInfo.user_code,
 						stu_catalog_file_id:this.pageData.learnInfo.id,
 						start_time:this.moment().format('YYYY-MM-DD HH:mm:ss'),
 						current_time:curr_time,

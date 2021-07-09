@@ -8,9 +8,9 @@
 			<uni-title class="h5" style="align-items: center;" type="h5" :title="`成绩：${parseInt(itemData.stu_total_score?itemData.stu_total_score:0)}/${parseInt(itemData.score)}`"></uni-title>
 		</view>
 		<template v-if="is_que">
-			<uni-card style="margin-top: 10px;" :title="`${curr_question.question.sort}.${curr_question.question.title}`" :isFull="true" :note="`解析:  ${curr_question.question.parse}`">
+			<uni-card style="margin-top: 10px;margin-bottom: 80px;" :title="`${curr_question.question.sort}.${curr_question.question.title}`" :isFull="true" :note="`解析:  ${curr_question.question.parse}`">
 				<template v-for="item in curr_question.question.options">
-					<uni-title style="padding-left:20px ;" class="h5" type="h5" :title="item"></uni-title>
+					<uni-title style="padding-left:20px ;word-break: break-all;" class="h5" type="h5" :title="item"></uni-title>
 				</template>
 				<uni-row style="margin-top: 10px;">
 					<uni-col :span="14">
@@ -64,10 +64,10 @@
 
 <script>
 	import util from '../../commom/util.js'
-	const personal =util.getPersonal();
 	export default {
 		data() {
 			return { 
+				personInfo:{},
 				itemData:{},
 				pageData:{},
 				answer_list:[],
@@ -83,7 +83,7 @@
 			getPageList(){
 				let comData={
 					test_id: this.itemData.test_id,
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.itemData.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/show',comData,response=>{
@@ -152,6 +152,7 @@
 			}
 		},
 		onLoad: function(option) {
+			this.personInfo = util.getPersonal();
 			const itemData = util.getPageData(option);
 			uni.setNavigationBarTitle({title: itemData.test_name})
 			this.itemData=itemData

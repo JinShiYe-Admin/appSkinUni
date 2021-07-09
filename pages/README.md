@@ -13,7 +13,7 @@ this.showToast(title:String = "")
 this.hideLoading();
 
 //时间格式化
-this.moment().format
+this.moment().format('YYYY-MM-DD HH:mm:sss')
 
 //获取全局公共参数
 const globaData = this.globaData
@@ -50,7 +50,7 @@ onLoad: function(option) {
 },
 
 /**
- * post get请求
+ * post 请求
  * 注：responseData 为返回的对象 {"msg":"成功","code":"0000","data":{},"state":"ok"} data一层里面的内容
  * 如果想获取data外层整个返回参数，请使用response
  */
@@ -59,11 +59,10 @@ let comData={
 	stu_code:personal.user_code,
 	index_code:this.index_code,
 }
-this.get(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/termList',comData,(responseData,response)=>{
-	console.log(response)
-})
 this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/termList',comData,(responseData,response)=>{
 	console.log(response)
+},error=>{
+	console.log(error)
 })
 
 //获取按钮权限

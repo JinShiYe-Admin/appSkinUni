@@ -15,7 +15,7 @@
 			       </uni-card-study>
 			    </uni-col> 
 			</uni-row> 
-		</view>
+		</view> 
 		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>
@@ -23,7 +23,6 @@
 <script>
 	import util from '../../commom/util.js'
 	import mynavBar from '../../components/my-navBar/m-navBar';
-	const personal=util.getPersonal();
 	export default {
 		data() {
 			return {
@@ -51,7 +50,7 @@
 			},
 			getTabList(){//获取tab栏列表 2.1学期列表
 				let comData={
-					stu_code:personal.user_code,
+					stu_code:this.personInfo.user_code,
 					index_code:this.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/termList',comData,response=>{
@@ -76,7 +75,7 @@
 			   let comData={
 			    sys_grd_code:id.split("_")[0],
 			    term_code:id.split("_")[1],
-			   	stu_code:personal.user_code,
+			   	stu_code:this.personInfo.user_code,
 			   	index_code:this.index_code,
 			   }
 			   this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/list',comData,response=>{
