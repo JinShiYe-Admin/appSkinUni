@@ -312,6 +312,9 @@
 			this.treeLoadReady=true
 			this.itemData=itemData
 			this.getDetailById(itemData)
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
 		},
 		onReady: function(res) {
 		        // #ifndef MP-ALIPAY

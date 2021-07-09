@@ -304,6 +304,9 @@
 				this.itemData.diffSeconds=diffs
 				this.startInterval()
 			}
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
 		},
 		onUnload(){
 			this.clearInterval(this.interval)

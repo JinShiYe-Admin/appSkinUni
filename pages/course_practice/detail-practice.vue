@@ -251,6 +251,9 @@
 			uni.setNavigationBarTitle({title: itemData.test_name})
 			this.showLoading()
 			this.getPageList()
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
 		},
 	}
 </script>

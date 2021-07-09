@@ -15,13 +15,11 @@
 			"path": "pages/course_study/index",
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTitleText": "课程学习",
 				"enablePullDownRefresh": true
 			}
 		}, { //课程学习 详情
 			"path": "pages/course_study/detail",
 			"style": {
-				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -29,14 +27,12 @@
 			"path": "pages/course_examination/index",
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTitleText": "考试",
 				"enablePullDownRefresh": true
 			}
 		}, 
 		{ //考试详情
 			"path": "pages/course_examination/detail",
 			"style": {
-				"navigationBarTitleText": "考试详情",
 				"enablePullDownRefresh": false
 			}
 		}, 
@@ -44,26 +40,20 @@
 			"path": "pages/course_practice/index",
 			"style": {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
-				"navigationBarTextStyle": "white",
 				"enablePullDownRefresh": true
 			}
 		} 
 	    ,{//练习 详情
             "path" : "pages/course_practice/detail-show",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
+            "style" : {
                 "enablePullDownRefresh": false
             }
         }
-        ,{//练习 做题
+        ,{//练习 做题详情
             "path" : "pages/course_practice/detail-practice",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
+            "style" :{
                 "enablePullDownRefresh": false
             }
-            
         }
         ,{
             "path" : "pages/register/index",
@@ -121,7 +111,6 @@
 		    "style" :                                                                                    
 		    {
 				"navigationStyle": "custom" ,// 隐藏系统导航栏
-		        "navigationBarTitleText": "",
 		        "enablePullDownRefresh": true
 		    }
 		},
@@ -156,7 +145,7 @@
 	"globalStyle": {
 		//"navigationStyle":"custom",//屏蔽原生导航栏，使用自定义导航栏NavBar https://uniapp.dcloud.io/collocation/pages?id=customnav   https://ask.dcloud.net.cn/article/34921
 		"pageOrientation": "portrait",
-		"navigationBarTitleText": "教宝校园",
+		"navigationBarTitleText": "",
 		"navigationBarTextStyle": "white",
 		"navigationBarBackgroundColor": "#00CFBD",
 		"backgroundColor": "#F8F8F8", //窗口的背景色 微信小程序、百度小程序、字节跳动小程序

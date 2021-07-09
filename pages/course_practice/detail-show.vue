@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="tabs">
-			<uni-title class="h3" style="align-items: center;" type="h3" :title="`${itemData.test_name}`"></uni-title>
+			<!-- <uni-title class="h3" style="align-items: center;" type="h3" :title="`${itemData.test_name}`"></uni-title> -->
 		</view>
 		<view class="tabs">
 			<uni-title class="h5" style="align-items: center;" type="h5" :title="`学期：${itemData.grd_name}${itemData.term_name}`"></uni-title>
@@ -159,6 +159,9 @@
 			console.log("itemData: " + JSON.stringify(itemData));
 			this.showLoading()
 			this.getPageList()
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
 		},
 	}
 </script>
