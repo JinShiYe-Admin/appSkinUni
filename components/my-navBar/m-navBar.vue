@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<u-navbar :title='navItem.text' :backFlag='navItem.index' :backImg="personInfo.img_url"
-			:custom-back="clickLeftImg"></u-navbar>
+		<u-navbar-my :title='navItem.text' :backFlag='navItem.index' :backImg="personInfo.img_url"
+			:custom-back="clickLeftImg"></u-navbar-my>
 		<uni-drawer ref="showPersonInfo" mode="left">
 			<scroll-view style="height: 100%;" scroll-y="true">
 				<view style="text-align: center;">

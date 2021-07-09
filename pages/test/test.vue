@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<mynavBar :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
-		<u-tabbar :list="tabbar"></u-tabbar>
+		<u-tabbar-my :list="tabbar"></u-tabbar-my>
 	</view>
 </template>
 

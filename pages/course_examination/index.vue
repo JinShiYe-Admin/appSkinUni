@@ -32,7 +32,7 @@
 				<uni-load-more :status="status" :icon-size="17" :content-text="contentText" />
 			</view>
 		</template>
-		<u-tabbar :list="tabbar" ></u-tabbar>
+		<u-tabbar-my :list="tabbar" ></u-tabbar-my>
 	</view>
 </template>
 
