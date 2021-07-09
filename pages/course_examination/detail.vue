@@ -8,14 +8,14 @@
 		<view style="z-index: 5;"></view>
 		<view v-for="(curr_question,index) in question_list">
 			<template v-if="curr_question.is_que">
-				<uni-card style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
+				<uni-card-practice style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
 					<template v-if="curr_question.type=='2'"><!-- 多选 -->
 						<checkbox-group @change="checkboxChange($event,curr_question)">
 							<label class="uni-list-cell uni-list-cell-pd" v-for="item in curr_question.optionObjs" :key="item.value">
 								<view style="margin: 0px 0;">
 									<checkbox :value="item.value" :checked="item.isCheck" color="#00CFBD" style="transform:scale(0.7)" />
 								</view>
-								<view style="word-break: break-all;">{{item.label}}</view>
+								<text style="word-break: break-all;" v-html="item.label"></text>
 							</label>
 						</checkbox-group>
 					</template>
@@ -25,11 +25,11 @@
 								<view style="margin: 0px 0;">
 									<radio :value="item.value" :checked="item.isCheck" color="#00CFBD" style="transform:scale(0.7)"/>
 								</view>
-								<view style="word-break: break-all;">{{item.label}}</view>
+								<text style="word-break: break-all;" v-html="item.label"></text>
 							</label>
 						</radio-group>
 					</template>
-				</uni-card>
+				</uni-card-practice>
 			</template>
 			<template v-else>
 				<uni-section style="min-height:200rpx;" :title="curr_question.title" type="line"></uni-section>

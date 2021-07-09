@@ -51,6 +51,7 @@
 			 :default-checked-keys="checkedKeys"
 			 defaultExpandAll
 			 highlightCurrent
+			 iconClass="noIcon"
 			  ></ly-tree>
 		</view>
 	</view>
@@ -243,12 +244,19 @@
 			onTimeupdate(e){
 				console.log("e.detail.currentTime: " + e.detail.currentTime);
 				this.videoData.curr_time=e.detail.currentTime
-				this.videoData.play_time=Math.round(e.detail.currentTime-this.videoData.after_time)
+				if(e.detail.currentTime-this.videoData.after_time<=0){
+					this.videoData.after_time=e.detail.currentTime
+					console.log(1);
+				}else{
+					console.log(2);
+					this.videoData.play_time=Math.round(e.detail.currentTime-this.videoData.after_time)
+				}
 			},
 			updateCurrentTime(){
 				if(!this.pageData.learnInfo.pass){
 					let curr_time=Math.round(this.videoData.curr_time)
 					let play_time=this.videoData.play_time
+					console.log("this.pageData.learnInfo.pass: ",curr_time,play_time);
 					if(play_time>0){//播放时间有效才请求
 						const comData={
 							per_code:this.pageData.learnInfo.per_code,
@@ -286,10 +294,12 @@
 					this.clearIntervals()
 				}
 				this.times=setInterval(()=>{
+					console.log('fuck1');
 					this.updateCurrentTime();
 				},15000)
 			},  
 			clearIntervals(){
+				console.log('fuck');
 				clearInterval(this.times)
 				this.times=null
 			},
@@ -380,7 +390,7 @@
 
 <style>
 	.noIcon{
-		/* display: none; */
+		display: none;
 	}
 	.line-h{
 		margin-top: 10px;

@@ -8,9 +8,9 @@
 			<uni-title class="h5" style="align-items: center;" type="h5" :title="`成绩：${parseInt(itemData.stu_total_score?itemData.stu_total_score:0)}/${parseInt(itemData.score)}`"></uni-title>
 		</view>
 		<template v-if="is_que">
-			<uni-card style="margin-top: 10px;margin-bottom: 80px;" :title="`${curr_question.question.sort}.${curr_question.question.title}`" :isFull="true" :note="`解析:  ${curr_question.question.parse}`">
+			<uni-card-practice style="margin-top: 10px;margin-bottom: 80px;" :title="`${curr_question.question.sort}.${curr_question.question.title}`" :isFull="true" :note="`解析:  ${curr_question.question.parse}`">
 				<template v-for="item in curr_question.question.options">
-					<uni-title style="padding-left:20px ;word-break: break-all;" class="h5" type="h5" :title="item"></uni-title>
+					<text v-html="item" style="padding-left:20px ;word-break: break-all;"></text>
 				</template>
 				<uni-row style="margin-top: 10px;">
 					<uni-col :span="14">
@@ -50,7 +50,7 @@
 						</uni-row>
 					</uni-col>
 				</uni-row>
-			</uni-card>
+			</uni-card-practice>
 		</template>
 		<template v-else>
 			<uni-section style="min-height:200rpx;" :title="curr_question.question.title" type="line"></uni-section>

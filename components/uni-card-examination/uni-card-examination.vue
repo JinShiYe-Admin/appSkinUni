@@ -32,7 +32,7 @@
 		<!-- 底部 -->
 		<view v-if="note" class="uni-card__footer">
 			<slot name="footer">
-				<text class="uni-card__footer-text">{{ note }}</text>
+				<text class="uni-card__footer-text"  style="word-break: break-all;">{{ note }}</text>
 			</slot>
 		</view>
 	</view>

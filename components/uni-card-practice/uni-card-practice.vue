@@ -5,8 +5,7 @@
 			<view v-if="thumbnail" class="uni-card__header-extra-img-view">
 				<image :src="thumbnail" class="uni-card__header-extra-img" />
 			</view>
-			<uni-section style="padding: 0;height: 15px;" :title="title" type="line"></uni-section>
-			<!-- <text class="uni-card__header-title-text">{{ title }}</text> -->
+			<text class="uni-card__header-title-text" v-html="title"></text>
 			<text v-if="extra" class="uni-card__header-extra-text">{{ extra }}</text>
 		</view>
 		<!-- 标题 -->
@@ -39,7 +38,7 @@
 		<!-- 底部 -->
 		<view v-if="note" class="uni-card__footer uni-border-top">
 			<slot name="footer">
-				<text class="uni-card__footer-text" style="word-break: break-all;">{{ note }}</text>
+				<text class="uni-card__footer-text"  style="word-break: break-all;">{{ note }}</text>
 			</slot>
 		</view>
 	</view>
