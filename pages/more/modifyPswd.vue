@@ -6,7 +6,7 @@
 					原密码
 				</view>
 				<view class="uni-list-cell-db">
-					<input v-model="oldPassword" password style="height: 50px;" maxlength="10" type="text"
+					<input v-model="oldPassword" password style="height: 50px;" maxlength="18" type="text"
 						placeholder="请输入原密码" />
 				</view>
 			</view>
@@ -15,7 +15,7 @@
 					新密码
 				</view>
 				<view class="uni-list-cell-db">
-					<input v-model="newPassword" password style="height: 50px;" maxlength="10" type="text"
+					<input v-model="newPassword" password style="height: 50px;" maxlength="18" type="text"
 						placeholder="请输入新密码" />
 				</view>
 			</view>
@@ -24,7 +24,7 @@
 					确认密码
 				</view>
 				<view class="uni-list-cell-db">
-					<input v-model="confirmPassword" password style="height: 50px;" maxlength="10" type="text"
+					<input v-model="confirmPassword" password style="height: 50px;" maxlength="18" type="text"
 						placeholder="请输入确认密码" />
 				</view>
 			</view>

@@ -20,7 +20,7 @@
 		</view>
 		
 		
-		<u-tabbar :list="tabbar"></u-tabbar>
+		<u-tabbar-my :list="tabbar"></u-tabbar-my>
 	</view>
 </template>
 

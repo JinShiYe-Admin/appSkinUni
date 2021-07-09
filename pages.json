@@ -108,7 +108,13 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
-            
+        },{
+		    "path" : "pages/more/about",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "关于",
+		        "enablePullDownRefresh": false
+		    }
         },
 		{//消息
 		    "path" : "pages/course_message/index",
@@ -118,7 +124,6 @@
 		        "navigationBarTitleText": "",
 		        "enablePullDownRefresh": true
 		    }
-		    
 		},
 		//更新相关
 		{
@@ -137,6 +142,15 @@
 				}
 			}
 		}
+        ,{
+            "path" : "pages/more/company",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
 	"globalStyle": {
