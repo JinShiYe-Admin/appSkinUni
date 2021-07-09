@@ -172,6 +172,7 @@
 							msg_token: this.curPage.msg_token,
 							msg: this.curPage.msg,
 						};
+						console.log('this.PWD_ENCRYPTION:'+this.PWD_ENCRYPTION);
 						console.log('comData0:' + JSON.stringify(comData0));
 						this.showLoading()
 						var tempUrl = 'register';

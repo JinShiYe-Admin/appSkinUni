@@ -109,7 +109,14 @@
                 "enablePullDownRefresh": false
             }
             
-        },
+        },{
+		    "path" : "pages/more/about",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "关于",
+		        "enablePullDownRefresh": false
+		    }
+		},
 		//更新相关
 		{
 			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
@@ -127,6 +134,15 @@
 				}
 			}
 		}
+        ,{
+            "path" : "pages/more/company",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
 	"globalStyle": {

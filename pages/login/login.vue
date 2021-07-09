@@ -3,9 +3,9 @@
 		<uniNavBar title='登录' backgroundColor='#00CFBD' fixed='true' statusBar='true' color='white' @clickLeft='clickLeft()'></uniNavBar>
 		
 		<view v-if="showInput == 1">
-			<!-- <view class="titletal">
+			<view class="titletal">
 				<text class="title">{{title}}</text>
-			</view> -->
+			</view>
 			<!-- <view class="uni-list"> -->
 			<view class="uni-list-cell" style="height: 60px;">
 				<view class="uni-list-cell-left" style="margin-left: 20px;height: 60px;">
@@ -55,7 +55,7 @@
 				showInput:0,//正式环境，直接显示注册,1，非正式环境，如果是微信页面，显示输入密码,2，app直接显示注册,1
 				pagePswd:'',
 				loginInfo: {},
-				title: '教宝校园大学',
+				title: '欢迎登陆',
 				uname: '',
 				passw: '',
 				jsonData: [],

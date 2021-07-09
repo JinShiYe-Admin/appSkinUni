@@ -5,12 +5,15 @@
 			<scroll-view style="height: 100%;" scroll-y="true">
 				<view style="text-align: center;">
 					<image :src="personInfo.img_url"
-						style="width: 150px;height: 150px;border-radius: 50%;margin-top: 50px;"></image>
+						style="width: 100px;height: 100px;border-radius: 50%;margin-top: 50px;"></image>
 				</view>
 				<view style="text-align: center;margin-top: 10px;">{{personInfo.user_name}}</view>
-				<uni-list style="margin-top: 20px;">
-					<!-- <uni-list-item title="修改头像" link to=''></uni-list-item> -->
+				<view style="height: 15px;background-color: #DCDFE6;margin-top: 30px;"></view>
+				<uni-list>
 					<uni-list-item @click="gotoModifyPswd()" title="修改密码" link to=''></uni-list-item>
+					<uni-list-item @click="zhuxiao()" title="注销账号" link to=''></uni-list-item>
+					<uni-list-item @click="yinsi()" title="用户隐私政策" link to=''></uni-list-item>
+					<uni-list-item @click="about()" title="关于" link to=''></uni-list-item>
 				</uni-list>
 				<view class="uni-padding-wrap uni-common-mt">
 					<button @click="tuichu()" type="warn">退出登录</button>
@@ -55,6 +58,18 @@
 			gotoModifyPswd:function(){
 				this.$refs.showPersonInfo.close();
 				util.openwithData('/pages/more/modifyPswd');
+			},
+			zhuxiao:function(){
+				this.$refs.showPersonInfo.close();
+				// util.openwithData('/pages/more/modifyPswd');
+			},
+			yinsi:function(){
+				this.$refs.showPersonInfo.close();
+				util.openwithData('/pages/more/privace');
+			},
+			about:function(){
+				this.$refs.showPersonInfo.close();
+				util.openwithData('/pages/more/about');
 			},
 			tuichu(){
 				var personal = util.getPersonal();
