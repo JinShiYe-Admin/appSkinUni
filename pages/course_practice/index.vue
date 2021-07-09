@@ -91,32 +91,38 @@
 		},
 		methods: {
 			termClick:function(e){
-				this.tremIndex=e.detail.value
-				if(e.detail.value-1>=0){
-					let term=this.queryData.list[(e.detail.value-1)]
-					this.subArray=[{sub_name:'全部',sub_code:''}].concat(term.sub_list)
+				if(this.tremIndex!==e.detail.value){
+					this.tremIndex=e.detail.value
+					if(e.detail.value-1>=0){
+						let term=this.queryData.list[(e.detail.value-1)]
+						this.subArray=[{sub_name:'全部',sub_code:''}].concat(term.sub_list)
+					}
+					this.showLoading()
+					this.loadFlag=0
+					this.canload=true
+					this.page_number=1
+					this.getPageList()
 				}
-				this.showLoading()
-				this.loadFlag=0
-				this.canload=true
-				this.page_number=1
-				this.getPageList()
 			},
 			courseClick:function(e){
-				this.subIndex=e.detail.value
-				this.showLoading()
-				this.loadFlag=0
-				this.canload=true
-				this.page_number=1
-				this.getPageList()
+				if(this.subIndex!==e.detail.value){
+					this.subIndex=e.detail.value
+					this.showLoading()
+					this.loadFlag=0
+					this.canload=true
+					this.page_number=1
+					this.getPageList()
+				}
 			},
 			statusClick:function(e){
-				this.statusIndex=e.detail.value
-				this.showLoading()
-				this.loadFlag=0
-				this.canload=true
-				this.page_number=1
-				this.getPageList()
+				if(this.statusIndex!==e.detail.value){
+					this.statusIndex=e.detail.value
+					this.showLoading()
+					this.loadFlag=0
+					this.canload=true
+					this.page_number=1
+					this.getPageList()
+				}
 			},
 			getTermList(){
 				let comData={
@@ -241,9 +247,6 @@
 	}
 	.flex-box{
 		 flex: 1;
-	}
-	.uni-easyinput__content-input{
-		line-height: 1 !important;
 	}
 	.tag-right{
 		position: absolute;
