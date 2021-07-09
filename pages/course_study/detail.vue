@@ -15,7 +15,8 @@
 					:show-play-btn="true"
 					:enable-progress-gesture="false"
 					:show-mute-btn="true"
-					:show-center-play-btn="true"
+					:show-center-play-btn="false"
+					x5-video-player-type='h5-page'
 					:controls="true"> 
 				</video>
 			</template>
@@ -31,15 +32,15 @@
 			<view class="uni-box">
 				<uni-title class="h4" type="h4" :title="itemData.sub_name"></uni-title>
 				<uni-title class="h5" type="h5" :title="`课程总时长：${pageData.video_timesStr?pageData.video_timesStr:'0'}`"></uni-title>
-				<uni-title v-if="!itemData.ex_score" class="h5" type="h5" :title="`已学总时长：${pageData.learn_timeStr?pageData.learn_timeStr:'未开始学习'}`"></uni-title>
+				<uni-title v-if="!pageData.ex_score" class="h5" type="h5" :title="`已学总时长：${pageData.learn_timeStr?pageData.learn_timeStr:'未开始学习'}`"></uni-title>
 			</view>
-			<view v-if="!itemData.ex_score">
+			<view v-if="!pageData.ex_score">
 				<progress :percent="pageData.percent" border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5"/>
 			</view>
 			<view style="display: flex;flex: 1;height: 1px;background-color: rgba(230,230,230,08);margin: 8px -15px 3px;"></view>
 			<uni-title class="h5" type="h5" :title="`视频：${videoData.name?videoData.name:'请选择视频'}`"></uni-title>
 			<uni-title class="h5" type="h5" :title="`本视频时长：${pageData.timesStr?pageData.timesStr:'请选择视频'}`"></uni-title>
-			<uni-title v-if="!itemData.ex_score" class="h5" type="h5" :title="`本视频已学时长：${pageData.video_learn_timeStr?pageData.video_learn_timeStr:'未开始学习'}`"></uni-title>
+			<uni-title v-if="!pageData.ex_score" class="h5" type="h5" :title="`本视频已学时长：${pageData.video_learn_timeStr?pageData.video_learn_timeStr:'未开始学习'}`"></uni-title>
 		</view>
 		<view class="line-h"></view>
 		<view class="uni-padding-wrap">
@@ -83,7 +84,10 @@
 						this.videoData.play_time=Math.round(this.videoData.curr_time-this.videoData.after_time)
 						this.videoData.after_time=this.videoData.curr_time
 						this.updateCurrentTime();
-						this.getVideoLearnInfo(obj.parentId,obj.data.id,obj.data)
+						setTimeout(()=>{
+							this.videoData=''
+							this.getVideoLearnInfo(obj.parentId,obj.data.id,obj.data)
+						},600)
 					}else{//如果不是视频，获取目录下的视频列表
 						this.getCatalogFile(obj.data.id,video_list=>{
 							console.log("video_list: " + JSON.stringify(video_list));
@@ -199,6 +203,8 @@
 					
 					this.videoData.after_time=response.curr_time
 					this.videoData.log_id=null
+					
+					this.videoContext = uni.createVideoContext('myVideo')
 					this.hideLoading()
 				})
 			},
@@ -299,7 +305,7 @@
 		},
 		onReady: function(res) {
 		        // #ifndef MP-ALIPAY
-		        this.videoContext = uni.createVideoContext('myVideo',this)
+		        this.videoContext = uni.createVideoContext('myVideo')
 		        // #endif
 		},
 		onUnload:function(){

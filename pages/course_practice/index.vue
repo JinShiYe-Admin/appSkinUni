@@ -18,7 +18,7 @@
 					<uni-tag v-if="item.stu_test_status==2" text="已做" size="small" type="warning" class="tag-right"/>
 					<uni-tag v-else-if="item.stu_test_status==1" text="未做" size="small" type="error" class="tag-right"/>
 					<uni-tag v-else-if="item.stu_test_status==3" text="已评" size="small" type="primary" class="tag-right"/>
-					
+					 
 					<uni-row>
 						<uni-col :span="20"><uni-title class="h4" type="h4" :title="item.test_name"></uni-title></uni-col>
 					</uni-row>

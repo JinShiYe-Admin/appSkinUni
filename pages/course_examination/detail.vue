@@ -15,7 +15,7 @@
 								<view style="margin: 0px 0;">
 									<checkbox :value="item.value" :checked="item.isCheck" color="#00CFBD" style="transform:scale(0.7)" />
 								</view>
-								<view>{{item.label}}</view>
+								<view style="word-break: break-all;">{{item.label}}</view>
 							</label>
 						</checkbox-group>
 					</template>
@@ -25,7 +25,7 @@
 								<view style="margin: 0px 0;">
 									<radio :value="item.value" :checked="item.isCheck" color="#00CFBD" style="transform:scale(0.7)"/>
 								</view>
-								<view>{{item.label}}</view>
+								<view style="word-break: break-all;">{{item.label}}</view>
 							</label>
 						</radio-group>
 					</template>

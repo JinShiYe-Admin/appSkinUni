@@ -15,7 +15,7 @@
 			       </uni-card-study>
 			    </uni-col> 
 			</uni-row> 
-		</view>
+		</view> 
 		<u-tabbar :list="tabbar" ></u-tabbar>
 	</view>
 </template>

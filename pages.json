@@ -110,6 +110,16 @@
             }
             
         },
+		{//消息
+		    "path" : "pages/course_message/index",
+		    "style" :                                                                                    
+		    {
+				"navigationStyle": "custom" ,// 隐藏系统导航栏
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},
 		//更新相关
 		{
 			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
@@ -153,6 +163,9 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [
+			{
+				"pagePath": "pages/course_message/index"
+			},
 			{
 				"pagePath": "pages/course_practice/index"
 			},
