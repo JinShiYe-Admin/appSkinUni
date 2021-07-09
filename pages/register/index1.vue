@@ -11,9 +11,9 @@
 					用户账号
 				</view>
 				<view class="uni-list-cell-db">
-					<input v-if="curPage.status==0" v-model="uaccount" style="height: 40px;" type="text"
+					<input v-if="curPage.status==0" v-model="uaccount" maxlength="20" style="height: 40px;" type="text"
 						placeholder="请输入账号" />
-					<input v-if="curPage.status==1" v-model="uaccount" style="height: 40px;" type="text" disabled
+					<input v-if="curPage.status==1" v-model="uaccount" maxlength="20" style="height: 40px;" type="text" disabled
 						placeholder="请输入账号" />
 				</view>
 			</view>
@@ -22,7 +22,7 @@
 					请输入{{tempStr}}密码
 				</view>
 				<view class="uni-list-cell-db">
-					<input v-model="upassword" password style="height: 40px;" type="text" placeholder="请输入密码" />
+					<input v-model="upassword" password style="height: 40px;" maxlength="18" type="text" placeholder="请输入密码" />
 				</view>
 			</view>
 			<view class="uni-list-cell">
@@ -30,7 +30,7 @@
 					请确认{{tempStr}}密码
 				</view>
 				<view class="uni-list-cell-db">
-					<input v-model="confirmpassword" password style="height: 40px;" type="text" placeholder="请确认密码" />
+					<input v-model="confirmpassword" password style="height: 40px;" maxlength="18" type="text" placeholder="请确认密码" />
 				</view>
 			</view>
 		</view>
@@ -144,7 +144,7 @@
 					this.showToast('请输入用户账号');
 				} else if (escape(this.uaccount).indexOf("%u") >= 0) {
 					this.showToast('用户账号不能输入汉字');
-				} else if (this.uaccount.length > 18 || this.uaccount.length < 4) {
+				} else if (this.uaccount.length > 20 || this.uaccount.length < 4) {
 					this.showToast('字符长度不能超过');
 				} else if (this.upassword == '') {
 					this.showToast('请输入用户密码');

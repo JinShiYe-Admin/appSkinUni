@@ -86,7 +86,7 @@ function post(url, data, callback, ecallback) {
 						showToast(res.data.msg);
 					}
 				} else {
-					// console.log('success:'+JSON.stringify(res.data));
+					console.log('success:'+url+':'+JSON.stringify(res.data));
 					if (res.data.code === '0000') {
 						callback(res.data.data, res.data)
 					} else {
