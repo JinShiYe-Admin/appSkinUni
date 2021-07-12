@@ -116,7 +116,7 @@
 					isDot: false,
 					customIcon: false,
 					img_href: "../../img/schapp_work/kaoqin_tab.png",
-					url: 'schappUni_Message2',
+					url: 'schappUni_Message',
 					childList: []
 				}, 
 				],

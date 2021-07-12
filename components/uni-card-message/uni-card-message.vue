@@ -364,6 +364,7 @@
 	.uni-card__footer {
 		justify-content: space-between;
 		padding: 12px;
+		text-align: right;
 	}
 
 	.uni-card__footer-text {
