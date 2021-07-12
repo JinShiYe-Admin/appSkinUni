@@ -313,7 +313,7 @@
 		/* #endif */
 		position: relative;
 		flex-direction: row;
-		padding: 12px;
+		padding: 8px;
 		align-items: center;
 	}
 
@@ -352,7 +352,7 @@
 	}
 
 	.uni-card__content--pd {
-		padding: 12px;
+		padding: 8px;
 	}
 
 	.uni-card__content-extra {
@@ -363,7 +363,7 @@
 
 	.uni-card__footer {
 		justify-content: space-between;
-		padding: 12px;
+		padding: 8px;
 		text-align: right;
 	}
 

@@ -7,18 +7,18 @@
 		</view>
 		<view class="content">
 			<view v-if="current === 0">
-				<uni-card-message title="通知公告"  :note="pagedata0.notice.create_time?pagedata0.notice.create_time:''" isShadow @click="clickCard(pagedata0.notice)"><text class="content-box-text">{{pagedata0.notice.name?pagedata0.notice.name:'暂无内容'}} <text v-show="pagedata0.notice.name" style="display: flex;margin-top: -20px;color: #00CFBD;justify-content: flex-end;" >详情</text></text></uni-card-message>
+				<uni-card-message title="通知公告"  :note="pagedata0.notice.create_time?pagedata0.notice.create_time:''" isShadow @click="clickCard(pagedata0.notice,0)"><text class="content-box-text">{{pagedata0.notice.name?pagedata0.notice.name:'暂无内容'}} <text v-show="pagedata0.notice.name" class="detail-c" >详情</text></text></uni-card-message>
 				<uni-card-message title="考试"     :note="pagedata0.exam.create_time?pagedata0.exam.create_time:''"  isShadow><text class="content-box-text">{{pagedata0.exam.name?`【${pagedata0.exam.name}】 已经布置，请及时完成`:'暂无内容'}}</text></uni-card-message>
 				<uni-card-message title="作业"     :note="pagedata0.work.create_time?pagedata0.work.create_time:''"  isShadow><text class="content-box-text">{{pagedata0.work.name?`【${pagedata0.work.name}】 已经布置，请及时完成`:'暂无内容'}}</text></uni-card-message>
 			</view> 
 			<view v-if="current === 1">
-				<uni-easyinput suffixIcon="search" style="padding:10px 0px 2px;" v-model="pageobj1.keyword" placeholder='请输入 "标题" 关键字' @iconClick="iconClick"></uni-easyinput>
-				<uni-card v-for="item in pagedata1" :note="item.create_time" isShadow @click="clickCard(item)"><text class="content-box-text">{{item.title}} <text style="display: flex;margin-top: -20px;color: #00CFBD;justify-content: flex-end;" >详情</text></text></uni-card>
+				<uni-easyinput suffixIcon="search" style="padding:10px 15px 2px;width: auto;" v-model="pageobj1.keyword" placeholder='请输入 "标题" 关键字' @iconClick="iconClick"></uni-easyinput>
+				<uni-card-message v-for="item in pagedata1" :note="item.create_time" isShadow @click="clickCard(item,1)"><text class="content-box-text">{{item.title}} <text class="detail-c" >详情</text></text></uni-card-message>
 				<uni-load-more :status="pageobj1.status" :icon-size="17" :content-text="pageobj1.contentText" />
 			</view>
 			<view v-if="current === 2">
-				<uni-card-message v-for="item in pagedata2" title="系统通知" :note="item.create_time?item.create_time:''" isShadow><text class="content-box-text">【{{item.test_name}}】 已经布置，请及时完成</text></uni-card-message>
-				<uni-load-more :status="pageobj2.status" :icon-size="17" :content-text="pageobj2.contentText" />
+				<uni-card-message v-for="item in pagedata2" :note="item.create_time?item.create_time:''" isShadow><text class="content-box-text">【{{item.test_name}}】 已经布置，请及时完成</text></uni-card-message>
+				<uni-load-more :status="pageobj2.status" :icon-size="17" :content-text="pageobj2.contentText" /><!-- title="系统通知"  -->
 			</view>
 		</view>
 		
@@ -167,10 +167,15 @@
 					this.hideLoading()
 				})
 			},
-			clickCard(item){
+			clickCard(item,tag){
 				console.log(item);
-				item.index_code=this.index_code
-				util.openwithData('./notice_detail',item)
+				if(this.pagedata0.notice.name){
+					if(tag===0){
+						item.title=item.name
+					}
+					item.index_code=this.index_code
+					util.openwithData('./notice_detail',item)
+				}
 			},
 			iconClick(){
 				this.pageobj1.loadFlag=0
@@ -194,7 +199,6 @@
 			this.getList0()
 		},
 		onPullDownRefresh() {
-			this.showLoading()
 			if(this.current===0){
 				this.getList0()
 			}else if(this.current===1){
@@ -237,5 +241,11 @@
 		font-size: 13px;
 		line-height: 22px;
 		word-break: break-all;
+	}
+	.detail-c{
+		display: flex;
+		margin-top: -20px;
+		color: #00CFBD;
+		justify-content: flex-end;
 	}
 </style>
