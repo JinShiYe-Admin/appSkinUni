@@ -359,7 +359,9 @@
 			// 	this.passw = tempInfo.passWord0;
 			// 	this.login();
 			// }
-			update();
+			//#ifdef APP-PLUS
+				update();
+			//#endif
 			if(this.globaData.EnvKey == 5){
 				this.showInput = 1;
 				var tempInfo = util.getPersonal();
