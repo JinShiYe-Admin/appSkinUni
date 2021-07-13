@@ -1,5 +1,4 @@
-
-
+	import cryption from '../../commom/uploadFiles/cryption.js';
 	/**
 	 * 获取多个上传token
 	 * @param {Object} data
@@ -53,7 +52,7 @@
 		}
 		configure.options = {
 			AppID: appId,
-			Param: encryptByDES(desKey, JSON.stringify(params))
+			Param: cryption.encryptByDES(desKey, JSON.stringify(params))
 		}
 
 		// console.log("参数数据：" + JSON.stringify(configure.options))
@@ -96,7 +95,7 @@
 	 * }
 	 */
 	var getQNUpToken = function(url, data, successCB, errorCB) {
-		console.log('getQNUpToken ' + url + ' ' + JSON.stringify(data));
+		// console.log('getQNUpToken ' + url + ' ' + JSON.stringify(data));
 		var type = ''; //获取上传token的类型。0上传需要生成缩略图的文件；1上传文件
 		var QNFileName = ''; //存放到七牛的文件名
 		var fileList = []; //上传文件的路径
@@ -160,11 +159,11 @@
 				var thumbType = temp[1];
 				if(thumbType == 'avi' || thumbType == 'mp4' || thumbType == 'flv' || thumbType == 'swf' || thumbType == '3gp' || thumbType == 'rm') {
 					//视频
-					configure.thumbKey = Qiniu.URLSafeBase64Encode(imageThumb + ":" + thumbSpace + thumbName + '.png');
+					configure.thumbKey = URLSafeBase64Encode(imageThumb + ":" + thumbSpace + thumbName + '.png');
 					ops = "vframe/png/offset/1|saveas/" + configure.thumbKey;
 				} else {
 					//图片
-					configure.thumbKey = Qiniu.URLSafeBase64Encode(imageThumb + ":" + thumbSpace + thumbName + '.png');
+					configure.thumbKey = URLSafeBase64Encode(imageThumb + ":" + thumbSpace + thumbName + '.png');
 					ops = "imageView2/1/w/" + maxWidth + "/h/" + maxHeight + "/format/png|saveas/" + configure.thumbKey;
 				}
 			}
@@ -179,7 +178,7 @@
 
 			configure.options = {
 				AppID: appId,
-				Param: encryptByDES(desKey, JSON.stringify(param))
+				Param: cryption.encryptByDES(desKey, JSON.stringify(param))
 			}
 		} else if(type == '2') { //多个图片文件
 			var params = [];
@@ -211,7 +210,7 @@
 
 			configure.options = {
 				AppID: appId,
-				Param: encryptByDES(desKey, JSON.stringify(params))
+				Param: cryption.encryptByDES(desKey, JSON.stringify(params))
 			}
 		} else if(type == '3') { //多个视频文件
 			var params = [];
@@ -244,7 +243,7 @@
 
 			configure.options = {
 				AppID: appId,
-				Param: encryptByDES(desKey, JSON.stringify(params))
+				Param: cryption.encryptByDES(desKey, JSON.stringify(params))
 			}
 		} else if(type == '4') { //多个音频文件
 			var params = [];
@@ -271,11 +270,11 @@
 			}
 			configure.options = {
 				AppID: appId,
-				Param: encryptByDES(desKey, JSON.stringify(params))
+				Param: cryption.encryptByDES(desKey, JSON.stringify(params))
 			}
 		}
 
-//		console.log("参数数据：" + JSON.stringify(configure.options))
+		// console.log("参数数据：" + JSON.stringify(configure.options))
 		//获取token
 		getQNUpTokenWithManage(url, configure.options, function(data) {
 			successCB({
@@ -299,34 +298,34 @@
 		switch(manageOptions.type) {
 			case 0: //缩略图
 				var thumbSpace = saveSpace + 'thumb/';
-				returnData.thumbKey = Qiniu.URLSafeBase64Encode(mainSpace + ":" + thumbSpace + QNFileName);
+				returnData.thumbKey = URLSafeBase64Encode(mainSpace + ":" + thumbSpace + QNFileName);
 				returnData.ops = "imageView2/1/w/" + manageOptions.thumbSize.width + "/h/" + manageOptions.thumbSize.height + "/format/png|saveas/" + returnData.thumbKey;
 				break;
 			case 1: //裁剪
 				var clipSpace = saveSpace + 'clip/';
-				returnData.clipKey = Qiniu.URLSafeBase64Encode(mainSpace + ":" + clipSpace + QNFileName);
+				returnData.clipKey = URLSafeBase64Encode(mainSpace + ":" + clipSpace + QNFileName);
 				returnData.ops = "imageMogr2/gravity/Center/crop/!" + getIfExist(manageOptions.cropSize.width) + "x" + getIfExist(manageOptions.cropSize.height) + "/format/png|saveas/" + returnData.clipKey;
 				break;
 			case 2: //视频
 				var thumbSpace = saveSpace + 'thumb/';
 				var tempFileName = QNFileName.split('.');
 				var thumbName = tempFileName[0];
-				returnData.thumbKey = Qiniu.URLSafeBase64Encode(mainSpace + ":" + thumbSpace + thumbName + '.png');
+				returnData.thumbKey = URLSafeBase64Encode(mainSpace + ":" + thumbSpace + thumbName + '.png');
 				returnData.ops = "vframe/png/offset/1|saveas/" + returnData.thumbKey;
 				break;
 			case 3: //音频，转格式
 				var thumbSpace = saveSpace + 'thumb/';
 				var tempFileName = QNFileName.split('.');
 				var thumbName = tempFileName[0];
-				returnData.thumbKey = Qiniu.URLSafeBase64Encode(mainSpace + ":" + thumbSpace + thumbName + '.mp3');
+				returnData.thumbKey = URLSafeBase64Encode(mainSpace + ":" + thumbSpace + thumbName + '.mp3');
 				returnData.ops = "avthumb/mp3/acodec/libmp3lame" + "|saveas/" + returnData.thumbKey;
 				//console.log('3 ' + returnData.ops);
 				break;
 			case 10: //缩略图+裁剪
 				var thumbSpace = saveSpace + 'thumb/';
-				returnData.thumbKey = Qiniu.URLSafeBase64Encode(mainSpace + ":" + thumbSpace + QNFileName);
+				returnData.thumbKey = URLSafeBase64Encode(mainSpace + ":" + thumbSpace + QNFileName);
 				var clipSpace = saveSpace + 'clip/';
-				returnData.clipKey = Qiniu.URLSafeBase64Encode(mainSpace + ":" + clipSpace + QNFileName);
+				returnData.clipKey = URLSafeBase64Encode(mainSpace + ":" + clipSpace + QNFileName);
 				returnData.ops = "imageView2/1/w/" + manageOptions.thumbSize.width + "/h/" + manageOptions.thumbSize.height + "/format/png|saveas/" + returnData.thumbKey +
 					";imageMogr2/gravity/Center/crop/!" + getIfExist(manageOptions.cropSize.width) + "x" + getIfExist(manageOptions.cropSize.height) + "/format/png|saveas/" + returnData.clipKey;
 				break;
@@ -348,21 +347,52 @@
 	 * @param {Object} errorCB
 	 */
 	var getQNUpTokenWithManage = function(url, data, successCB, errorCB) {
-//		console.log('url:'+url);
-//		console.log('data:'+data);
-		uni.request(url, {
-			async: false,
-			data: data, //请求参数
-			dataType: 'json', //服务器返回json格式数据
-			type: 'post', //HTTP请求类型
-			timeout: 60000, //超时时间设置为60秒
-			success: function(data) {
-				//服务器返回响应
-				successCB(data);
+		// console.log('url:'+url);
+		// console.log('data:'+JSON.stringify(data));
+		// uni.request(url, {
+		// 	async: false,
+		// 	data: data, //请求参数
+		// 	dataType: 'json', //服务器返回json格式数据
+		// 	type: 'post', //HTTP请求类型
+		// 	timeout: 60000, //超时时间设置为60秒
+		// 	success: function(data) {
+		// 		console.log('11111111');
+		// 		//服务器返回响应
+		// 		successCB(data);
+		// 	},
+		// 	error: function(xhr, type, errorThrown) {
+		// 		console.log('2222222');
+		// 		//异常处理
+		// 		errorCB(xhr, type, errorThrown);
+		// 	}
+		// });
+		let reuqestTask = uni.request({
+			url: url,
+			method: 'POST',
+			header: {
+				'content-type': 'application/json; charset=UTF-8'
 			},
-			error: function(xhr, type, errorThrown) {
-				//异常处理
-				errorCB(xhr, type, errorThrown);
+			data: data,
+			success: res => { //接口调用成功的回调函数
+				// console.log('11111res:'+JSON.stringify(res));
+				if (res.statusCode === 200) {
+					if (res.data.Status === '1') {
+						//服务器返回响应
+						successCB(res.data);
+					} else {
+						
+					}
+				} else {//比如服务器404 500
+					
+				}
+			},
+			fail: (e) => { //接口调用失败的回调函数  比如跨域了，断网
+				// console.log("e: " + JSON.stringify(e));
+				uni.hideLoading();
+				showToast('网络请求失败')
+			},
+			complete: () => {
+				Vue.prototype.requestTask.delete(reuqestTask)
 			}
 		});
 	}
@@ -496,7 +526,107 @@
 			//			//console.log("Upload success: " + upload.getFileName());
 		}
 	}
+	var utf8_encode = function(argString) {
+		if(argString === null || typeof argString === 'undefined') {
+			return '';
+		}
+	
+		var string = (argString + ''); // .replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+		var utftext = '',
+			start, end, stringl = 0;
+	
+		start = end = 0;
+		stringl = string.length;
+		for(var n = 0; n < stringl; n++) {
+			var c1 = string.charCodeAt(n);
+			var enc = null;
+	
+			if(c1 < 128) {
+				end++;
+			} else if(c1 > 127 && c1 < 2048) {
+				enc = String.fromCharCode(
+					(c1 >> 6) | 192, (c1 & 63) | 128
+				);
+			} else if(c1 & 0xF800 ^ 0xD800 > 0) {
+				enc = String.fromCharCode(
+					(c1 >> 12) | 224, ((c1 >> 6) & 63) | 128, (c1 & 63) | 128
+				);
+			} else { // surrogate pairs
+				if(c1 & 0xFC00 ^ 0xD800 > 0) {
+					throw new RangeError('Unmatched trail surrogate at ' + n);
+				}
+				var c2 = string.charCodeAt(++n);
+				if(c2 & 0xFC00 ^ 0xDC00 > 0) {
+					throw new RangeError('Unmatched lead surrogate at ' + (n - 1));
+				}
+				c1 = ((c1 & 0x3FF) << 10) + (c2 & 0x3FF) + 0x10000;
+				enc = String.fromCharCode(
+					(c1 >> 18) | 240, ((c1 >> 12) & 63) | 128, ((c1 >> 6) & 63) | 128, (c1 & 63) | 128
+				);
+			}
+			if(enc !== null) {
+				if(end > start) {
+					utftext += string.slice(start, end);
+				}
+				utftext += enc;
+				start = end = n + 1;
+			}
+		}
+	
+		if(end > start) {
+			utftext += string.slice(start, stringl);
+		}
+	
+		return utftext;
+	};
+	var base64_encode = function(data) {
+		var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+		var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+			ac = 0,
+			enc = '',
+			tmp_arr = [];
+	
+		if(!data) {
+			return data;
+		}
+	
+		data = utf8_encode(data + '');
+	
+		do { // pack three octets into four hexets
+			o1 = data.charCodeAt(i++);
+			o2 = data.charCodeAt(i++);
+			o3 = data.charCodeAt(i++);
+	
+			bits = o1 << 16 | o2 << 8 | o3;
+	
+			h1 = bits >> 18 & 0x3f;
+			h2 = bits >> 12 & 0x3f;
+			h3 = bits >> 6 & 0x3f;
+			h4 = bits & 0x3f;
+	
+			// use hexets to index into b64, and append result to encoded string
+			tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+		} while (i < data.length);
+	
+		enc = tmp_arr.join('');
+	
+		switch(data.length % 3) {
+			case 1:
+				enc = enc.slice(0, -2) + '==';
+				break;
+			case 2:
+				enc = enc.slice(0, -1) + '=';
+				break;
+		}
+	
+		return enc;
+	};
+	var URLSafeBase64Encode = function(v) {
+		v = base64_encode(v);
+		return v.replace(/\//g, '_').replace(/\+/g, '-');
+	};
 
-	// module.exports = {
-	//     cloudFileUtil
-	// }
+	module.exports = {
+	    getQNUpToken:getQNUpToken,
+		upload:upload,
+	}

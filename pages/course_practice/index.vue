@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<mynavBar :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
+		<mynavBar ref="mynavBar" :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
 		<view class="tabs">
 			<picker class="flex-box" @change="termClick" :value="tremIndex" :range="tremArray" range-key="name">
 				<uni-easyinput suffixIcon="arrowdown" :styles="styles" disabled :value="tremArray[tremIndex].name" ></uni-easyinput>
@@ -49,6 +49,7 @@
 <script>
 	import util from '../../commom/util.js'
 	import mynavBar from '../../components/my-navBar/m-navBar';
+	let _this;
 	export default {
 		data() {
 			return {
@@ -192,6 +193,11 @@
 			}
 		},
 		onLoad() {
+			_this = this;
+			// 添加监听，如果修改了头像，将左上角和个人中心的也对应修改
+			uni.$on('updateHeadImg', function(data) {
+				_this.$refs.mynavBar.upLoadImg();
+			})
 			this.tabbar = util.getMenu();
 			this.personInfo = util.getPersonal();
 			let tempMenu;

@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<mynavBar :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
+		<mynavBar ref="mynavBar" :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
 		<template v-if="show">
 			<uni-title class="h4" style="align-items: center;padding: 3px 0;" type="h4" title="暂无考试安排"></uni-title>
 		</template>
@@ -39,6 +39,7 @@
 <script>
 	import util from '../../commom/util.js'
 	import mynavBar from '../../components/my-navBar/m-navBar';
+	let _this;
 	export default {
 		data() {
 			return {
@@ -117,6 +118,11 @@
 			}
 		},
 		onLoad:function(){
+			_this = this;
+			// 添加监听，如果修改了头像，将左上角和个人中心的也对应修改
+			uni.$on('updateHeadImg', function(data) {
+				_this.$refs.mynavBar.upLoadImg();
+			})
 			this.tabbar = util.getMenu();
 			this.personInfo = util.getPersonal();
 			let tempMenu;

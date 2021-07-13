@@ -83,6 +83,7 @@ Vue.prototype.QNGETUPTOKENHEADIMGE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNi
 Vue.prototype.QNGETUPTOKENFILE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传文件（云存储）到七牛的token的url
 Vue.prototype.QNGETDOWNTOKENFILE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetAccess'; //获取下载文件（云存储）的token的url，url+七牛文件url
 Vue.prototype.QNGETTOKENDELETE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
+Vue.prototype.QN_HEADIMG = "headImg/"; //头像
 
 Vue.prototype.PWD_ENCRYPTION ='#@_JFnice_@#';//修改密码时，加密密钥
 Vue.prototype.SECRETKEY ='jsy309';//sign签名时需要的盐
