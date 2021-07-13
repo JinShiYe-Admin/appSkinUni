@@ -1,13 +1,13 @@
 {
-    "name" : "uniAdmin",
+    "name" : "金视野APP升级中心",
     "appid" : "__UNI__1ADD56C",
     "description" : "",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
-	"networkTimeout":{
-	    "uploadFile":1200000    //ms， 如果不配置，上传大文件可能会超时
-	},
+    "networkTimeout" : {
+        "uploadFile" : 1200000 //ms， 如果不配置，上传大文件可能会超时
+    },
     /* 5+App特有相关 */
     "app-plus" : {
         "usingComponents" : true,
