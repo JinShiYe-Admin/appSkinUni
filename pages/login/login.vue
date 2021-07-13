@@ -49,6 +49,7 @@
 	import util from '../../commom/util.js'
 	import RSAKey from '../../commom/encrypt/rsa.js'
 	import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
+	import update from '../../uni_modules/uni-upgrade-center-app/utils/check-update.js'
 	export default {
 		data() {
 			return {
@@ -358,6 +359,9 @@
 			// 	this.passw = tempInfo.passWord0;
 			// 	this.login();
 			// }
+			//#ifdef APP-PLUS
+				update();
+			//#endif
 			if(this.globaData.EnvKey == 5){
 				this.showInput = 1;
 				var tempInfo = util.getPersonal();
