@@ -9,7 +9,7 @@
 			<text style="word-break: break-all;font-size: 13px;" v-html="itemData.content"></text>
 		</view>
 		<view  style="padding:15px 15px 40px;">
-			<view v-for="file in itemData.file_list" style="margin-top: 15px;font-size: 13px;">
+			<view v-for="file in itemData.file_list" style="margin-top: 15px;font-size: 13px;word-break: break-all;">
 				<uni-link :href="file.url" :text="file.name" :download="file.name" color="#00CFBD"></uni-link>
 			</view>
 		</view>
@@ -24,9 +24,7 @@
 				itemData:{}
 			}
 		},
-		methods: {
-			
-		},
+		methods: {},
 		onLoad: function(option) {
 			this.personInfo = util.getPersonal();
 			const itemData = util.getPageData(option);
@@ -35,8 +33,20 @@
 			this.itemData=itemData
 			//#ifndef APP-PLUS
 				document.title=""
+				var isPageHide = false;
+				window.addEventListener('pageshow', function() {
+					if (isPageHide) {
+						window.location.reload();
+					}
+				});
+				window.addEventListener('pagehide', function() {
+					isPageHide = true;
+				});
 			//#endif
 		},
+		onUnload() {
+			console.log('fuck laoliang');
+		}
 	}
 </script>
 
