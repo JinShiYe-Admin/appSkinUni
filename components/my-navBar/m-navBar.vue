@@ -4,7 +4,7 @@
 			:custom-back="clickLeftImg"></u-navbar-my>
 		<uni-drawer ref="showPersonInfo" mode="left">
 			<scroll-view style="height: 100%;" scroll-y="true">
-				<view style="text-align: center;">
+				<view style="text-align: center;" @click="headImg()">
 					<image :src="personInfo.img_url"
 						style="width: 100px;height: 100px;border-radius: 50%;margin-top: 50px;"></image>
 				</view>
@@ -52,6 +52,10 @@
 			}
 		},
 		methods: {
+			headImg:function(){
+				this.$refs.showPersonInfo.close();
+				util.openwithData('/pages/more/headImg');
+			},
 			clickLeftImg() {
 				if (this.navItem.index == 0) {
 					this.$refs.showPersonInfo.open();
