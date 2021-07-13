@@ -4,7 +4,7 @@
 			:custom-back="clickLeftImg"></u-navbar-my>
 		<uni-drawer ref="showPersonInfo" mode="left">
 			<scroll-view style="height: 100%;" scroll-y="true">
-				<view style="text-align: center;">
+				<view style="text-align: center;" @click="headImg()">
 					<image :src="personInfo.img_url"
 						style="width: 100px;height: 100px;border-radius: 50%;margin-top: 50px;"></image>
 				</view>
@@ -22,8 +22,8 @@
 			</scroll-view>
 		</uni-drawer>
 		<uni-popup ref="popup" type="dialog">
-			<uni-popup-dialog title="确定注销?" content="注销后账号将不可使用，与账号相关的数据也会一并删除，确定注销吗？" :duration="2000" :before-close="true" @close="close"
-				@confirm="confirm"></uni-popup-dialog>
+			<uni-popup-dialog title="确定注销?" content="注销后账号将不可使用，与账号相关的数据也会一并删除，确定注销吗？" :duration="2000"
+				:before-close="true" @close="close" @confirm="confirm"></uni-popup-dialog>
 		</uni-popup>
 	</view>
 </template>
@@ -31,6 +31,7 @@
 <script>
 	import util from '../../commom/util.js'
 	export default {
+		name:'mynavBar',
 		props: {
 			personInfo: {
 				type: Object,
@@ -52,6 +53,13 @@
 			}
 		},
 		methods: {
+			upLoadImg:function(){
+				this.$set(this.personInfo,'img_url',util.getPersonal().img_url);
+			},
+			headImg: function() {
+				this.$refs.showPersonInfo.close();
+				util.openwithData('/pages/more/headImg');
+			},
 			clickLeftImg() {
 				if (this.navItem.index == 0) {
 					this.$refs.showPersonInfo.open();
@@ -84,14 +92,14 @@
 				var personal = util.getPersonal();
 				//不需要加密的数据
 				var comData0 = {
-					index_code:'index',
-					op_user_code:personal.user_code,
+					index_code: 'index',
+					op_user_code: personal.user_code,
 				};
 				this.showLoading();
 				//发送网络请求，data为网络返回值
-				this.post(this.globaData.INTERFACE_HR_SKIN + 'unregister', comData0, (data0,data) => {
+				this.post(this.globaData.INTERFACE_HR_SKIN + 'unregister', comData0, (data0, data) => {
 					this.hideLoading();
-					if(data.code == 0) {
+					if (data.code == 0) {
 						this.showToast(data.msg);
 						util.setPersonal({});
 						uni.reLaunch({

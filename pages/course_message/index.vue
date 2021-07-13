@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<mynavBar :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
+		<mynavBar ref="mynavBar" :navItem='tabBarItem' :personInfo='personInfo'></mynavBar>
 		
 		<view class="uni-padding-wrap uni-common-mt">
 			<uni-segmented-control :current="current" :values="items" style-type="button" active-color="#00cfbd" @clickItem="onClickItem" />
@@ -29,6 +29,7 @@
 <script>
 	import util from '../../commom/util.js';
 	import mynavBar from '@/components/my-navBar/m-navBar';
+	let _this;
 	export default {
 		data() {
 			return {
@@ -185,6 +186,11 @@
 			}
 		},
 		onLoad(option) {
+			_this = this;
+			// 添加监听，如果修改了头像，将左上角和个人中心的也对应修改
+			uni.$on('updateHeadImg', function(data) {
+				_this.$refs.mynavBar.upLoadImg();
+			})
 			this.tabbar = util.getMenu();
 			this.personInfo = util.getPersonal();
 			let tempMenu;
