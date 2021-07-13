@@ -244,7 +244,7 @@
 	}
 	.detail-c{
 		display: flex;
-		margin-top: -20px;
+		margin-top: -10px;
 		color: #00CFBD;
 		justify-content: flex-end;
 	}

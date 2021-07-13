@@ -5,8 +5,13 @@
 			<uni-title class="h5" style="align-items: center;word-break: break-all;" type="h5" :title="`发布时间：${itemData.create_time}`"></uni-title>
 		</view>
 		<view class="line"></view>
-		<view  style="padding:15px 15px 20px;">
+		<view  style="padding:15px 15px 10px;">
 			<text style="word-break: break-all;font-size: 13px;" v-html="itemData.content"></text>
+		</view>
+		<view  style="padding:15px 15px 40px;">
+			<view v-for="file in itemData.file_list" style="margin-top: 15px;font-size: 13px;">
+				<uni-link :href="file.url" :text="file.name" :download="file.name" color="#00CFBD"></uni-link>
+			</view>
 		</view>
 	</view>
 </template>

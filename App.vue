@@ -18,5 +18,6 @@
 <style lang="scss">
 	// @import "./third-ui/uview-ui/index.scss";
 	@import "./commom/uni.css";
+	@import "./commom/common.css";
 </style>
 

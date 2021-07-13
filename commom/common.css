@@ -1,0 +1,18 @@
+.wave-line {
+	background: url(@/static/images/bolang.svg) repeat-x 0 100%;
+	background-size: 20px auto;
+}
+
+.dot-mark {
+	position: relative;
+}
+
+.dot-mark::before {
+	position: absolute;
+	top: 0.65em;
+	left: 0px;
+	width: 100%;
+	white-space: nowrap;
+	content: "・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・";
+	overflow: hidden;
+}
