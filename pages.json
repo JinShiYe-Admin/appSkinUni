@@ -7,14 +7,14 @@
 		{
 			"path": "pages/login/login",
 			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationStyle": "custom", // 隐藏系统导航栏
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
 		}, { //课程学习
 			"path": "pages/course_study/index",
 			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationStyle": "custom", // 隐藏系统导航栏
 				"enablePullDownRefresh": true
 			}
 		}, { //课程学习 详情
@@ -26,93 +26,81 @@
 		{ //考试
 			"path": "pages/course_examination/index",
 			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationStyle": "custom", // 隐藏系统导航栏
 				"enablePullDownRefresh": true
 			}
-		}, 
+		},
 		{ //考试详情
 			"path": "pages/course_examination/detail",
 			"style": {
 				"enablePullDownRefresh": false
 			}
-		}, 
+		},
 		{ //练习
 			"path": "pages/course_practice/index",
 			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"navigationStyle": "custom", // 隐藏系统导航栏
 				"enablePullDownRefresh": true
 			}
-		} 
-	    ,{//练习 详情
-            "path" : "pages/course_practice/detail-show",
-            "style" : {
-                "enablePullDownRefresh": false
-            }
-        }
-        ,{//练习 做题详情
-            "path" : "pages/course_practice/detail-practice",
-            "style" :{
-                "enablePullDownRefresh": false
-            }
-        }
-        ,{
-            "path" : "pages/register/index",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "查询资料",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/register/index1",
-            "style" :                                                                                    
-            {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        },
-		{
-			"path": "pages/more/index",
+		}, { //练习 详情
+			"path": "pages/course_practice/detail-show",
 			"style": {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
+				"enablePullDownRefresh": false
+			}
+		}, { //练习 做题详情
+			"path": "pages/course_practice/detail-practice",
+			"style": {
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/register/index",
+			"style": {
+				"navigationBarTitleText": "查询资料",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/register/index1",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-		}
-        ,{
-            "path" : "pages/more/modifyPswd",
-            "style" :                                                                                    
-            {
+
+		},
+		{
+			"path": "pages/more/index",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/more/modifyPswd",
+			"style": {
 				"navigationBarTitleText": "修改密码",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/more/privace",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-        },{
-		    "path" : "pages/more/about",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "关于",
-		        "enablePullDownRefresh": false
-		    }
-        },
-		{//消息
-		    "path" : "pages/course_message/index",
-		    "style" :                                                                                    
-		    {
-				"navigationStyle": "custom" ,// 隐藏系统导航栏
-		        "enablePullDownRefresh": true
-		    }
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/more/privace",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/more/about",
+			"style": {
+				"navigationBarTitleText": "关于",
+				"enablePullDownRefresh": false
+			}
+		},
+		{ //消息
+			"path": "pages/course_message/index",
+			"style": {
+				"navigationStyle": "custom", // 隐藏系统导航栏
+				"enablePullDownRefresh": true
+			}
 		},
 		//更新相关
 		{
@@ -127,29 +115,30 @@
 					"popGesture": "none",
 					"animationType": "fade-in",
 					"animationDuration": 200
-	
+
 				}
 			}
+		}, {
+			"path": "pages/more/company",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/more/headImg",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/course_message/notice_detail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
 		}
-        ,{
-            "path" : "pages/more/company",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/more/headImg",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
 	"globalStyle": {
 		//"navigationStyle":"custom",//屏蔽原生导航栏，使用自定义导航栏NavBar https://uniapp.dcloud.io/collocation/pages?id=customnav   https://ask.dcloud.net.cn/article/34921
@@ -174,8 +163,7 @@
 		"selectedColor": "#007AFF",
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/course_message/index"
 			},
 			{

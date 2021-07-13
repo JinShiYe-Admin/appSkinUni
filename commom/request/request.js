@@ -90,7 +90,6 @@ function post(url, data, callback, ecallback) {
 						}
 					}
 				} else {
-					console.log('success:'+url+':'+JSON.stringify(res.data));
 					if (res.data.code ==0) {
 						callback(res.data.data, res.data)
 					} else {//比如 ？？？、 不知道了
