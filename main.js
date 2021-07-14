@@ -12,7 +12,7 @@ switch (EnvKey) {
 	case 1:
 		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
-		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
 		GLOBALDATA.UNITCODE ='100004' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =15;//七牛appid
@@ -21,7 +21,7 @@ switch (EnvKey) {
 	case 2:
 		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
-		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
 		GLOBALDATA.UNITCODE ='100004' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =15;//七牛appid
@@ -30,7 +30,7 @@ switch (EnvKey) {
 	case 3:
 		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0003';//平台代码
-		GLOBALDATA.APPCODE ='schappUni#';//应用系统代码
+		GLOBALDATA.APPCODE ='schappWxUni#';//应用系统代码
 		GLOBALDATA.UNITCODE ='-1' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.INTERFACE_SSO_SKIN ='http://nwifapp.jiaobaowang.net/ssotoskin/api/skin/';//单点登录,供PC外皮及APP用户登录,管理
@@ -48,7 +48,7 @@ switch (EnvKey) {
 	case 4:
 		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
-		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
 		GLOBALDATA.UNITCODE ='100004' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =16;//七牛appid
@@ -57,7 +57,7 @@ switch (EnvKey) {
 	case 5:
 		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0001' ;//平台代码
-		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
 		GLOBALDATA.UNITCODE ='100001' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =17;//七牛appid
@@ -66,7 +66,7 @@ switch (EnvKey) {
 	case 6:
 		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
-		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
 		GLOBALDATA.UNITCODE ='100001' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.QN_APPID =16;//七牛appid
