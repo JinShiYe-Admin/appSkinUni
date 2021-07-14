@@ -138,7 +138,25 @@
 				"enablePullDownRefresh": false
 			}
 		}
-	],
+	    ,{//我的信息
+            "path" : "pages/mydata/index",
+            "style" :                                                                                    
+            {
+                "navigationStyle": "custom", // 隐藏系统导航栏
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{//学习成绩
+            "path" : "pages/grades/index",
+            "style" :                                                                                    
+            {
+                "navigationStyle": "custom", // 隐藏系统导航栏
+                "enablePullDownRefresh": true
+            }
+            
+        }
+    ],
 	//配置项如果有注释，注释内容为官网文档中的 平台差异说明
 	"globalStyle": {
 		//"navigationStyle":"custom",//屏蔽原生导航栏，使用自定义导航栏NavBar https://uniapp.dcloud.io/collocation/pages?id=customnav   https://ask.dcloud.net.cn/article/34921

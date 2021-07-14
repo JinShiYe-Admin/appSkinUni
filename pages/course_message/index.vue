@@ -199,6 +199,7 @@
 			} else {
 				tempMenu = util.getPageData(option);
 			}
+			console.log("tempMenu: ",tempMenu);
 			this.tabBarItem = tempMenu;
 			this.index_code=tempMenu.access.split("#")[1]
 			this.showLoading()
