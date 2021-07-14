@@ -169,6 +169,7 @@
 					this.showToast('账号或密码不能为空');
 					return;
 				} else {
+					util.setPersonal({});
 					this.showLoading()
 					let deviceId = util.getDeviceId();
 					let broswerId = util.getBroswerId();
