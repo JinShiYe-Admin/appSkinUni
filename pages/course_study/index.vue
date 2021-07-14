@@ -9,7 +9,7 @@
 			</scroll-view>
 			<view class="line-h"></view>
 			<uni-row class="demo-uni-row">
-			    <uni-col class="card-list" :xs="12" :sm="12" :md="6" :lg="4" :xl="4" v-for="item in dataList">
+			    <uni-col :key="index" class="card-list" :xs="12" :sm="12" :md="6" :lg="4" :xl="4" v-for="(item,index) in dataList">
 			       <uni-card-study mode="style" :is-shadow="true" :thumbnail="item.book_img_url" @click="toDetail(item)" class="u-card">
 						<text class="text">{{ item.sub_name }}</text>
 			       </uni-card-study>
@@ -17,7 +17,7 @@
 			</uni-row> 
 		</view> 
 		<u-tabbar-my :list="tabbar" ></u-tabbar-my>
-	</view>
+	</view> 
 </template>
 
 <script>

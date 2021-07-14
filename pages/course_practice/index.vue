@@ -13,21 +13,21 @@
 			</picker>
 		</view>
 		<view class="content-body">
-			<template v-for="item in pageData">
-				<uni-card  isShadow><!--  @click="clickCard" -->
-					<uni-tag v-if="item.stu_test_status==2" text="已做" size="small" type="warning" class="tag-right"/>
-					<uni-tag v-else-if="item.stu_test_status==1" text="未做" size="small" type="error" class="tag-right"/>
-					<uni-tag v-else-if="item.stu_test_status==3" text="已评" size="small" type="primary" class="tag-right"/>
+			<template v-for="(item,index) in pageData">
+				<uni-card :key="index" isShadow><!--  @click="clickCard" -->
+					<text v-if="item.stu_test_status==2" size="small" class="tag-right" style="color:#00CFBD;right: 15px;">已做</text>
+					<text v-else-if="item.stu_test_status==1"  size="small" class="tag-right" style="color: #E64340;right: 15px">未做</text>
+					<text v-else-if="item.stu_test_status==3" size="small" class="tag-right" style="color: #007AFF;right: 15px">已评</text>
 					 
 					<uni-row>
-						<uni-col :span="20"><uni-title class="h4" type="h4" :title="item.test_name"></uni-title></uni-col>
+						<uni-col :span="20"><uni-title class="h4" type="h4" :title="item.test_name" style="word-break: break-all;"></uni-title></uni-col>
 					</uni-row>
 					<uni-row style="margin-top: 5px;">
 						<uni-col :span="10" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><text style="font-size: 22rpx;">学期: {{item.grd_name}}{{item.term_name}}</text></uni-col>
 						<uni-col :span="10"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><text style="font-size: 22rpx;">课程: {{item.sub_name}}</text></uni-col>
 						<uni-col :span="4"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;text-align: right;"><text style="font-size: 22rpx;">满分: {{parseInt(item.score)}}</text></uni-col>
 					</uni-row>
-					<uni-row>
+					<uni-row> 
 						<uni-col :span="24">
 							<text style="font-size: 22rpx;margin-top: 8px;">时间: {{item.start_time.split(' ')[0]}} ~ {{item.end_time.split(' ')[0]}}</text>
 						</uni-col>
@@ -69,9 +69,9 @@
 				tremIndex:0,
 				subIndex:0,
 				statusIndex:0,
-				tremArray: [{name:'全部',value:''}],
-				subArray: [{sub_name:'全部',sub_code:''}],
-				statusArray: [{name:'全部',value:''},{name:'未做',value:1},{name:'已做',value:2},{name:'已评',value:3}],
+				tremArray: [{name:'全部学期',value:''}],
+				subArray: [{sub_name:'全部科目',sub_code:''}],
+				statusArray: [{name:'全部状态',value:''},{name:'未做',value:1},{name:'已做',value:2},{name:'已评',value:3}],
 
 				status:'more',//加载更多的状态
 				contentText: {
@@ -82,21 +82,25 @@
 				canload:true,//是否加载更多
 				loadFlag:0,//0 刷新 1加载更多
 				
-				tabbar: [],
 				styles: {borderColor:'rgba(204,198,204,0.4)',borderRadius: '10px',margin: '0 1px 0'}
 			}
-		},
+		}, 
 		components: {
 			mynavBar
 		},
 		methods: {
 			termClick:function(e){
+				console.log("e.detail.value: ",e.detail.value);
 				if(this.tremIndex!==e.detail.value){
 					this.tremIndex=e.detail.value
 					if(e.detail.value-1>=0){
 						let term=this.queryData.list[(e.detail.value-1)]
-						this.subArray=[{sub_name:'全部',sub_code:''}].concat(term.sub_list)
+						this.subArray=[{sub_name:'全部科目',sub_code:''}].concat(term.sub_list)
+					}else{
+						this.subArray=[{sub_name:'全部科目',sub_code:''}]
 					}
+					this.subIndex=0
+					this.statusIndex=0
 					this.showLoading()
 					this.loadFlag=0
 					this.canload=true
@@ -107,6 +111,7 @@
 			courseClick:function(e){
 				if(this.subIndex!==e.detail.value){
 					this.subIndex=e.detail.value
+					this.statusIndex=0
 					this.showLoading()
 					this.loadFlag=0
 					this.canload=true
@@ -137,7 +142,7 @@
 							item.name=item.grd_name+item.term_name
 							item.value=item.term_code
 						})
-						this.tremArray=[{name:'全部',value:''}].concat(response.list)
+						this.tremArray=[{name:'全部学期',value:''}].concat(response.list)
 					}else{
 						this.showToast('暂无学期')
 					}

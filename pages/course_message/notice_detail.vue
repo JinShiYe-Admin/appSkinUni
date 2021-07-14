@@ -9,13 +9,13 @@
 			<text style="word-break: break-all;font-size: 13px;" v-html="itemData.content"></text>
 		</view>
 		<view  style="padding:15px 15px 40px;">
-			<view v-for="file in itemData.file_list" style="margin-top: 15px;font-size: 13px;word-break: break-all;">
+			<view :key="index" v-for="(file,index) in itemData.file_list" style="margin-top: 15px;font-size: 13px;word-break: break-all;">
 				<uni-link :href="file.url" :text="file.name" :download="file.name" color="#00CFBD"></uni-link>
 			</view>
 		</view>
 	</view>
 </template>
-
+ 
 <script>
 	import util from '../../commom/util.js';
 	export default {
@@ -45,7 +45,6 @@
 			//#endif
 		},
 		onUnload() {
-			console.log('fuck laoliang');
 		}
 	}
 </script>

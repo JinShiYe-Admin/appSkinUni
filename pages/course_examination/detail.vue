@@ -5,8 +5,8 @@
 			<uni-title class="h5" style="align-items: center;padding: 3px 0;" color="#F5222D" type="h5" :title="timeTitle"></uni-title>
 			<progress  :percent="percent" show-info border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5" :stroke-width="10"/>
 		</view>
-		<view style="z-index: 5;"></view>
-		<view v-for="(curr_question,index) in question_list">
+		<view style="z-index: 5;"></view> 
+		<view :key="index" v-for="(curr_question,index) in question_list">
 			<template v-if="curr_question.is_que">
 				<uni-card-practice style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
 					<template v-if="curr_question.type=='2'"><!-- 多选 -->

@@ -10,7 +10,7 @@
 					<uni-notice-bar :show-icon="true" text="考试安排：本学期考试安排如下，请同学们按时参加考试。" />
 				</view>
 				<uni-row class="demo-uni-row">
-						<uni-col class="card-list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-for="item in pageData">
+						<uni-col :key="index" class="card-list" :xs="24" :sm="24" :md="12" :lg="12" :xl="12" v-for="(item,index) in pageData">
 						   <uni-card-examination mode="style" :is-shadow="true" :thumbnail="item.img_url?item.img_url:'http://jbsch-pb.zhuxue101.net/develop/hr/student/2vsr68c0jn_1616635382610.png'" class="u-card">
 								<uni-tag v-if="item.test_status==2" text="未开始" size="small" type="warning" class="tag-right"/>
 								<uni-tag v-else-if="item.test_status==0 && item.answer_number && item.answer_number !== 0" :text="`已提交: ${item.answer_number}/${item.question_count}`" size="small" type="error" class="tag-right"/>
@@ -50,7 +50,7 @@
 				
 				
 				index_code:'',
-				pageData:[],//页面列表数据
+				pageData:[],//页面列表数据 
 				
 				show:false,
 				page_number:1,//页码
@@ -61,9 +61,6 @@
 					contentnomore: ''//没有更多
 				},
 				canload:true,//是否加载更多
-				
-				
-				tabbar: []
 			}
 		},
 		components: {
