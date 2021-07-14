@@ -11,6 +11,8 @@
 				<view style="text-align: center;margin-top: 10px;">{{personInfo.user_name}}</view>
 				<view style="height: 15px;background-color: #DCDFE6;margin-top: 30px;"></view>
 				<uni-list>
+					<uni-list-item @click="gotoMyData()" title="我的资料" link to=''></uni-list-item>
+					<uni-list-item @click="gotoGrades()" title="学习成绩" link to=''></uni-list-item>
 					<uni-list-item @click="gotoModifyPswd()" title="修改密码" link to=''></uni-list-item>
 					<uni-list-item @click="zhuxiao()" title="注销账号" link to=''></uni-list-item>
 					<uni-list-item @click="yinsi()" title="用户隐私政策" link to=''></uni-list-item>
@@ -67,6 +69,14 @@
 			},
 			closeDrawer() {
 				this.$refs.showPersonInfo.close();
+			},
+			gotoMyData: function() {
+				this.$refs.showPersonInfo.close();
+				util.openwithData('/pages/mydata/index');
+			},
+			gotoGrades: function() {
+				this.$refs.showPersonInfo.close();
+				util.openwithData('/pages/grades/index');
 			},
 			gotoModifyPswd: function() {
 				this.$refs.showPersonInfo.close();
