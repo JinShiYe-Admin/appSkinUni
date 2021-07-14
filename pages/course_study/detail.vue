@@ -31,16 +31,16 @@
 		<view class="uni-padding-wrap">
 			<view class="uni-box">
 				<uni-title class="h4" type="h4" :title="itemData.sub_name"></uni-title>
-				<uni-title class="h5" type="h5" :title="`课程总时长：${pageData.video_timesStr?pageData.video_timesStr:'0'}`"></uni-title>
-				<uni-title v-if="!pageData.ex_score" class="h5" type="h5" :title="`已学总时长：${pageData.learn_timeStr?pageData.learn_timeStr:'未开始学习'}`"></uni-title>
+				<uni-title class="h5" type="h5" :title="`课程总时长：${getVideoTimeStr()}`"></uni-title>
+				<uni-title v-if="!pageData.ex_score" class="h5" type="h5" :title="`已学总时长：${getVideoLearnTimeStr()}`"></uni-title>
 			</view>
 			<view v-if="!pageData.ex_score">
 				<progress :percent="pageData.percent" border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5"/>
 			</view>
 			<view style="display: flex;flex: 1;height: 1px;background-color: rgba(230,230,230,08);margin: 8px -15px 3px;"></view>
 			<uni-title class="h5" type="h5" :title="`视频：${videoData.name?videoData.name:'请选择视频'}`"></uni-title>
-			<uni-title class="h5" type="h5" :title="`本视频时长：${pageData.timesStr?pageData.timesStr:'请选择视频'}`"></uni-title>
-			<uni-title v-if="!pageData.ex_score" class="h5" type="h5" :title="`本视频已学时长：${pageData.video_learn_timeStr?pageData.video_learn_timeStr:'未开始学习'}`"></uni-title>
+			<uni-title class="h5" type="h5" :title="`本视频时长：${getCurVideoTimeStr()}`"></uni-title>
+			<uni-title v-if="!pageData.ex_score" class="h5" type="h5" :title="`本视频已学时长：${getCurVideoLearnTimeStr()}`"></uni-title>
 		</view>
 		<view class="line-h"></view>
 		<view class="uni-padding-wrap">
@@ -138,19 +138,6 @@
 							}
 						// }
 					}
-					let timeStr=''
-					if(((''+response.video_times/60/60).split(".")[0])>0){
-						timeStr+=(''+response.video_times/60/60).split(".")[0]+' 小时 '
-					}
-					timeStr+=(''+response.video_times/60).split(".")[0]+' 分钟 '+response.video_times%60+' 秒'
-					
-					let ltimeStr=''
-					if(((''+response.learn_time/60/60).split(".")[0])>0){
-						ltimeStr+=(''+response.learn_time/60/60).split(".")[0]+' 小时 '
-					}
-					ltimeStr+=(''+response.learn_time/60).split(".")[0]+' 分钟 '+response.learn_time%60+' 秒'
-					response.video_timesStr=timeStr
-					response.learn_timeStr=ltimeStr
 					response.percent=0
 					if(response.video_times>0){
 						response.percent=(response.learn_time/response.video_times)*100
@@ -187,19 +174,7 @@
 					console.log("responsea: " + JSON.stringify(response));
 					videoInfo.curr_time=response.curr_time
 					this.videoData=videoInfo
-					let timeStr='' 
-					if(((''+response.times/60/60).split(".")[0])>0){
-						timeStr+=(''+response.times/60/60).split(".")[0]+' 小时 '
-					}
-					timeStr+=(''+response.times/60).split(".")[0]+' 分钟 '+response.times%60+' 秒'
-					let video_learn_timeStr=''
-					if(((''+response.learn_time/60/60).split(".")[0])>0){
-						video_learn_timeStr+=(''+response.learn_time/60/60).split(".")[0]+' 小时 '
-					}
-					video_learn_timeStr+=(''+response.learn_time/60).split(".")[0]+' 分钟 '+response.learn_time%60+' 秒'
-					this.pageData.timesStr=timeStr
 					this.pageData.learnInfo=response
-					this.pageData.video_learn_timeStr=video_learn_timeStr
 					
 					this.videoData.after_time=response.curr_time
 					this.videoData.log_id=null
@@ -242,13 +217,14 @@
 				this.updateCurrentTime();
 			},
 			onTimeupdate(e){
-				console.log("e.detail.currentTime: " + e.detail.currentTime);
+				// console.log("e.detail.currentTime: " + (e.detail.currentTime-this.videoData.after_time));
+				if(e.detail.currentTime-this.videoData.curr_time>1){
+					this.videoData.after_time=e.detail.currentTime
+				}
 				this.videoData.curr_time=e.detail.currentTime
 				if(e.detail.currentTime-this.videoData.after_time<=0){
 					this.videoData.after_time=e.detail.currentTime
-					console.log(1);
 				}else{
-					console.log(2);
 					this.videoData.play_time=Math.round(e.detail.currentTime-this.videoData.after_time)
 				}
 			},
@@ -276,12 +252,33 @@
 							comData.log_id=this.videoData.log_id
 						}
 						console.log(JSON.stringify(comData))
+						this.pageData.learnInfo.learn_time=curr_time
 						this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/updateCurrentTime',comData,response=>{
 							console.log("responsea: " + JSON.stringify(response));
 							this.videoData.after_time=this.videoData.curr_time
 							if(response.log_id){
 								this.videoData.log_id=response.log_id
 								this.pageData.learnInfo.pass=response.pass
+								
+								
+								let curlearntimes=this.pageData.learnInfo.learn_time+response.learn_time
+								if(curlearntimes>this.pageData.learnInfo.times){
+									this.$set(this.pageData.learnInfo,'learn_time',this.pageData.learnInfo.times)
+								}else{
+									this.$set(this.pageData.learnInfo,'learn_time',curlearntimes)
+								}
+								
+								let learntimes=this.pageData.learn_time+response.learn_time
+								if(learntimes>this.pageData.learn_time){
+									this.$set(this.pageData,'learn_time',this.pageData.video_times)
+								}else{
+									this.$set(this.pageData,'learn_time',learntimes)
+								}
+								
+								
+								let percent=(response.learn_time/this.pageData.video_times)*100
+								this.$set(this.pageData,'percent',percent)
+								
 							}
 						},()=>{
 							this.clearIntervals()
@@ -294,15 +291,54 @@
 					this.clearIntervals()
 				}
 				this.times=setInterval(()=>{
-					console.log('fuck1');
 					this.updateCurrentTime();
 				},15000)
 			},  
 			clearIntervals(){
-				console.log('fuck');
 				clearInterval(this.times)
 				this.times=null
 			},
+			getVideoTimeStr(){
+				let video_times=this.pageData.video_times
+				let timeStr=''				if(((''+video_times/60/60).split(".")[0])>0){					timeStr+=(''+video_times/60/60).split(".")[0]+' 小时 '				}				timeStr+=(''+video_times/60).split(".")[0]+' 分钟 '+video_times%60+' 秒'
+				return timeStr?timeStr:'0'
+			},
+			getVideoLearnTimeStr(){
+				let learn_time=this.pageData.learn_time
+				let ltimeStr=''
+				if(((''+learn_time/60/60).split(".")[0])>0){
+					ltimeStr+=(''+learn_time/60/60).split(".")[0]+' 小时 '
+				}
+				ltimeStr+=(''+learn_time/60).split(".")[0]+' 分钟 '+learn_time%60+' 秒'
+				return ltimeStr?ltimeStr:'未开始学习'
+			},
+			getCurVideoTimeStr(){
+				if(this.pageData.learnInfo){
+					let times=this.pageData.learnInfo.times
+					let timeStr=''
+					if(((''+times/60/60).split(".")[0])>0){
+						timeStr+=(''+times/60/60).split(".")[0]+' 小时 '
+					}
+					timeStr+=(''+times/60).split(".")[0]+' 分钟 '+times%60+' 秒'
+					return timeStr?timeStr:'请选择视频'
+				}else{
+					return '请选择视频'
+				}
+			},
+			getCurVideoLearnTimeStr(){
+				if(this.pageData.learnInfo){
+					let learn_time=this.pageData.learnInfo.learn_time
+					let video_learn_timeStr=''
+					if(((''+learn_time/60/60).split(".")[0])>0){
+						video_learn_timeStr+=(''+learn_time/60/60).split(".")[0]+' 小时 '
+					}
+					video_learn_timeStr+=(''+learn_time/60).split(".")[0]+' 分钟 '+learn_time%60+' 秒'
+					return video_learn_timeStr?video_learn_timeStr:'未开始学习'
+				}else{
+					return '0'
+				}
+				
+			}
 		},
 		onLoad: function(option) {
 			this.personInfo = util.getPersonal();
@@ -322,7 +358,7 @@
 		        // #endif
 		},
 		onUnload:function(){
-			if(!this.pageData.learnInfo.pass){
+			if(this.pageData.learnInfo&&!this.pageData.learnInfo.pass){
 				let curr_time=Math.round(this.videoData.curr_time)
 				let play_time=this.videoData.play_time
 				if(play_time>0){//播放时间有效才请求
@@ -348,12 +384,13 @@
 						if(response.log_id){
 							this.videoData.log_id=response.log_id
 						}
-					})
+					}) 
 				}
 			}
 			this.clearIntervals()
-		}
+		},
 	}
+	
 	//获取多维数组第一个最下级目录的第一个节点对象
 	function getArrayLayer(arr, attr) {
 	  let obj={};

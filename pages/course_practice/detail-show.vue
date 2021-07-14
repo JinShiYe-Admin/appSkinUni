@@ -9,9 +9,9 @@
 		</view>
 		<template v-if="is_que">
 			<uni-card-practice style="margin-top: 10px;margin-bottom: 80px;" :title="`${curr_question.question.sort}.${curr_question.question.title}`" :isFull="true" :note="`解析:  ${curr_question.question.parse}`">
-				<template v-for="item in curr_question.question.options">
-					<view style="margin: 10px 0;"><text v-html="item" style="padding-left:20px ;word-break: break-all;"></text></view>
-				</template>
+				<template v-for="(item,index) in curr_question.question.options">
+					<view :key="index" style="margin: 10px 0;"><text v-html="item" style="padding-left:20px ;word-break: break-all;"></text></view>
+				</template> 
 				<uni-row style="margin-top: 10px;">
 					<uni-col :span="14">
 						<uni-row>
