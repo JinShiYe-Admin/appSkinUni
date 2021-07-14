@@ -55,7 +55,7 @@
 		}, {
 			"path": "pages/register/index",
 			"style": {
-				"navigationBarTitleText": "查询资料",
+				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
 
@@ -78,7 +78,7 @@
 		}, {
 			"path": "pages/more/modifyPswd",
 			"style": {
-				"navigationBarTitleText": "修改密码",
+				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
 
@@ -91,7 +91,7 @@
 		}, {
 			"path": "pages/more/about",
 			"style": {
-				"navigationBarTitleText": "关于",
+				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
 		},

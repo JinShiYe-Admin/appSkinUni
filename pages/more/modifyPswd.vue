@@ -52,6 +52,10 @@
 		onLoad:function(){
 			this.personal = util.getPersonal();
 			console.log('this.personal:'+JSON.stringify(this.personal));
+			uni.setNavigationBarTitle({title: '修改密码'});
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
 		},
 		methods: {
 			submit: function() {

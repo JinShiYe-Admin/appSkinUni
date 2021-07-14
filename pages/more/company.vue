@@ -11,6 +11,12 @@
 				pageSrc:'http://www.jsy8800.com'
 			}
 		},
+		onLoad() {
+			uni.setNavigationBarTitle({title: '公司介绍'});
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
+		},
 		methods: {
 			
 		}
