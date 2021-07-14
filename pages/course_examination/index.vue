@@ -125,14 +125,13 @@
 			})
 			this.tabbar = util.getMenu();
 			this.personInfo = util.getPersonal();
-			let tempMenu;
-			if (util.getMenuMore().length==0) {
-				tempMenu = util.getTabbarMenu();
-			} else{
-				tempMenu = util.getPageData(option);
+			if(util.getTabbarMenu().url){
+				this.tabBarItem = util.getTabbarMenu();
+				util.setTabbarMenu({});
+			}else{
+				this.tabBarItem = util.getPageData(option);
 			}
-			this.tabBarItem = tempMenu;
-			this.index_code=tempMenu.access.split("#")[1]
+			this.index_code=this.tabBarItem.access.split("#")[1]
 			this.getList()
 		},
 		onReachBottom() {
