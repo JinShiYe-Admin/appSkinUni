@@ -9,14 +9,14 @@
 					<image style="width: 35px;height: 35px;border-radius: 50%;margin-top: 5px;" :src="personInfo.img_url"></image>
 				</view>
 			</view>
-			<view class="uni-list-cell">
+			<!-- <view class="uni-list-cell">
 				<view class="uni-list-cell-left" style="width: 80px;">
 					手机号
 				</view>
 				<view class="uni-list-cell-right">
 					{{personInfo.peoplePhone}}
 				</view>
-			</view>
+			</view> -->
 			<view class="uni-list-cell">
 				<view class="uni-list-cell-left" style="width: 80px;">
 					昵称
@@ -42,6 +42,9 @@
 		onLoad(option) {
 			_this = this;
 			uni.setNavigationBarTitle({title: '账号信息'});
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
 			this.tabbar = util.getMenu();
 			let tempInfo = util.getPersonal();
 			console.log('tempInfo:' + JSON.stringify(this.tempInfo));
@@ -89,7 +92,7 @@
 										var thumb = QNUptoken.Data.OtherKey[configure.thumbKey]; //缩略图地址
 										var domain = QNUptoken.Data.Domain + QNUptoken.Data.Key; //文件地址
 										// console.log(thumb);
-										// console.log('domain:'+domain);
+										console.log('domain:'+domain);
 										var myDate = new Date();
 										var imgeURL = domain + '?' + myDate.getTime();
 										var comData0 = {

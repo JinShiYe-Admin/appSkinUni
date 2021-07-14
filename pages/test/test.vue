@@ -33,14 +33,13 @@
 			this.tabbar = util.getMenu();
 			this.personInfo = util.getPersonal();
 			console.log('personInfo:' + JSON.stringify(this.personInfo));
-			let tempMenu;
-			if (util.getMenuMore().length == 0) {
-				tempMenu = util.getTabbarMenu();
-			} else {
-				tempMenu = util.getPageData(option);
+			if(util.getTabbarMenu().url){
+				this.tabBarItem = util.getTabbarMenu();
+				util.setTabbarMenu({});
+			}else{
+				this.tabBarItem = util.getPageData(option);
 			}
-			this.tabBarItem = tempMenu;
-			console.log('tempMenu:' + JSON.stringify(tempMenu));
+			console.log('this.tabBarItem:' + JSON.stringify(this.tabBarItem));
 		}
 	}
 </script>

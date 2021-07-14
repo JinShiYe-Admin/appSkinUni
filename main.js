@@ -47,21 +47,37 @@ switch (EnvKey) {
 		break;
 	case 4:
 		GLOBALDATA.EnvKey = EnvKey ;
-		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
-		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
-		GLOBALDATA.UNITCODE ='100004' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
+		GLOBALDATA.PLATFORMCODE ='PT0007' ;//平台代码
+		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.UNITCODE ='-1' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
+		
+		GLOBALDATA.INTERFACE_SSO_SKIN = 'http://nwifapp.jiaobaowang.net/ssotoskin/api/skin/'; //单点登录,供PC外皮及APP用户登录,管理  单点对人事及登录皮肤接口
+		GLOBALDATA.INTERFACE_SSO_HR = 'http://nwifapp.jiaobaowang.net/ssotohr/api/hr/'; //单点登录,供人事系统使用                  单点对人事及登录皮肤接口
+		GLOBALDATA.INTERFACE_SUP_HR = 'http://nwifapp.jiaobaowang.net/suptohr/api/hr/'; //单点登录,供人事系统使用                  单点对人事及登录皮肤接口
+		GLOBALDATA.INTERFACE_SSO_SUB = 'http://nwifapp.jiaobaowang.net/ssotosub/api/sub/'; //单点登录,供各子系统用 			     单点对子系统接口
+		GLOBALDATA.INTERFACE_HR_SUB = 'http://nwifapp.jiaobaowang.net/hrunvtosub/api/sub/'; //人事接口,供子系统用 				     人事对子系统接口
+		GLOBALDATA.INTERFACE_HR_SKIN = 'http://nwifapp.jiaobaowang.net/hrunvtosup/api/skin/'; //人事接口,供APP或PC注册及外皮用        人事对单点及登录皮肤接口
+		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='http://nwifapp.jiaobaowang.net/unvedusubapi/api/';//继续教育接口文档 供展示前台
 		
 		GLOBALDATA.QN_APPID =16;//七牛appid
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 	case 5:
 		GLOBALDATA.EnvKey = EnvKey ;
-		GLOBALDATA.PLATFORMCODE ='PT0001' ;//平台代码
-		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
-		GLOBALDATA.UNITCODE ='100001' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
+		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
+		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.UNITCODE ='-1' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
+		
+		GLOBALDATA.INTERFACE_SSO_SKIN = 'http://sso.108800.com:8080/ssotoskin/api/skin/'; // 单点对登录框接口
+		GLOBALDATA.INTERFACE_SSO_HR = 'http://sso.108800.com:8080/ssotohr/api/hr/'; // 单点对人事接口 (gu )
+		GLOBALDATA.INTERFACE_SUP_HR = 'http://sso.108800.com/suptohr/api/hr/'; //单点对人事及登录皮肤接口  (zeng)
+		GLOBALDATA.INTERFACE_SSO_SUB = 'http://sso.108800.com:8080/ssotosub/api/sub/'; // 单点对子系统接口
+		GLOBALDATA.INTERFACE_HR_SUB = 'http://apps.108800.com/hrunvtosub/api/sub/'; //人事接口,供子系统用 				     人事对子系统接口
+		GLOBALDATA.INTERFACE_HR_SKIN = 'http://apps.108800.com/hrunvtosup/api/skin/'; //人事接口,供APP或PC注册及外皮用        人事对单点及登录皮肤接口
+		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='http://139.129.252.49:8180/unvedusubapi/api/';//继续教育接口文档 供展示前台
 		
 		GLOBALDATA.QN_APPID =17;//七牛appid
-		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
+		GLOBALDATA.QN_APPKEY ='oafor1010'; //七牛appkey
 		break;
 	case 6:
 		GLOBALDATA.EnvKey = EnvKey ;

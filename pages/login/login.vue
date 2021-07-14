@@ -81,8 +81,8 @@
 					midButton: false,
 					// 点击某一个item时，跳转的路径，此路径必须是pagees.json中tabBar字段中定义的路径
 					pagePath: '/pages/course_practice/index', // 1.5.6新增，路径需要以"/"开头
-					img_href: "../../img/schapp_work/kaoqin_tab.png",
-					url: 'schappWxUni_CoursePractice',
+					img_href: "../../static/tabbar/more_practive.png",
+					url: 'schappUni_CoursePractice',
 					childList: []
 				}, {
 					text: "课程学习", //课程学习
@@ -92,8 +92,8 @@
 					count: 0,
 					isDot: false,
 					customIcon: false,
-					img_href: "../../img/schapp_work/kaoqin_tab.png",
-					url: 'schappWxUni_CourseStudy',
+					img_href: "../../static/tabbar/more_study.png",
+					url: 'schappUni_CourseStudy',
 					childList: []
 				}, 
 				{
@@ -104,8 +104,8 @@
 					count: 0,
 					isDot: false,
 					customIcon: false,
-					img_href: "../../img/schapp_work/kaoqin_tab.png",
-					url: 'schappWxUni_CourseTest',
+					img_href: "../../static/tabbar/more_exam.png",
+					url: 'schappUni_CourseTest',
 					childList: []
 				}, 
 				{
@@ -116,34 +116,10 @@
 					count: 0,
 					isDot: false,
 					customIcon: false,
-					img_href: "../../img/schapp_work/kaoqin_tab.png",
-					url: 'schappWxUni_Message',
+					img_href: "../../static/tabbar/more_message.png",
+					url: 'schappUni_Message',
 					childList: []
-				}, 
-				// {
-				// 	text: "我的资料", //我的资料
-				// 	pagePath: "/pages/mydata/index",
-				// 	iconPath: '../../static/tabbar/study.png',
-				// 	selectedIconPath: '../../static/tabbar/study_select.png',
-				// 	count: 0,
-				// 	isDot: false,
-				// 	customIcon: false,
-				// 	img_href: "../../img/schapp_work/kaoqin_tab.png",
-				// 	url: 'schappWxUni_MyData',
-				// 	childList: []
-				// }, 
-				// {
-				// 	text: "学习成绩", //学习成绩
-				// 	pagePath: "/pages/grades/index",
-				// 	iconPath: '../../static/tabbar/study.png',
-				// 	selectedIconPath: '../../static/tabbar/study_select.png',
-				// 	count: 0,
-				// 	isDot: false,
-				// 	customIcon: false,
-				// 	img_href: "../../img/schapp_work/kaoqin_tab.png",
-				// 	url: 'schappWxUni_Grades',
-				// 	childList: []
-				// }, 
+				},
 				],
 			}
 		},
@@ -193,6 +169,7 @@
 					this.showToast('账号或密码不能为空');
 					return;
 				} else {
+					util.setPersonal({});
 					this.showLoading()
 					let deviceId = util.getDeviceId();
 					let broswerId = util.getBroswerId();
@@ -315,7 +292,7 @@
 				// 	iconPath: '../../static/tabbar/more.png',
 				// 	selectedIconPath: '../../static/tabbar/more_select.png',
 				// 	img_href: "../../img/schapp_work/kaoqin_tab.png",
-				// 	url: 'schappWxUni_CoursePractice',
+				// 	url: 'schappUni_CoursePractice',
 				// 	childList: []
 				// });
 				for (var i = 0; i < tempMenu.length; i++) { //一级菜单循环
@@ -362,7 +339,7 @@
 						iconPath: '../../static/tabbar/more.png',
 						selectedIconPath: '../../static/tabbar/more_select.png',
 						img_href: "../../img/schapp_work/kaoqin_tab.png",
-						url: 'schappWxUni_CoursePractice',
+						url: 'schappUni_CoursePractice',
 						childList: []
 					});
 				} else {

@@ -11,6 +11,12 @@
 				pageSrc:this.PRIVACE
 			}
 		},
+		onLoad() {
+			uni.setNavigationBarTitle({title: '隐私政策'});
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
+		},
 		methods: {
 			
 		}

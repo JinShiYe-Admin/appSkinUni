@@ -52,6 +52,10 @@
 		onLoad:function(){
 			this.personal = util.getPersonal();
 			console.log('this.personal:'+JSON.stringify(this.personal));
+			uni.setNavigationBarTitle({title: '修改密码'});
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
 		},
 		methods: {
 			submit: function() {
@@ -68,9 +72,9 @@
 				} else if (this.newPassword === this.oldPassword) {
 					this.showToast('新密码不能与旧密码相同');
 				} else if (!checkPass(this.newPassword)) {
-					this.showToast('密码需为数字和字母的组合');
+					this.showToast('密码需为6到18个数字和字母的组合');
 				} else if (this.newPassword.length > 18 || this.newPassword.length < 6) {
-					this.showToast('密码长度需为6到18个字符');
+					this.showToast('密码需为6到18个数字和字母的组合');
 				} else {
 					console.log('111111:'+this.PWD_ENCRYPTION+','+this.oldPassword+','+this.newPassword);
 					var comData0 = {
