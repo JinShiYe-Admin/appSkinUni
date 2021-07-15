@@ -3,7 +3,6 @@
 		<view class="tabs">
 			<progress  :percent="percent" show-info border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5" :stroke-width="10"/>
 		</view>
-		<view style="z-index: 5;"></view>
 		<view :key="index" v-for="(curr_question,index) in question_list">
 			<template v-if="curr_question.is_que">
 				<uni-card-practice style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
@@ -14,7 +13,7 @@
 									<checkbox :value="item.value" :checked="item.isCheck" color="#00CFBD" style="transform:scale(0.7)" />
 								</view>
 								<text style="word-break: break-all;" v-html="item.label"></text>
-						 	</label>
+							</label>
 						</checkbox-group>
 					</template>
 					<template v-else-if="curr_question.type=='1'"><!-- 单选 -->
@@ -36,7 +35,7 @@
 		<template v-if="question_list.length>0">
 			<view class="bottom-btn-tab">
 				<button class="btn test-btn0" type="default" @click="cancel">取消</button>
-				<button class="btn test-btn1" type="warn" @click="onClearAnser">清空答案</button>
+				<button class="btn test-btn1" type="warn" @click="onClearAnswer">清空答案</button>
 				<button class="btn test-btn" type="primary" @click="onSubmit">交卷</button>
 			</view>
 		</template>
@@ -49,7 +48,7 @@
 		</uni-popup>
 		
 		<uni-popup ref="alertDialog3" type="dialog">
-			<uni-popup-dialog type="warn" title="提醒" content="上次有修改未提交，是否恢复" @confirm="dialogConfirm3"></uni-popup-dialog>
+			<uni-popup-dialog type="warn" title="提醒" content="上次有修改未提交，是否恢复" @confirm="dialogConfirm3" @close="dialogClose3"></uni-popup-dialog>
 		</uni-popup>
 	</view>
 </template>
@@ -64,10 +63,21 @@
 				itemData:{},
 				percent:0,
 				answer_list:[],
+				online_answer_list:[],
 				question_list:[]
 			}
 		},
 		methods: {
+			removeAnswers(){
+				uni.setStorageSync(this.itemData.test_id+'_practice_answers',JSON.stringify([]))
+			},
+			setAnswers(answers){
+				uni.setStorageSync(this.itemData.test_id+'_practice_answers',JSON.stringify(answers))
+			},
+			getAnswers(){
+				const answers=uni.getStorageSync(this.itemData.test_id+'_practice_answers')
+				return answers?JSON.parse(answers):[];
+			},
 			getPageList(){
 				let comData={
 					test_id: this.itemData.test_id,
@@ -78,6 +88,7 @@
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/detail',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
 					this.answer_list=response.answer_list
+					this.online_answer_list=response.answer_list
 					this.question_list=response.question_list
 					let questions=[]
 					if(response.question_list.length>0){//过滤非题目
@@ -208,8 +219,11 @@
 					}
 				}
 			},
-			onClearAnser(){
+			onClearAnswer(){
 				this.$refs.alertDialog2.open()
+			},
+			onSetAnswer(){
+				this.$refs.alertDialog3.open()
 			},
 			dialogConfirm(){
 				this.submitData()
@@ -226,7 +240,34 @@
 				})
 			},
 			dialogConfirm3(){
-				
+				let answer_list=this.getAnswers()
+				this.answer_list=answer_list
+				this.question_list.map(question_item=>{
+					if(question_item.is_que){
+						answer_list.map(answer_item=>{
+							if(question_item.id==answer_item.question_id){
+								question_item.optionObjs.map(question_item_optionObjs_item=>{
+										question_item_optionObjs_item.isCheck=false
+								})
+								answer_item.answer.map(answer_item_item=>{
+									question_item.optionObjs.map(question_item_optionObjs_item=>{
+										if(answer_item_item==question_item_optionObjs_item.value){
+											question_item_optionObjs_item.isCheck=true
+											question_item_optionObjs_item.label=question_item_optionObjs_item.label
+										}
+									})
+									 
+								})
+							}
+						})
+					}
+				})
+				this.$set(this.question_list,)
+				console.log("this.question_list: " + JSON.stringify(this.question_list));
+				this.removeAnswers();
+			},
+			dialogClose3(){
+				this.removeAnswers();
 			},
 			submitData(){
 				let score=0
@@ -277,10 +318,20 @@
 			uni.setNavigationBarTitle({title: itemData.test_name})
 			this.showLoading()
 			this.getPageList()
+			setTimeout(()=>{
+				if(this.getAnswers().length>0){
+					this.onSetAnswer()
+				}
+			},500)
 			//#ifndef APP-PLUS
 				document.title=""
 			//#endif
 		},
+		onUnload(){
+			if(JSON.stringify(this.answer_list)!=JSON.stringify(this.online_answer_list)){
+				this.setAnswers(this.answer_list)
+			}
+		}
 	}
 </script>
 
