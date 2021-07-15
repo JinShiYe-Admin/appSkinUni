@@ -206,6 +206,9 @@
 						showDialog=true
 					}
 				})
+				if(this.answer_list.length<this.itemData.questions.length){
+					showDialog=true
+				}
 				if(showDialog){
 					this.$refs.alertDialog.open()
 				}else{
