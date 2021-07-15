@@ -7,7 +7,7 @@ import moment from 'moment'
 Vue.use(uView);
 //配置项开始
 const GLOBALDATA = {};//参数对象 用于存全局公共参数
-const EnvKey = 3; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
+const EnvKey = 5; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
 switch (EnvKey) {
 	case 1:
 		GLOBALDATA.EnvKey = EnvKey ;
@@ -48,7 +48,7 @@ switch (EnvKey) {
 	case 4:
 		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0007' ;//平台代码
-		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
 		GLOBALDATA.UNITCODE ='-1' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.INTERFACE_SSO_SKIN = 'http://nwifapp.jiaobaowang.net/ssotoskin/api/skin/'; //单点登录,供PC外皮及APP用户登录,管理  单点对人事及登录皮肤接口
@@ -65,7 +65,7 @@ switch (EnvKey) {
 	case 5:
 		GLOBALDATA.EnvKey = EnvKey ;
 		GLOBALDATA.PLATFORMCODE ='PT0002' ;//平台代码
-		GLOBALDATA.APPCODE ='schappUni#' ;//应用系统代码
+		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
 		GLOBALDATA.UNITCODE ='-1' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
 		GLOBALDATA.INTERFACE_SSO_SKIN = 'http://sso.108800.com:8080/ssotoskin/api/skin/'; // 单点对登录框接口
@@ -74,7 +74,7 @@ switch (EnvKey) {
 		GLOBALDATA.INTERFACE_SSO_SUB = 'http://sso.108800.com:8080/ssotosub/api/sub/'; // 单点对子系统接口
 		GLOBALDATA.INTERFACE_HR_SUB = 'http://apps.108800.com/hrunvtosub/api/sub/'; //人事接口,供子系统用 				     人事对子系统接口
 		GLOBALDATA.INTERFACE_HR_SKIN = 'http://apps.108800.com/hrunvtosup/api/skin/'; //人事接口,供APP或PC注册及外皮用        人事对单点及登录皮肤接口
-		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='http://139.129.252.49:8180/unvedusubapi/api/';//继续教育接口文档 供展示前台
+		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='http://unvapps.108800.com/unvedusubapi/api/';//继续教育接口文档 供展示前台
 		
 		GLOBALDATA.QN_APPID =17;//七牛appid
 		GLOBALDATA.QN_APPKEY ='oafor1010'; //七牛appkey

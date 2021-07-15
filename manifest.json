@@ -114,7 +114,7 @@
         "domain" : "http://jbsch-pb.zhuxue101.net",
         "title" : "大学校园",
         "router" : {
-            "base" : "/test/jsyWechatUnv/-1/202107141601/"
+            "base" : "/formal/jsyWechatUnv/-1/202107141600/"
         },
         "sdkConfigs" : {
             "maps" : {}

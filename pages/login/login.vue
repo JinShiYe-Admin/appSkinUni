@@ -82,7 +82,7 @@
 					// 点击某一个item时，跳转的路径，此路径必须是pagees.json中tabBar字段中定义的路径
 					pagePath: '/pages/course_practice/index', // 1.5.6新增，路径需要以"/"开头
 					img_href: "../../static/tabbar/more_practive.png",
-					url: 'schappUni_CoursePractice',
+					url: 'schappWxUni_CoursePractice',
 					childList: []
 				}, {
 					text: "课程学习", //课程学习
@@ -93,7 +93,7 @@
 					isDot: false,
 					customIcon: false,
 					img_href: "../../static/tabbar/more_study.png",
-					url: 'schappUni_CourseStudy',
+					url: 'schappWxUni_CourseStudy',
 					childList: []
 				}, 
 				{
@@ -105,7 +105,7 @@
 					isDot: false,
 					customIcon: false,
 					img_href: "../../static/tabbar/more_exam.png",
-					url: 'schappUni_CourseTest',
+					url: 'schappWxUni_CourseTest',
 					childList: []
 				}, 
 				{
@@ -117,7 +117,7 @@
 					isDot: false,
 					customIcon: false,
 					img_href: "../../static/tabbar/more_message.png",
-					url: 'schappUni_Message',
+					url: 'schappWxUni_Message',
 					childList: []
 				},
 				],
