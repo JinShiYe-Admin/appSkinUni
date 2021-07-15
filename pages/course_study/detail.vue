@@ -47,7 +47,7 @@
 			<uni-section title="章节" type="line"></uni-section>
 		</view>
 		<view class="uni-padding-wrap">
-			 <ly-tree v-if="treeLoadReady"  :tree-data="treeData" node-key="id" @node-click="handleNodeClick" :props="props" showNodeIcon
+			 <ly-tree v-if="treeLoadReady"  :treeData="treeData" node-key="id" @node-click="handleNodeClick" :props="props" showNodeIcon
 			 :default-checked-keys="checkedKeys"
 			 defaultExpandAll
 			 highlightCurrent
@@ -80,18 +80,19 @@
 				if(obj.childNodesId.length===0){//如果>0说明是父节点，不管
 					this.showLoading()
 					if(obj.data.url){//如果是视频，获取学习此视频的信息
+						uni.pageScrollTo({scrollTop:0})
 						this.clearIntervals()
 						this.videoData.play_time=Math.round(this.videoData.curr_time-this.videoData.after_time)
 						this.videoData.after_time=this.videoData.curr_time
 						this.updateCurrentTime();
 						setTimeout(()=>{
 							this.videoData=''
-							this.getVideoLearnInfo(obj.parentId,obj.data.id,obj.data)
+							this.getVideoLearnInfo(obj.parentId,obj.data.id.split('_')[0],obj.data)
 						},600)
 					}else{//如果不是视频，获取目录下的视频列表
 						this.getCatalogFile(obj.data.id,video_list=>{
 							console.log("video_list: " + JSON.stringify(video_list));
-							setTreeDataAndChecked(this,obj.data.id,'',video_list)
+							this.setTreeDataAndChecked(obj.data.id,'',video_list)
 							this.hideLoading()
 						})
 					}
@@ -108,7 +109,7 @@
 					index_code:this.itemData.index_code,
 				}
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/detail',comData,response=>{
-					console.log("response: " + JSON.stringify(response));
+					console.log("response卧槽: " + JSON.stringify(response));
 					if(response.book_catalog_list){
 						response.book_catalog_list.map(item=>{item.img=''})
 						this.treeData=response.book_catalog_list
@@ -121,17 +122,17 @@
 							// 			videoInfo=video_list[i]
 							// 		}
 							// 	}
-							// 	setTreeDataAndChecked(this,response.learn_book_catalog_id,response.learn_book_catalog_file_id,video_list)
+							// 	this.setTreeDataAndChecked(response.learn_book_catalog_id,response.learn_book_catalog_file_id,video_list)
 							// 	this.getVideoLearnInfo(response.learn_book_catalog_id,response.learn_book_catalog_file_id,videoInfo)
 							// })
 							//如果已学视频和目录id正确的话，使用以上代码，可以将树形菜单正确显示，
 						// }else{//获取第一个最下级目录下的文件
 							if(response.book_catalog_list.length>0){
-								const lastObj=getArrayLayer(response.book_catalog_list,'children')
+								const lastObj=this.getArrayLayer(response.book_catalog_list,'children')
 								this.getCatalogFile(lastObj.id,video_list=>{
 									let videoInfo=video_list[0]
-									setTreeDataAndChecked(this,lastObj.id,videoInfo.id,video_list)
-									this.getVideoLearnInfo(lastObj.id,videoInfo.id,videoInfo)
+									this.setTreeDataAndChecked(lastObj.id,videoInfo.id,video_list)
+									this.getVideoLearnInfo(lastObj.id,videoInfo.id.split('_')[0],videoInfo)
 								})
 							}else{
 								this.hideLoading()
@@ -184,6 +185,8 @@
 				})
 			},
 			videoErrorCallback(e){
+				console.log(e);
+				console.log(JSON.stringify(e));
 				 this.showToast("视频播放异常")
 			},
 			onPlay(e){
@@ -252,7 +255,6 @@
 							comData.log_id=this.videoData.log_id
 						}
 						console.log(JSON.stringify(comData))
-						this.pageData.learnInfo.learn_time=curr_time
 						this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/sub/updateCurrentTime',comData,response=>{
 							console.log("responsea: " + JSON.stringify(response));
 							this.videoData.after_time=this.videoData.curr_time
@@ -260,16 +262,15 @@
 								this.videoData.log_id=response.log_id
 								this.pageData.learnInfo.pass=response.pass
 								
-								
-								let curlearntimes=this.pageData.learnInfo.learn_time+response.learn_time
+								let curlearntimes=this.pageData.learnInfo.learn_time+response.real_play_time
 								if(curlearntimes>this.pageData.learnInfo.times){
 									this.$set(this.pageData.learnInfo,'learn_time',this.pageData.learnInfo.times)
 								}else{
 									this.$set(this.pageData.learnInfo,'learn_time',curlearntimes)
 								}
 								
-								let learntimes=this.pageData.learn_time+response.learn_time
-								if(learntimes>this.pageData.learn_time){
+								let learntimes=this.pageData.learn_time+response.real_play_time
+								if(learntimes>this.pageData.video_times){
 									this.$set(this.pageData,'learn_time',this.pageData.video_times)
 								}else{
 									this.$set(this.pageData,'learn_time',learntimes)
@@ -299,45 +300,151 @@
 				this.times=null
 			},
 			getVideoTimeStr(){
-				let video_times=this.pageData.video_times
-				let timeStr=''				if(((''+video_times/60/60).split(".")[0])>0){					timeStr+=(''+video_times/60/60).split(".")[0]+' 小时 '				}				timeStr+=(''+video_times/60).split(".")[0]+' 分钟 '+video_times%60+' 秒'
-				return timeStr?timeStr:'0'
+				let second=this.pageData.video_times
+				if(second){
+					second = parseInt(String(second));
+					let result = ''
+					const s = second % 60
+					const m = parseInt(String(second / 60)) % 60
+					const h = parseInt(String(second / 60 / 60)) % 24
+					const d = parseInt(String(second / 60 / 60 / 24))
+					if (d != 0) {
+					  result += d + "天";
+					}
+					if (h != 0) {
+					  result += h + "小时";
+					}
+					if (m != 0) {
+					  result += m + "分钟";
+					}
+					if (s != 0) {
+					  result += s + "秒";
+					}
+					return result;
+				}
+				return 0
 			},
 			getVideoLearnTimeStr(){
-				let learn_time=this.pageData.learn_time
-				let ltimeStr=''
-				if(((''+learn_time/60/60).split(".")[0])>0){
-					ltimeStr+=(''+learn_time/60/60).split(".")[0]+' 小时 '
+				let second=this.pageData.learn_time
+				if(second){
+					second = parseInt(String(second));
+					let result = ''
+					const s = second % 60
+					const m = parseInt(String(second / 60)) % 60
+					const h = parseInt(String(second / 60 / 60)) % 24
+					const d = parseInt(String(second / 60 / 60 / 24))
+					if (d != 0) {
+					  result += d + "天";
+					}
+					if (h != 0) {
+					  result += h + "小时";
+					}
+					if (m != 0) {
+					  result += m + "分钟";
+					}
+					if (s != 0) {
+					  result += s + "秒";
+					}
+					return result;
 				}
-				ltimeStr+=(''+learn_time/60).split(".")[0]+' 分钟 '+learn_time%60+' 秒'
-				return ltimeStr?ltimeStr:'未开始学习'
+				return '未开始学习'
 			},
 			getCurVideoTimeStr(){
 				if(this.pageData.learnInfo){
-					let times=this.pageData.learnInfo.times
-					let timeStr=''
-					if(((''+times/60/60).split(".")[0])>0){
-						timeStr+=(''+times/60/60).split(".")[0]+' 小时 '
+					let second=this.pageData.learnInfo.times
+					if(second){
+						second = parseInt(String(second));
+						let result = ''
+						const s = second % 60
+						const m = parseInt(String(second / 60)) % 60
+						const h = parseInt(String(second / 60 / 60)) % 24
+						const d = parseInt(String(second / 60 / 60 / 24))
+						if (d != 0) {
+						  result += d + "天";
+						}
+						if (h != 0) {
+						  result += h + "小时";
+						}
+						if (m != 0) {
+						  result += m + "分钟";
+						}
+						if (s != 0) {
+						  result += s + "秒";
+						}
+						return result;
 					}
-					timeStr+=(''+times/60).split(".")[0]+' 分钟 '+times%60+' 秒'
-					return timeStr?timeStr:'请选择视频'
+					return '请选择视频'
 				}else{
 					return '请选择视频'
 				}
 			},
 			getCurVideoLearnTimeStr(){
 				if(this.pageData.learnInfo){
-					let learn_time=this.pageData.learnInfo.learn_time
-					let video_learn_timeStr=''
-					if(((''+learn_time/60/60).split(".")[0])>0){
-						video_learn_timeStr+=(''+learn_time/60/60).split(".")[0]+' 小时 '
+					let second=this.pageData.learnInfo.learn_time
+					if(second){
+						second = parseInt(String(second));
+						let result = ''
+						const s = second % 60
+						const m = parseInt(String(second / 60)) % 60
+						const h = parseInt(String(second / 60 / 60)) % 24
+						const d = parseInt(String(second / 60 / 60 / 24))
+						if (d != 0) {
+						  result += d + "天";
+						}
+						if (h != 0) {
+						  result += h + "小时";
+						}
+						if (m != 0) {
+						  result += m + "分钟";
+						}
+						if (s != 0) {
+						  result += s + "秒";
+						}
+						return result;
 					}
-					video_learn_timeStr+=(''+learn_time/60).split(".")[0]+' 分钟 '+learn_time%60+' 秒'
-					return video_learn_timeStr?video_learn_timeStr:'未开始学习'
+					return '未开始学习'
 				}else{
 					return '0'
 				}
 				
+			},
+			setTreeDataAndChecked(book_catalog_id,book_catalog_file_id,video_list){//将获取到的目录数组设置到tree中 并设置选中状态 book_catalog_file_id 不传代表不选中
+				
+				video_list.map(item=>{
+					item.id=item.id+'_'+item.url
+				})
+				
+				this.getTreeData(this.treeData,book_catalog_id,video_list,()=>{
+					//更新树
+					this.treeData=[].concat(this.treeData)
+					
+					//设置选择状态
+					if(book_catalog_file_id){
+						this.checkedKeys=[book_catalog_file_id]
+					}
+				})
+			},
+			getTreeData(arr,book_catalog_id,video_list,callback){
+				for (const iterator of arr) {
+					if(iterator['children']){
+					    this.getTreeData(iterator['children'],book_catalog_id,video_list,callback)
+					}else{
+						if(book_catalog_id===iterator.id){
+							iterator.children=video_list
+							callback()
+							return 0
+						}
+					}
+				}
+			},
+			getArrayLayer(arr, attr) {	//获取多维数组第一个最下级目录的第一个节点对象
+			  let obj={};
+			  if(arr[0][attr]){
+				  obj=this.getArrayLayer(arr[0][attr],attr)
+			  }else{
+				  obj=arr[0]
+			  }
+			  return obj
 			}
 		},
 		onLoad: function(option) {
@@ -391,40 +498,9 @@
 		},
 	}
 	
-	//获取多维数组第一个最下级目录的第一个节点对象
-	function getArrayLayer(arr, attr) {
-	  let obj={};
-	  if(arr[0][attr]){
-		  obj=getArrayLayer(arr[0][attr],attr)
-	  }else{
-		  obj=arr[0]
-	  }
-	  return obj
-	}
-	//将获取到的目录数组设置到tree中 并设置选中状态 book_catalog_file_id 不传代表不选中
-	function setTreeDataAndChecked(that,book_catalog_id,book_catalog_file_id,video_list){
-		getTreeData(that.treeData,book_catalog_id,video_list,()=>{
-			//更新树
-			that.treeData=[].concat(that.treeData)
-			//设置选择状态
-			if(book_catalog_file_id){
-				that.checkedKeys=[book_catalog_file_id]
-			}
-		})
-	}
-	function getTreeData(arr,book_catalog_id,video_list,callback){
-		for (const iterator of arr) {
-			if(iterator['children']){
-			    getTreeData(iterator['children'],book_catalog_id,video_list,callback)
-			}else{
-				if(book_catalog_id===iterator.id){
-					iterator.children=video_list
-					callback()
-					return 0
-				}
-			}
-		}
-	}
+
+	
+	 
 	
 </script>
 

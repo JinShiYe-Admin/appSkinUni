@@ -36,11 +36,20 @@
 		<template v-if="question_list.length>0">
 			<view class="bottom-btn-tab">
 				<button class="btn test-btn0" type="default" @click="cancel">取消</button>
+				<button class="btn test-btn1" type="warn" @click="onClearAnser">清空答案</button>
 				<button class="btn test-btn" type="primary" @click="onSubmit">交卷</button>
 			</view>
 		</template>
 		<uni-popup ref="alertDialog" type="dialog">
 			<uni-popup-dialog type="warn" title="提醒" content="还有题目未完成,是否现在提交" @confirm="dialogConfirm"></uni-popup-dialog>
+		</uni-popup>
+		
+		<uni-popup ref="alertDialog2" type="dialog">
+			<uni-popup-dialog type="warn" title="提醒" content="是否确认清空答案" @confirm="dialogConfirm2"></uni-popup-dialog>
+		</uni-popup>
+		
+		<uni-popup ref="alertDialog3" type="dialog">
+			<uni-popup-dialog type="warn" title="提醒" content="上次有修改未提交，是否恢复" @confirm="dialogConfirm3"></uni-popup-dialog>
 		</uni-popup>
 	</view>
 </template>
@@ -199,8 +208,25 @@
 					}
 				}
 			},
+			onClearAnser(){
+				this.$refs.alertDialog2.open()
+			},
 			dialogConfirm(){
 				this.submitData()
+			},
+			dialogConfirm2(){
+				this.percent=0;
+				this.answer_list=[]
+				this.question_list.map(item=>{
+					if(item.is_que){
+						item.optionObjs.map(itemop=>{
+							itemop.isCheck=false
+						})
+					}
+				})
+			},
+			dialogConfirm3(){
+				
 			},
 			submitData(){
 				let score=0
@@ -308,6 +334,16 @@
 		width: 30%;
 		border-radius: 0;
 		color: #353535;
+		font-size: 15px;
+		height: 50px;
+		padding-top: 6px;
+	}
+	
+	
+	.test-btn1{
+		width: 30%;
+		border-radius: 0;
+		color: #FFFFFF;
 		font-size: 15px;
 		height: 50px;
 		padding-top: 6px;
