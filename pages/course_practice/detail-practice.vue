@@ -68,15 +68,12 @@
 			}
 		},
 		methods: {
-			removeAnswers(){
-				uni.setStorageSync(this.itemData.test_id+'_practice_answers',JSON.stringify([]))
-			},
 			setAnswers(answers){
-				uni.setStorageSync(this.itemData.test_id+'_practice_answers',JSON.stringify(answers))
+				uni.setStorageSync(this.itemData.test_id+'_practice_answers',answers?JSON.stringify(answers):null)
 			},
 			getAnswers(){
 				const answers=uni.getStorageSync(this.itemData.test_id+'_practice_answers')
-				return answers?JSON.parse(answers):[];
+				if(answers){return JSON.parse(answers)}else{return []}
 			},
 			getPageList(){
 				let comData={
@@ -131,7 +128,7 @@
 							}
 						})
 					})
-					this.question_list.questions=questions
+					this.itemData.questions=questions
 					this.hideLoading()
 				})
 			},
@@ -244,16 +241,18 @@
 				this.answer_list=answer_list
 				this.question_list.map(question_item=>{
 					if(question_item.is_que){
+						question_item.optionObjs.map(question_item_optionObjs_item=>{
+								question_item_optionObjs_item.isCheck=false
+						})
 						answer_list.map(answer_item=>{
 							if(question_item.id==answer_item.question_id){
-								question_item.optionObjs.map(question_item_optionObjs_item=>{
-										question_item_optionObjs_item.isCheck=false
-								})
+								// question_item.optionObjs.map(question_item_optionObjs_item=>{
+								// 		question_item_optionObjs_item.isCheck=false
+								// })
 								answer_item.answer.map(answer_item_item=>{
 									question_item.optionObjs.map(question_item_optionObjs_item=>{
 										if(answer_item_item==question_item_optionObjs_item.value){
 											question_item_optionObjs_item.isCheck=true
-											question_item_optionObjs_item.label=question_item_optionObjs_item.label
 										}
 									})
 									 
@@ -262,12 +261,20 @@
 						})
 					}
 				})
-				this.$set(this.question_list,)
-				console.log("this.question_list: " + JSON.stringify(this.question_list));
-				this.removeAnswers();
+				this.question_list=[].concat(this.question_list)
+				let answers=0
+				answer_list.map(item=>{
+					let filter =item.answer.filter((item) => item!=null);
+					if(filter.length>0){
+						answers++
+					}
+				})
+				let num=(answers/this.itemData.questions.length)*100
+				this.percent=parseInt(num)
+				this.setAnswers(null);
 			},
 			dialogClose3(){
-				this.removeAnswers();
+				this.setAnswers(null);
 			},
 			submitData(){
 				let score=0
@@ -287,6 +294,9 @@
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/work/submit',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
 					this.showToast("交卷成功")
+					this.setAnswers(null);
+					this.online_answer_list=[]
+					this.answer_list=[]
 					setTimeout(()=>{
 						const eventChannel = this.getOpenerEventChannel()
 						eventChannel.emit('refresh', {data: 'test'});
@@ -303,7 +313,7 @@
 						answers++
 					}
 				})
-				let num=(answers/this.question_list.questions.length)*100
+				let num=(answers/this.itemData.questions.length)*100
 				this.percent=parseInt(num)
 			},
 			cancel(){
@@ -313,12 +323,12 @@
 		onLoad: function(option) {
 			this.personInfo = util.getPersonal();
 			const itemData = util.getPageData(option);
-			console.log("itemData: " + JSON.stringify(itemData));
 			this.itemData=itemData
 			uni.setNavigationBarTitle({title: itemData.test_name})
 			this.showLoading()
 			this.getPageList()
 			setTimeout(()=>{
+				console.log("this.getAnswers(): " + JSON.stringify(this.getAnswers()));
 				if(this.getAnswers().length>0){
 					this.onSetAnswer()
 				}
