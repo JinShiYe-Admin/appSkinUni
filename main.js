@@ -89,7 +89,7 @@ switch (EnvKey) {
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 }
-Vue.prototype.APPORWECHAT =1;//app为1，微信里面是2
+Vue.prototype.APPORWECHAT =2;//app为1，微信里面是2
 Vue.prototype.PRIVACE='http://www.jiaobao.net/dl/jiaobaoxiaoyuan/jbdxyPrivacy.htm';//用户隐私政策地址
 Vue.prototype.QN_PV_NAME ='jbsch-pv';//七牛私有空间名
 Vue.prototype.QN_PB_NAME ='jbsch-pb';//七牛公有空间名
