@@ -5,10 +5,9 @@
 			<uni-title class="h5" style="align-items: center;padding: 3px 0;" color="#F5222D" type="h5" :title="timeTitle"></uni-title>
 			<progress  :percent="percent" show-info border-radius="10" activeColor="#26AAFD" backgroundColor="#E5E5E5" :stroke-width="10"/>
 		</view>
-		<view style="z-index: 5;"></view> 
 		<view :key="index" v-for="(curr_question,index) in question_list">
 			<template v-if="curr_question.is_que">
-				<uni-card-practice style="margin-top: 10px;" :title="`${curr_question.sort}.${curr_question.title}`" :isFull="true">
+				<uni-card-practice style="margin-top: 10px;" :title="`${curr_question.qusetion_num}.${curr_question.title}`" :isFull="true">
 					<template v-if="curr_question.type=='2'"><!-- 多选 -->
 						<checkbox-group @change="checkboxChange($event,curr_question)">
 							<label class="uni-list-cell uni-list-cell-pd" v-for="item in curr_question.optionObjs" :key="item.value">
@@ -38,11 +37,20 @@
 		<template v-if="question_list.length>0">
 			<view class="bottom-btn-tab">
 				<button class="btn test-btn0" type="default" @click="cancel">取消</button>
+				<button class="btn test-btn1" type="warn" @click="onClearAnswer">清空答案</button>
 				<button class="btn test-btn" type="primary" @click="onSubmit">交卷</button>
 			</view>
 		</template>
 		<uni-popup ref="alertDialog" type="dialog">
 			<uni-popup-dialog type="warn" title="提醒" content="还有题目未完成,是否现在提交" @confirm="dialogConfirm"></uni-popup-dialog>
+		</uni-popup>
+		
+		<uni-popup ref="alertDialog2" type="dialog">
+			<uni-popup-dialog type="warn" title="提醒" content="是否确认清空答案" @confirm="dialogConfirm2"></uni-popup-dialog>
+		</uni-popup>
+		
+		<uni-popup ref="alertDialog3" type="dialog">
+			<uni-popup-dialog type="warn" title="提醒" content="上次有修改未提交，是否恢复" @confirm="dialogConfirm3" @close="dialogClose3"></uni-popup-dialog>
 		</uni-popup>
 	</view>
 </template>
@@ -57,13 +65,23 @@
 				timeTitle:'',//倒计时相关
 				personInfo:{},
 				
+				
+				
 				itemData:{},
 				percent:0,
 				answer_list:[],
-				question_list:[]
+				online_answer_list:[],
+				question_list:[],
 			}
 		},
 		methods: {
+			setAnswers(answers){
+				uni.setStorageSync(this.itemData.test_id+'_examination_answers',answers?JSON.stringify(answers):null)
+			},
+			getAnswers(){
+				const answers=uni.getStorageSync(this.itemData.test_id+'_examination_answers')
+				if(answers){return JSON.parse(answers)}else{return []}
+			},
 			getPageList(){
 				let comData={
 					test_id: this.itemData.test_id,
@@ -73,11 +91,14 @@
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/exam/detail',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
 					this.answer_list=response.answer_list
+					this.online_answer_list=response.answer_list
 					this.question_list=response.question_list
 					let questions=[]
 					if(response.question_list.length>0){//过滤非题目
+						let que_num=0
 						for (var i = 0; i < response.question_list.length; i++) {
 							if(response.question_list[i].is_que){
+								response.question_list[i].qusetion_num=++que_num
 								questions.push(response.question_list[i])
 							}
 						}
@@ -115,7 +136,7 @@
 							}
 						})
 					})
-					this.question_list.questions=questions
+					this.itemData.questions=questions
 					this.hideLoading()
 				})
 			},
@@ -193,6 +214,9 @@
 						showDialog=true
 					}
 				})
+				if(this.answer_list.length<this.itemData.questions.length){
+					showDialog=true
+				}
 				if(showDialog){
 					this.$refs.alertDialog.open()
 				}else{
@@ -203,8 +227,68 @@
 					}
 				}
 			},
+			onClearAnswer(){
+				this.$refs.alertDialog2.open()
+			},
+			onSetAnswer(){
+				this.$refs.alertDialog3.open()
+			},
 			dialogConfirm(){
 				this.submitData()
+			},
+			dialogConfirm2(){
+				this.percent=0;
+				this.answer_list=[]
+				this.question_list.map(item=>{
+					if(item.is_que){
+						item.optionObjs.map(itemop=>{
+							itemop.isCheck=false
+						})
+					}
+				})
+			},
+			dialogConfirm3(){
+				let answer_list=this.getAnswers()
+				this.answer_list=answer_list
+				console.log("answer_list: " + JSON.stringify(answer_list));
+				console.log("this.question_list: " + JSON.stringify(this.question_list));
+				this.question_list.map(question_item=>{
+					if(question_item.is_que){
+						question_item.optionObjs.map(question_item_optionObjs_item=>{
+								question_item_optionObjs_item.isCheck=false
+						})
+						answer_list.map(answer_item=>{
+							if(question_item.id==answer_item.question_id){
+								// question_item.optionObjs.map(question_item_optionObjs_item=>{
+								// 		question_item_optionObjs_item.isCheck=false
+								// })
+								answer_item.answer.map(answer_item_item=>{
+									question_item.optionObjs.map(question_item_optionObjs_item=>{
+										if(answer_item_item==question_item_optionObjs_item.value){
+											question_item_optionObjs_item.isCheck=true
+											question_item_optionObjs_item.label=question_item_optionObjs_item.label
+										}
+									})
+									 
+								})
+							}
+						})
+					}
+				})
+				this.question_list=[].concat(this.question_list)
+				let answers=0
+				answer_list.map(item=>{
+					let filter =item.answer.filter((item) => item!=null);
+					if(filter.length>0){
+						answers++
+					}
+				})
+				let num=(answers/this.itemData.questions.length)*100
+				this.percent=parseInt(num)
+				this.setAnswers(null);
+			},
+			dialogClose3(){
+				this.setAnswers(null);
 			},
 			submitData(){
 				let score=0
@@ -224,6 +308,9 @@
 				this.post(this.globaData.INTERFACE_UNVEDUSUBAPI+'web/exam/submit',comData,response=>{
 					console.log("response: " + JSON.stringify(response));
 					this.showToast("交卷成功")
+					this.setAnswers(null);
+					this.online_answer_list=[]
+					this.answer_list=[]
 					setTimeout(()=>{
 						const eventChannel = this.getOpenerEventChannel()
 						eventChannel.emit('refreshPage', {data: 'test'});
@@ -240,7 +327,7 @@
 						answers++
 					}
 				})
-				let num=(answers/this.question_list.questions.length)*100
+				let num=(answers/this.itemData.questions.length)*100
 				this.percent=parseInt(num)
 			},
 			cancel(){
@@ -304,12 +391,22 @@
 				this.itemData.diffSeconds=diffs
 				this.startInterval()
 			}
+			setTimeout(()=>{
+				let answers=this.getAnswers()
+				if(answers.length>0){
+					this.onSetAnswer()
+				}
+			},500)
 			//#ifndef APP-PLUS
 				document.title=""
 			//#endif
 		},
 		onUnload(){
 			this.clearInterval(this.interval)
+			console.log("this.answer_list: " + JSON.stringify(this.answer_list));
+			if(JSON.stringify(this.answer_list)!=JSON.stringify(this.online_answer_list)){
+				this.setAnswers(this.answer_list)
+			}
 		}
 	}
 </script>
@@ -366,6 +463,16 @@
 		width: 30%;
 		border-radius: 0;
 		color: #353535;
+		font-size: 15px;
+		height: 50px;
+		padding-top: 6px;
+	}
+	
+	
+	.test-btn1{
+		width: 30%;
+		border-radius: 0;
+		color: #FFFFFF;
 		font-size: 15px;
 		height: 50px;
 		padding-top: 6px;
