@@ -71,6 +71,76 @@ import cryption from '../../commom/uploadFiles/cryption.js';
 			});
 		});
 	}
+	
+	var getQNDownToken = function(url, data, successCB, errorCB) {
+		// console.log('getQNDownToken:url ' + JSON.stringify(data));
+		// console.log('getQNDownToken:data ' + JSON.stringify(data));
+		var desKey = ''; //项目名称
+		var appId = 0; //项目id
+		var urls = []; //需要获取下载token文件的路径
+		var configure = {}; //配置的数据
+		if(data) {
+			if(data.appId) {
+				appId = data.appId;
+				desKey = data.appKey;
+			}
+			if(data.urls) {
+				urls = data.urls;
+			}
+	
+		}
+		if(desKey != '' && urls.length != 0) {
+			configure.options = {
+				AppID: appId,
+				Param: cryption.encryptByDES(desKey, JSON.stringify(urls))
+			}
+			// console.log("参数数据：" + JSON.stringify(configure.options));
+			// mui.ajax(url, {
+			// 	async: false,
+			// 	data: configure.options,
+			// 	dataType: 'json', //服务器返回json格式数据
+			// 	type: 'post', //HTTP请求类型
+			// 	timeout: 60000, //超时时间设置为60秒
+			// 	success: function(data) {
+			// 		////console.log(JSON.stringify(data));
+			// 		successCB(data);
+			// 	},
+			// 	error: function(xhr, type, errorThrown) {
+			// 		//异常处理
+			// 		errorCB(xhr, type, errorThrown);
+			// 	}
+			// });
+			uni.request({
+				url: url,
+				timeout: 60000,
+				dataType: 'json', //服务器返回json格式数据
+				method: 'POST',
+				header: {
+					'content-type': 'application/x-www-form-urlencoded'
+				},
+				data: configure.options,
+				success: res => { //接口调用成功的回调函数
+					// console.log('11111res:'+JSON.stringify(res));
+					if (res.statusCode === 200) {
+						if (res.data.Status === '1') {
+							//服务器返回响应
+							successCB(res.data);
+						}
+					}
+				},
+				fail: (e) => { //接口调用失败的回调函数  比如跨域了，断网
+					// console.log("e: " + JSON.stringify(e));
+					uni.hideLoading();
+					this.showToast('网络请求失败')
+				},
+				complete: () => {
+				}
+			});
+	
+		} else {
+			errorCB('### ERROR ### 配置获取七牛下载token参数错误');
+		}
+	}
 
 	/**
 	 * 获取上传到七牛的uptoken（单/多个文件的uptoken）
@@ -666,4 +736,5 @@ import cryption from '../../commom/uploadFiles/cryption.js';
 	module.exports = {
 		getQNUpToken: getQNUpToken,
 		upload: upload,
+		getQNDownToken:getQNDownToken,
 	}
