@@ -142,7 +142,6 @@
             "path" : "pages/mydata/index",
             "style" :                                                                                    
             {
-                "navigationStyle": "custom", // 隐藏系统导航栏
                 "enablePullDownRefresh": false
             }
             
@@ -151,7 +150,6 @@
             "path" : "pages/grades/index",
             "style" :                                                                                    
             {
-                "navigationStyle": "custom", // 隐藏系统导航栏
                 "enablePullDownRefresh": true
             }
             
