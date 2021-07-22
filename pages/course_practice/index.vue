@@ -42,7 +42,7 @@
 			</template> 
 		</view>
 		<uni-load-more :status="status" :icon-size="17" :content-text="contentText" />
-		<u-tabbar-my :list="tabbar" ></u-tabbar-my>
+		<u-tabbar-my v-if='tabBarItem.index<5' :list="tabbar" ></u-tabbar-my>
 	</view>
 </template>
 
@@ -204,12 +204,7 @@
 			})
 			this.tabbar = util.getMenu();
 			this.personInfo = util.getPersonal();
-			if(util.getTabbarMenu().url){
-				this.tabBarItem = util.getTabbarMenu();
-				util.setTabbarMenu({});
-			}else{
-				this.tabBarItem = util.getPageData(option);
-			}
+			this.tabBarItem = util.getTabbarMenu();
 			this.index_code=this.tabBarItem.access.split("#")[1]
 			this.showLoading()
 			this.getTermList()
