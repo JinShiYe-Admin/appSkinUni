@@ -7,7 +7,7 @@ import moment from 'moment'
 Vue.use(uView);
 //配置项开始
 const GLOBALDATA = {};//参数对象 用于存全局公共参数
-const EnvKey = 5; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
+const EnvKey = 3; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
 switch (EnvKey) {
 	case 1:
 		GLOBALDATA.EnvKey = EnvKey ;
@@ -89,7 +89,7 @@ switch (EnvKey) {
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 }
-Vue.prototype.APPORWECHAT =2;//app为1，微信里面是2
+Vue.prototype.APPORWECHAT =1;//app为1，微信里面是2
 Vue.prototype.PRIVACE='http://www.jiaobao.net/dl/jiaobaoxiaoyuan/jbdxyPrivacy.htm';//用户隐私政策地址
 Vue.prototype.QN_PV_NAME ='jbsch-pv';//七牛私有空间名
 Vue.prototype.QN_PB_NAME ='jbsch-pb';//七牛公有空间名

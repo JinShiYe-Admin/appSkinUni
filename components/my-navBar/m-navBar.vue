@@ -65,6 +65,10 @@
 			clickLeftImg() {
 				if (this.navItem.index == 0) {
 					this.$refs.showPersonInfo.open();
+				}else if (this.navItem.index >4) {
+					uni.switchTab({
+						url: '/pages/more/index'
+					});
 				}
 			},
 			closeDrawer() {
