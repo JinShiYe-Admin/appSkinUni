@@ -8,7 +8,7 @@
 			<uni-title class="h5" style="align-items: center;" type="h5" :title="`成绩：${parseInt(itemData.stu_total_score?itemData.stu_total_score:0)}/${parseInt(itemData.score)}`"></uni-title>
 		</view>
 		<template v-if="is_que">
-			<uni-card-practice style="margin-top: 10px;margin-bottom: 80px;" :title="`${curr_question.question.qusetion_num}.${curr_question.question.title}`" :isFull="true"><!--  :note="`解析:  ${curr_question.question.parse?curr_question.question.parse:'无'}`" -->
+			<uni-card-practice style="margin-top: 10px;margin-bottom: 80px;" :title="`${curr_question.question.qusetion_num}.${curr_question.question.title}`" :isFull="true">
 				<template v-for="(item,index) in curr_question.question.options">
 					<view :key="index" style="margin: 10px 0;"><text v-html="item" style="padding-left:20px ;word-break: break-all;"></text></view>
 				</template> 
@@ -49,6 +49,21 @@
 							</uni-col>
 						</uni-row>
 					</uni-col>
+				</uni-row>
+				<uni-row>
+					<view style="width: 100vw;height: 1px;background-color: rgba(113,113,113,0.3);margin-left: -15px;margin-top: 10px;"></view>
+					<template v-if="curr_question.question.parse==null || curr_question.question.parse=='null'">
+						<view style="font-size: 12px;margin-top: 10px;">
+							解析：无
+						</view>
+					</template>
+					<template v-else>
+						
+						<view style="font-size: 12px;margin-top: 10px">
+							解析：<view v-html="curr_question.question.parse"></view>
+						</view>
+					</template>
+					<!-- {{curr_question.question.parse==null || curr_question.question.parse=='null')?'解析：无':`解析：${curr_question.question.parse}`}} -->
 				</uni-row>
 			</uni-card-practice>
 		</template>
