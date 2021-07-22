@@ -207,16 +207,12 @@
 				this.refreshPercent()
 			},
 			onSubmit(){
-				console.log("this.answer_list: " + JSON.stringify(this.answer_list));
 				let showDialog=false
 				this.answer_list.map(item=>{
 					if(item.answer.length===0){
 						showDialog=true
 					}
 				})
-				if(this.answer_list.length<this.itemData.questions.length){
-					showDialog=true
-				}
 				if(showDialog){
 					this.$refs.alertDialog.open()
 				}else{
@@ -291,15 +287,34 @@
 				this.setAnswers(null);
 			},
 			submitData(){
+				console.log("this.answer_list: " + JSON.stringify(this.answer_list));
+				console.log("this.itemData.questions: " + JSON.stringify(this.itemData.questions));
+				let newAnswer=[]
+				this.itemData.questions.map(qitem=>{
+					let obj={
+						question_id:qitem.id,
+						answer:[],
+						score:0,
+						is_right:false,
+					}
+					this.answer_list.map(aitem=>{
+						if(aitem.question_id==qitem.id){
+							obj.answer=aitem.answer
+							obj.score=aitem.score
+							obj.is_right=aitem.is_right
+						}
+					})
+					newAnswer.push(obj)
+				})
 				let score=0
 				this.showLoading();
-				this.answer_list.map(item=>{
+				newAnswer.map(item=>{
 					score+=parseFloat(item.score)
 				})
 				let comData={
 					test_id: this.itemData.test_id,
 					stu_code:this.personInfo.user_code,
-					answer_list:this.answer_list,
+					answer_list:newAnswer,
 					total_score:score,
 					answer_number:this.answer_list.length,
 					index_code:this.itemData.index_code,

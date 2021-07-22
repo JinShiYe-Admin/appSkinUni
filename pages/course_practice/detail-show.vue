@@ -21,7 +21,7 @@
 										<uni-tag text="学生答案:" custom-style="background-color: #E5E5E5; color: #383838;"></uni-tag>
 									</uni-col>
 									<uni-col :span="12">
-										<uni-title class="h5" type="h5" :title="curr_answer.answer?curr_answer.answer.join(','):''"></uni-title>
+										<uni-title class="h5" type="h5" :title="(curr_answer && curr_answer.answer)==undefined?'':curr_answer.answer.join(',')"></uni-title>
 										<!-- <text v-for="item in curr_answer.answer">{{item}}</text> -->
 									</uni-col>
 								</uni-row>
@@ -45,7 +45,7 @@
 								<uni-tag text="得分:" custom-style="background-color: #E5E5E5; color: #383838;"></uni-tag>
 							</uni-col>
 							<uni-col :span="10">
-								<uni-title class="h5" style="align-items: center;" type="h5" :title="`${curr_answer.score==undefined?'0.00':curr_answer.score} 分`"></uni-title>
+								<uni-title class="h5" style="align-items: center;" type="h5" :title="`${(curr_answer && curr_answer.score)==undefined?'0.00':curr_answer.score} 分`"></uni-title>
 							</uni-col>
 						</uni-row>
 					</uni-col>
@@ -136,6 +136,7 @@
 			after(){
 				let index=this.curr_question.index-1
 				let question=this.question_list[index]
+				this.curr_answer={}
 				if(question.is_que){
 					let question_id=question.id
 					this.answer_list.map(item=>{
@@ -155,6 +156,7 @@
 			next(){
 				let index=this.curr_question.index+1
 				let question=this.question_list[index]
+				this.curr_answer={}
 				if(question.is_que){
 					let question_id=question.id
 					this.answer_list.map(item=>{
