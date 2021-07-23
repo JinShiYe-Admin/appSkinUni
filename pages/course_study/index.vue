@@ -30,13 +30,12 @@
 				personInfo: {},
 				tabbar: [],
 				tabBarItem: {},
-						
 				index_code:'',
+				scrollInto: "",
+				
 				dataList: [],
-				cacheTab: [],
 				tabIndex: 0,
 				tabBars: [],
-				scrollInto: "",
 			}
 		},
 		components: {
@@ -115,14 +114,7 @@
 				this.getTabList();
 			},350)
 		},
-		onShow() {
-			if(!this.tabBarItem.first&&this.tabBarItem.index>5){
-				this.showLoading();
-				this.getTabList();
-			}
-			this.tabBarItem.first=false;
-		},
-		onPullDownRefresh() {
+ 		onPullDownRefresh() {
 			this.showLoading()
 			this.getList(this.tabIndex,this.tabBars[this.tabIndex].id)
 			setTimeout(function () {

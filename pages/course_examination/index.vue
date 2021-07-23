@@ -127,12 +127,6 @@
 			this.index_code=this.tabBarItem.access.split("#")[1]
 			this.getList()
 		},
-		onShow() {
-			if(!this.tabBarItem.first&&this.tabBarItem.index>5){
-				this.getList()
-			}
-			this.tabBarItem.first=false;
-		},
 		onReachBottom() {
 			if(this.canload){
 				this.loadFlag=1

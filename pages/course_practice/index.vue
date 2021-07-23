@@ -56,10 +56,8 @@
 				personInfo: {},
 				tabbar: [],
 				tabBarItem: {},
-				
-				
-				
 				index_code:'',
+				
 				queryData:{},//查询栏得到的数据
 				pageData:[],//页面列表数据
 				
@@ -210,14 +208,6 @@
 			this.showLoading()
 			this.getTermList()
 			this.getPageList()
-		},
-		onShow() {
-			if(!this.tabBarItem.first&&this.tabBarItem.index>5){
-				this.showLoading()
-				this.getTermList()
-				this.getPageList()
-			}
-			this.tabBarItem.first=false;
 		},
 		onReachBottom() {
 			if(this.canload){

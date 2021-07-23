@@ -37,12 +37,6 @@
 			this.tabBarItem.first=true;
 			//...functions
 		},
-		onShow() {
-			if(!this.tabBarItem.first&&this.tabBarItem.index>5){
-				//onLoad  ...functions
-			}
-			this.tabBarItem.first=false;
-		},
 	}
 </script>
 
