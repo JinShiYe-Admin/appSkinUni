@@ -198,43 +198,6 @@
 			this.index_code=this.tabBarItem.access.split("#")[1]
 			this.showLoading()
 			this.getList0()
-			console.log('啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊');
-		},
-		onShow() {
-			console.log('啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊');
-			console.log(this.tabBarItem.first);
-			console.log(this.tabBarItem.index);
-			if(!this.tabBarItem.first&&this.tabBarItem.index>5){
-				console.log("this.currenta啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊: ",this.current);
-				this.current=2
-				this.pageobj1={
-					keyword:'',
-					loadFlag:0,//0 刷新 1加载更多
-					page_number:1,//页码
-					status:'more',//加载更多的状态
-					contentText: {
-						contentdown: '',//上滑加载更多
-						contentrefresh: '加载中',
-						contentnomore: ''//没有更多
-					},
-					canload:true,//是否加载更多
-				}
-				this.pageobj2={
-					loadFlag:0,//0 刷新 1加载更多
-					page_number:1,//页码
-					status:'more',//加载更多的状态
-					contentText: {
-						contentdown: '',//上滑加载更多
-						contentrefresh: '加载中',
-						contentnomore: ''//没有更多
-					},
-					canload:true,//是否加载更多
-				}
-				
-				this.showLoading()
-				this.getList0()
-			}
-			this.tabBarItem.first=false;
 		},
 		onPullDownRefresh() {
 			if(this.current===0){
