@@ -108,11 +108,19 @@
 			this.tabbar = util.getMenu();
 			this.personInfo = util.getPersonal();
 			this.tabBarItem = util.getTabbarMenu();
+			this.tabBarItem.first=true;
 			this.index_code=this.tabBarItem.access.split("#")[1]
 			setTimeout(()=>{
 				this.showLoading();
 				this.getTabList();
 			},350)
+		},
+		onShow() {
+			if(!this.tabBarItem.first&&this.tabBarItem.index>5){
+				this.showLoading();
+				this.getTabList();
+			}
+			this.tabBarItem.first=false;
 		},
 		onPullDownRefresh() {
 			this.showLoading()
@@ -120,7 +128,7 @@
 			setTimeout(function () {
 				uni.stopPullDownRefresh();
 			}, 5000);
-		}
+		},
 	}
 </script>
 

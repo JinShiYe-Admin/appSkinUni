@@ -205,10 +205,19 @@
 			this.tabbar = util.getMenu();
 			this.personInfo = util.getPersonal();
 			this.tabBarItem = util.getTabbarMenu();
+			this.tabBarItem.first=true;
 			this.index_code=this.tabBarItem.access.split("#")[1]
 			this.showLoading()
 			this.getTermList()
 			this.getPageList()
+		},
+		onShow() {
+			if(!this.tabBarItem.first&&this.tabBarItem.index>5){
+				this.showLoading()
+				this.getTermList()
+				this.getPageList()
+			}
+			this.tabBarItem.first=false;
 		},
 		onReachBottom() {
 			if(this.canload){
