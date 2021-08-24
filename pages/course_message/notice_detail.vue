@@ -10,7 +10,12 @@
 		</view>
 		<view  style="padding:15px 15px 40px;">
 			<view :key="index" v-for="(file,index) in itemData.file_list" style="margin-top: 15px;font-size: 13px;word-break: break-all;">
+				<!-- #ifdef APP-PLUS -->
+				<a class="" style="font-size: 13px;color: #00CFBD;margin-left: 10px;" @click="checkEnc(file.url)">{{file.name}}</a>
+				<!-- #endif -->
+				<!-- #ifdef H5 -->
 				<uni-link :href="file.url" :text="file.name" :download="file.name" color="#00CFBD"></uni-link>
+				<!-- #endif -->
 			</view>
 		</view>
 	</view>
@@ -24,7 +29,33 @@
 				itemData:{}
 			}
 		},
-		methods: {},
+		methods: {
+			checkEnc: function(tempUrl) {
+				this.showLoading()
+				let that=this
+				console.log('tempUrl:' + tempUrl);
+				var urlStr = encodeURI(tempUrl);
+				uni.downloadFile({
+				  url: urlStr,
+				  success: function (res) {
+				    var filePath = res.tempFilePath;
+				    uni.openDocument({
+				      filePath: filePath,
+				      success: function (res) {
+						  that.hideLoading()
+				        console.log('打开文档成功');
+				      },
+					  fail() {
+						  that.hideLoading()
+					  	uni.showToast({
+					  		title:'当前附件打开失败'
+					  	})
+					  }
+				    });
+				  }
+				});
+			},
+		},
 		onLoad: function(option) {
 			this.personInfo = util.getPersonal();
 			const itemData = util.getPageData(option);
