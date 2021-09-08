@@ -2,6 +2,7 @@
  * APP 工具类
  */
 import Vue from 'vue'
+import uniCopy from '@/js_sdk/xb-copy/uni-copy.js'
 /**
  * 获取有层级关系的部门数组  
  * （应用场景：人事接口返回的部门数组为一维数组，需要根据dpt_code自行分层）
@@ -193,6 +194,60 @@ function getPermissionByPosition(op_codes,index_code,callback){
 	})
 }
 
+
+// 打开附件
+function openFile(fileUrl) {
+	var urlStr = encodeURI(fileUrl);
+	// #ifdef APP-PLUS
+	this.showLoading();
+	uni.downloadFile({
+		url: urlStr,
+		success: function(res) {
+			var filePath = res.tempFilePath;
+			uni.openDocument({
+				filePath: filePath,
+				success: function(res) {
+					uni.hideLoading();
+					console.log('打开文档成功');
+				},
+				fail() {
+					uni.hideLoading();
+					uni.showToast({
+						title: '当前附件打开失败'
+					})
+				}
+			});
+		}
+	});
+	// #endif
+	// #ifndef APP-PLUS
+	console.log('urlStr:' + urlStr)
+	var tempArr = urlStr.split('.');
+	var tempStr = tempArr[tempArr.length - 1];
+	if (tempStr == 'png' || tempStr == 'jpg' || tempStr == 'jpeg' || tempStr == 'gif' || tempStr == 'bmp' ) {
+		var tempArray = [];
+		tempArray.push(urlStr);
+		uni.previewImage({
+			urls: tempArray,
+		});
+	} else {
+		uniCopy({
+			content: urlStr,
+			success: (res) => {
+				uni.showToast({
+					title: '已复制该附件链接，请在系统浏览器中粘贴并打开',
+					duration: 3000,
+				})
+				console.log('uniCopy-success');
+			},
+			error: (e) => {
+				console.log('uniCopy-error');
+			}
+		})
+	}
+	// #endif
+}
+
 //获取设备
 module.exports = {
 	getDptTree: getDptTree,
@@ -212,6 +267,6 @@ module.exports = {
 	openwithData:openwithData,
 	getPageData:getPageData,
 	showToast:showToast,
-	getPermissionByPosition:getPermissionByPosition
-	
+	getPermissionByPosition:getPermissionByPosition,
+	openFile: openFile
 }
