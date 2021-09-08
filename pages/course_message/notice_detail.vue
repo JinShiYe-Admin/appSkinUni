@@ -10,8 +10,7 @@
 		</view>
 		<view  style="padding:15px 15px 40px;">
 			<view :key="index" v-for="(file,index) in itemData.file_list" style="margin-top: 15px;font-size: 13px;word-break: break-all;">
-				{{file.url}}
-				<a class="" style="font-size: 13px;color: #00CFBD;margin-left: 10px;" @click="checkEnc(file.url)">{{file.name}}666</a>
+				<a class="" style="font-size: 13px;color: #00CFBD;margin-left: 10px;" @click="checkEnc(file.url)">{{file.name}}</a>
 			</view>
 		</view>
 	</view>
