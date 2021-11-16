@@ -109,12 +109,14 @@
             "enable" : true
         },
         "devServer" : {
-            "https" : false
+            "https" : true,
+            "key" : "G:\\HBuilderWorkSpace\\appSchSkinUni\\https\\windows\\localhost+3-key.pem",
+            "cert" : "G:\\HBuilderWorkSpace\\appSchSkinUni\\https\\windows\\localhost+3.pem"
         },
         "domain" : "http://jbsch-pb.zhuxue101.net",
         "title" : "大学校园",
         "router" : {
-            "base" : "/formal/jsyWechatUnv/-1/202107221519/"
+            "base" : "/formal/jsyWechatUnv/-1/202111161656/"
         },
         "sdkConfigs" : {
             "maps" : {}

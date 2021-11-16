@@ -7,7 +7,7 @@ import moment from 'moment'
 Vue.use(uView);
 //配置项开始
 const GLOBALDATA = {};//参数对象 用于存全局公共参数
-const EnvKey = 3; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
+const EnvKey = 4; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
 switch (EnvKey) {
 	case 1:
 		GLOBALDATA.EnvKey = EnvKey ;
@@ -51,13 +51,13 @@ switch (EnvKey) {
 		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
 		GLOBALDATA.UNITCODE ='-1' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
-		GLOBALDATA.INTERFACE_SSO_SKIN = 'http://nwifapp.jiaobaowang.net/ssotoskin/api/skin/'; //单点登录,供PC外皮及APP用户登录,管理  单点对人事及登录皮肤接口
-		GLOBALDATA.INTERFACE_SSO_HR = 'http://nwifapp.jiaobaowang.net/ssotohr/api/hr/'; //单点登录,供人事系统使用                  单点对人事及登录皮肤接口
-		GLOBALDATA.INTERFACE_SUP_HR = 'http://nwifapp.jiaobaowang.net/suptohr/api/hr/'; //单点登录,供人事系统使用                  单点对人事及登录皮肤接口
-		GLOBALDATA.INTERFACE_SSO_SUB = 'http://nwifapp.jiaobaowang.net/ssotosub/api/sub/'; //单点登录,供各子系统用 			     单点对子系统接口
-		GLOBALDATA.INTERFACE_HR_SUB = 'http://nwifapp.jiaobaowang.net/hrunvtosub/api/sub/'; //人事接口,供子系统用 				     人事对子系统接口
-		GLOBALDATA.INTERFACE_HR_SKIN = 'http://nwifapp.jiaobaowang.net/hrunvtosup/api/skin/'; //人事接口,供APP或PC注册及外皮用        人事对单点及登录皮肤接口
-		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='http://nwifapp.jiaobaowang.net/unvedusubapi/api/';//继续教育接口文档 供展示前台
+		GLOBALDATA.INTERFACE_SSO_SKIN = 'https://test.108800.com/ssotoskin/api/skin/'; //单点登录,供PC外皮及APP用户登录,管理  单点对人事及登录皮肤接口
+		GLOBALDATA.INTERFACE_SSO_HR = 'https://test.108800.com/ssotohr/api/hr/'; //单点登录,供人事系统使用                  单点对人事及登录皮肤接口
+		GLOBALDATA.INTERFACE_SUP_HR = 'https://test.108800.com/suptohr/api/hr/'; //单点登录,供人事系统使用                  单点对人事及登录皮肤接口
+		GLOBALDATA.INTERFACE_SSO_SUB = 'https://test.108800.com/ssotosub/api/sub/'; //单点登录,供各子系统用 			     单点对子系统接口
+		GLOBALDATA.INTERFACE_HR_SUB = 'https://test.108800.com/hrunvtosub/api/sub/'; //人事接口,供子系统用 				     人事对子系统接口
+		GLOBALDATA.INTERFACE_HR_SKIN = 'https://test.108800.com/hrunvtosup/api/skin/'; //人事接口,供APP或PC注册及外皮用        人事对单点及登录皮肤接口
+		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='https://test.108800.com/unvedusubapi/api/';//继续教育接口文档 供展示前台
 		
 		GLOBALDATA.QN_APPID =16;//七牛appid
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
@@ -94,11 +94,11 @@ Vue.prototype.PRIVACE='http://www.jiaobao.net/dl/jiaobaoxiaoyuan/jbdxyPrivacy.ht
 Vue.prototype.QN_PV_NAME ='jbsch-pv';//七牛私有空间名
 Vue.prototype.QN_PB_NAME ='jbsch-pb';//七牛公有空间名
 Vue.prototype.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
-Vue.prototype.QNGETUPLOADTOKEN = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen';
-Vue.prototype.QNGETUPTOKENHEADIMGE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传个人头像，群头像，资料头像到七牛的token的url
-Vue.prototype.QNGETUPTOKENFILE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传文件（云存储）到七牛的token的url
-Vue.prototype.QNGETDOWNTOKENFILE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetAccess'; //获取下载文件（云存储）的token的url，url+七牛文件url
-Vue.prototype.QNGETTOKENDELETE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
+Vue.prototype.QNGETUPLOADTOKEN = 'https://sso.108800.com:8443/qiniuapi/Api/QiNiu/GetUpLoadToKen';
+Vue.prototype.QNGETUPTOKENHEADIMGE = 'https://sso.108800.com:8443/qiniuapi/Api/QiNiu/GetUpLoadToKen'; //获取上传个人头像，群头像，资料头像到七牛的token的url
+Vue.prototype.QNGETUPTOKENFILE = 'https://sso.108800.com:8443/qiniuapi/Api/QiNiu/GetUpLoadToKen'; //获取上传文件（云存储）到七牛的token的url
+Vue.prototype.QNGETDOWNTOKENFILE = 'https://sso.108800.com:8443/qiniuapi/Api/QiNiu/GetAccess'; //获取下载文件（云存储）的token的url，url+七牛文件url
+Vue.prototype.QNGETTOKENDELETE = 'https://sso.108800.com:8443/qiniuapi/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
 Vue.prototype.QN_HEADIMG = "headImg/"; //头像
 
 Vue.prototype.PWD_ENCRYPTION ='#@_JFnice_@#';//修改密码时，加密密钥
