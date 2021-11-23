@@ -7,7 +7,7 @@
 		</view>
 		<view :key="index" v-for="(curr_question,index) in question_list">
 			<template v-if="curr_question.is_que">
-				<uni-card-practice style="margin-top: 10px;" :title="`${curr_question.qusetion_num}.${curr_question.title}`" :isFull="true">
+				<uni-card-practice style="margin-top: 10px;word-break: break-all;" :title="`${curr_question.qusetion_num}.${curr_question.title}`" :isFull="true">
 					<template v-if="curr_question.type=='2'"><!-- 多选 -->
 						<checkbox-group @change="checkboxChange($event,curr_question)">
 							<label class="uni-list-cell uni-list-cell-pd" v-for="item in curr_question.optionObjs" :key="item.value">

@@ -33,13 +33,13 @@ switch (EnvKey) {
 		GLOBALDATA.APPCODE ='schappWxUni#';//应用系统代码
 		GLOBALDATA.UNITCODE ='-1' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
-		GLOBALDATA.INTERFACE_SSO_SKIN ='http://nwifapp.jiaobaowang.net/ssotoskin/api/skin/';//单点登录,供PC外皮及APP用户登录,管理
-		GLOBALDATA.INTERFACE_SSO_HR ='http://nwifapp.jiaobaowang.net/ssotohr/api/hr/';//单点登录,供人事系统使用
-		GLOBALDATA.INTERFACE_SUP_HR ='http://nwifapp.jiaobaowang.net/suptohr/api/hr/';//单点对人事及登录皮肤接口
-		GLOBALDATA.INTERFACE_SSO_SUB ='http://nwifapp.jiaobaowang.net/ssotosub/api/sub/';//单点登录,供各子系统用
-		GLOBALDATA.INTERFACE_HR_SUB ='http://nwifapp.jiaobaowang.net/testhrunvtosub/api/sub/';//人事接口,供子系统用
-		GLOBALDATA.INTERFACE_HR_SKIN ='http://nwifapp.jiaobaowang.net/testhrunvtosup/api/skin/';//人事接口,供APP或PC注册及外皮用
-		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='http://139.129.252.49:8180/unvedusubapi/api/';//继续教育接口文档 供展示前台
+		GLOBALDATA.INTERFACE_SSO_SKIN ='https://test.108800.com/ssotoskin/api/skin/';//单点登录,供PC外皮及APP用户登录,管理
+		GLOBALDATA.INTERFACE_SSO_HR ='https://test.108800.com/ssotohr/api/hr/';//单点登录,供人事系统使用
+		GLOBALDATA.INTERFACE_SUP_HR ='https://test.108800.com/suptohr/api/hr/';//单点对人事及登录皮肤接口
+		GLOBALDATA.INTERFACE_SSO_SUB ='https://test.108800.com/ssotosub/api/sub/';//单点登录,供各子系统用
+		GLOBALDATA.INTERFACE_HR_SUB ='https://test.108800.com/testhrunvtosub/api/sub/';//人事接口,供子系统用
+		GLOBALDATA.INTERFACE_HR_SKIN ='https://test.108800.com/testhrunvtosup/api/skin/';//人事接口,供APP或PC注册及外皮用
+		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='https://developgx.108800.com:8443/unvedusubapi/api/';//继续教育接口文档 供展示前台
 		
 		
 		GLOBALDATA.QN_APPID =16;//七牛appid

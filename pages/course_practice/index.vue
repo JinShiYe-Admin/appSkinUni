@@ -23,9 +23,9 @@
 						<uni-col :span="20"><uni-title class="h4" type="h4" :title="item.test_name" style="word-break: break-all;"></uni-title></uni-col>
 					</uni-row>
 					<uni-row style="margin-top: 5px;">
-						<uni-col :span="10" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><text style="font-size: 22rpx;">学期: {{item.grd_name}}{{item.term_name}}</text></uni-col>
-						<uni-col :span="10"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><text style="font-size: 22rpx;">课程: {{item.sub_name}}</text></uni-col>
-						<uni-col :span="4"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;text-align: right;"><text style="font-size: 22rpx;">满分: {{parseInt(item.score)}}</text></uni-col>
+						<uni-col :span="9" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><text style="font-size: 22rpx;">学期: {{item.grd_name}}{{item.term_name}}</text></uni-col>
+						<uni-col :span="9"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;text-align: center;"><text style="font-size: 22rpx;">课程: {{item.sub_name}}</text></uni-col>
+						<uni-col :span="6"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;text-align: right;"><text style="font-size: 22rpx;">满分: {{parseInt(item.score)}}</text></uni-col>
 					</uni-row>
 					<uni-row> 
 						<uni-col :span="24">
