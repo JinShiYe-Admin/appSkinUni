@@ -34,8 +34,8 @@
 					</uni-row>
 					<uni-row style="margin-top: 10px;">
 						<uni-col :span="24" style="text-align: right;">
-							 <button v-if="item.stu_test_status!=1" class="mini-btn" type="default" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;"  @click="clickLook(item)">查看</button>
-							 <button v-if="item.stu_test_status!=3" class="mini-btn" type="primary" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;background-color: #00CFBD;"  @click="clickTest(item)">答题</button>
+							 <button v-if="item.stu_test_status==3" class="mini-btn" type="default" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;"  @click="clickLook(item)">查看</button>
+							 <button v-if="item.stu_test_status==1 || item.stu_test_status==2" class="mini-btn" type="primary" size="mini" style="margin-left: 5px;font-size: 12px;padding: 0 1em;background-color: #00CFBD;"  @click="clickTest(item)">答题</button>
 						</uni-col>
 					</uni-row>
 				</uni-card>
