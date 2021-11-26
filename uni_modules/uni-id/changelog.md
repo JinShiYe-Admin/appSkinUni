@@ -1,3 +1,36 @@
+## 3.3.9（2021-11-09）
+- 去除重复的context.xxx未找到的提示语
+## 3.3.8（2021-10-28）
+- 新增 用户账户封禁接口 [详情](https://uniapp.dcloud.net.cn/uniCloud/uni-id?id=ban-account)
+- 新增 用户账户注销接口 [详情](https://uniapp.dcloud.net.cn/uniCloud/uni-id?id=close-account)
+- 修复 未传appid时用户重复注册的Bug
+## 3.3.7（2021-10-08）
+- 移除部分接口的废弃提示
+## 3.3.6（2021-09-08）
+- 修复 邀请码可能重复的Bug
+## 3.3.5（2021-08-10）
+- 修复版本号错误
+## 3.3.4（2021-08-10）
+- 微信、QQ、支付宝登录新增type参数用于指定当前是登录还是注册
+## 3.3.3（2021-08-04）
+- 修复使用数组形式的配置文件报错的Bug
+## 3.3.2（2021-08-03）
+- 修复上3.3.0版本引出的createInstance接口传入配置不生效的Bug 感谢[hmh](https://gitee.com/hmh)
+## 3.3.1（2021-07-30）
+- 修复 将设置用户允许登录的应用列表时传入空数组报错的Bug
+## 3.3.0（2021-07-30）
+- 新增 不同端应用配置隔离 [详情](https://uniapp.dcloud.net.cn/uniCloud/uni-id?id=isolate-config)
+- 新增 不同端用户隔离 [详情](https://uniapp.dcloud.net.cn/uniCloud/uni-id?id=isolate-user)
+  + 此版本升级需要开发者处理一下用户数据，请参考 [补齐用户dcloud_appid字段](https://uniapp.dcloud.net.cn/uniCloud/uni-id?id=makeup-dcloud-appid)
+- 新增 QQ登录、注册相关功能 [详情](https://uniapp.dcloud.net.cn/uniCloud/uni-id?id=qq)
+- 调整 不再支持绑定手机、邮箱时不填验证码直接绑定
+## 3.2.1（2021-07-09）
+- 撤销3.2.0版本所做的调整
+## 3.2.0（2021-07-09）
+- 【重要】支持不同端（管理端、用户端等）用户隔离 [详情](https://uniapp.dcloud.net.cn/uniCloud/uni-id?id=isolate-user)
+- 支持不同端（管理端、用户端等）配置文件隔离 [详情](https://uniapp.dcloud.net.cn/uniCloud/uni-id?id=isolate-config)
+## 3.1.3（2021-07-08）
+- 移除插件内误传的node_modules
 ## 3.1.2（2021-07-08）
 - 修复 微信小程序绑定微信账号时报错的Bug
 ## 3.1.1（2021-07-01）

@@ -299,12 +299,6 @@
 								uni.hideLoading()
 								this.restart();
 							}, 1000)
-						} else {
-							uni.showLoading({
-								icon: 'none',
-								title: '安装成功，重启应用体验新版',
-								duration: 1000
-							})
 						}
 					} else {
 						const localFilePathRecord = uni.getStorageSync(localFilePathKey)
