@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uniNavBar title='登录' backgroundColor='#00CFBD' fixed='true' statusBar='true' color='white' @clickLeft='clickLeft()'></uniNavBar>
+		<uniNavBar title='登录' backgroundColor='#00CFBD' fixed='true' statusBar='true' color='white' ></uniNavBar>
 		
 		<view v-if="showInput == 1">
 			<view class="titletal">
@@ -42,6 +42,13 @@
 			</view>
 			<view class="loginBtnView"><button class="loginBtn" @click="sure()">确定</button></view>
 		</view>
+		<uni-popup ref="alertDialog" type="dialog">
+			<uni-popup-dialog type="warn" title="用户须知" content="确定要通过此条请假记录吗" closeText='不同意' confirmText="同意" @confirm="dialogConfirm" :before-close="true" @close="dialogClose">
+				<view solt="designTxt">
+					<div class='yonghuxieyi'>依据最新的法律要求，我们更新了《<a @click="toPrivace" id='yonghuAA' style='text-decoration: underline;'>用户隐私政策</a>》，请您务必审慎阅读，充分理解相关条款内容，特别是字体加粗标识的重要条款</div><div class='yonghuxieyi'>点击同意即代表您已阅读并同意《用户隐私政策》，如果您不同意用户协议和隐私政策的内容，我们暂时无法为您提供服务</div><div class='yonghuxieyi'>我们会尽力保护您的个人信息安全</div>
+				</view>
+			</uni-popup-dialog>
+		</uni-popup>
 	</view>
 </template>
 
@@ -127,6 +134,10 @@
 			uniNavBar
 		},
 		methods: {
+			toPrivace(){
+				console.log(123);
+				util.openwithData('/pages/more/privace');
+			},
 			sure:function(){
 				if(this.pagePswd == 'jsy@123654'){
 					this.showInput = 1;
@@ -140,25 +151,43 @@
 					this.showToast('请输入正确的密码');
 				}
 			},
-			clickLeft:function(){
-				console.log('clickLeft');
+			dialogConfirm(e){ //e->false取消 true确认
+				uni.setStorageSync('yinsi',1);
+				this.tongyiYinsi();
+				this.$refs.alertDialog.close()
+			},
+			dialogClose(){
+				console.log('lalal');
+				this.showToast('由于您没有同意教宝校园《用户隐私政策》的相关内容，我们暂时无法为您提供服务。请谅解！');
 			},
 			zhuce: function() {
 				util.openwithData('/pages/register/index');
 			},
-			toPage: function() {
-				if (this.jsonData.length === 0) {
-					this.showToast('请先登录');
-				} else {
-					util.openwithData('./detail', this.jsonData, {
-						test1: function(data) {
-							console.log(data);
-						},
-						test2: function(data) {
-							console.log(data);
+			tongyiYinsi(){
+				if(this.globaData.EnvKey == 5){
+					this.showInput = 1;
+					var tempInfo = util.getPersonal();
+					if (tempInfo.userName0) {
+						this.uname = tempInfo.userName0;
+						this.passw = tempInfo.passWord0;
+						this.login();
+					}
+				}else{
+					if (this.APPORWECHAT == 1) {
+						this.showInput = 1;
+						var tempInfo = util.getPersonal();
+						if (tempInfo.userName0) {
+							this.uname = tempInfo.userName0;
+							this.passw = tempInfo.passWord0;
+							this.login();
 						}
-					})
+					} else{
+						this.showInput = 2;
+					}
 				}
+				console.log('this.showInput:'+this.showInput);
+				console.log('同意隐私');
+				
 			},
 			login: function() {
 				console.log('login');
@@ -261,11 +290,12 @@
 				delete tempData['user'];
 				console.log('new tempData:' + JSON.stringify(tempData));
 				util.setPersonal(tempData)
-				if ('111111a' == '123456') {
+				if (this.passw == '123456') {
+					this.showToast('初始密码不安全，请修改后再登录')
 					var tempModel = {
 						flag: 1 //0是主动修改密码，1是判断是默认密码，自动让修改
 					}
-					// util.mOpenWithData("../../html/mine/modifyPassword.html", tempModel);
+					util.openwithData('/pages/more/modifyPswd',tempModel);
 				} else {
 					if (tempData.user_code == '0') { //无权限
 						// util.hrefSessionStorage('../../html/login/index2.html', {});
@@ -354,38 +384,28 @@
 			}
 		},
 		onLoad: function() {
-			// var tempInfo = util.getPersonal();
-			// if (tempInfo.userName0) {
-			// 	this.uname = tempInfo.userName0;
-			// 	this.passw = tempInfo.passWord0;
-			// 	this.login();
-			// }
 			//#ifdef APP-PLUS
 				update();
+				// 判断是否同意隐私政策
+				let yinsiShow = uni.getStorageSync('yinsi');
+				console.log('yinsiShow:'+yinsiShow);
+				if(yinsiShow==1){
+					this.tongyiYinsi();
+				}else{
+					let that=this
+					setTimeout(()=>{that.$refs.alertDialog.open()},300)
+				}
 			//#endif
-			if(this.globaData.EnvKey == 5){
-				this.showInput = 1;
-				var tempInfo = util.getPersonal();
-				if (tempInfo.userName0) {
-					this.uname = tempInfo.userName0;
-					this.passw = tempInfo.passWord0;
-					this.login();
-				}
-			}else{
-				if (this.APPORWECHAT == 1) {
-					this.showInput = 1;
-					var tempInfo = util.getPersonal();
-					if (tempInfo.userName0) {
-						this.uname = tempInfo.userName0;
-						this.passw = tempInfo.passWord0;
-						this.login();
-					}
-				} else{
-					this.showInput = 2;
-				}
-			}
-			console.log('this.showInput:'+this.showInput);
-		}
+			//#ifdef H5
+				document.title=""
+				this.tongyiYinsi();
+			//#endif
+		},
+		onShow(){ 
+			//#ifndef APP-PLUS
+				document.title=""
+			//#endif
+		},
 	}
 </script>
 
@@ -514,5 +534,12 @@
 		margin-top: 50px;
 		background-color: #00CFBD;
 		color: aliceblue;
+	}
+	.yonghuxieyi{
+		margin-top: 10px;
+		font-size: 14px;
+		color: gray;
+		text-align: left;
+		text-indent: 1.5em;
 	}
 </style>

@@ -100,6 +100,9 @@
 		},
 		onLoad:function(){
 			_this = this;
+					//#ifndef APP-PLUS
+						document.title=""
+					//#endif
 			// 添加监听，如果修改了头像，将左上角和个人中心的也对应修改
 			uni.$on('updateHeadImg', function(data) {
 				_this.$refs.mynavBar.upLoadImg();
@@ -113,6 +116,11 @@
 				this.showLoading();
 				this.getTabList();
 			},350)
+		},
+		onShow(){
+				//#ifndef APP-PLUS
+					document.title=""
+				//#endif
 		},
  		onPullDownRefresh() {
 			this.showLoading()

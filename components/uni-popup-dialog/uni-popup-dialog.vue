@@ -4,6 +4,7 @@
 			<text class="uni-dialog-title-text" :class="['uni-popup__'+dialogType]">{{title}}</text>
 		</view>
 		<view v-if="mode === 'base'" class="uni-dialog-content">
+			<slot name='designTxt'></slot>
 			<slot>
 				<text class="uni-dialog-content-text">{{content}}</text>
 			</slot>
@@ -15,10 +16,10 @@
 		</view>
 		<view class="uni-dialog-button-group">
 			<view class="uni-dialog-button" @click="closeDialog">
-				<text class="uni-dialog-button-text">取消</text>
+				<text class="uni-dialog-button-text">{{closeText}}</text>
 			</view>
 			<view class="uni-dialog-button uni-border-left" @click="onOk">
-				<text class="uni-dialog-button-text uni-button-color">确定</text>
+				<text class="uni-dialog-button-text uni-button-color">{{confirmText}}</text>
 			</view>
 		</view>
 
@@ -78,7 +79,15 @@
 			beforeClose: {
 				type: Boolean,
 				default: false
-			}
+			},
+			closeText:{
+				type: String,
+				default: '取消'
+			},
+			confirmText:{
+				type: String,
+				default: '确定'
+			},
 		},
 		data() {
 			return {

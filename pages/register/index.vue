@@ -89,6 +89,17 @@
 			_this = this;
 			util.setPersonal({});
 			// this.getUserType();
+			//#ifndef H5
+				document.title=""
+			//#endif
+			uni.setNavigationBarTitle({
+				title: '注册'
+			});
+		},
+		onShow(){ 
+				//#ifndef APP-PLUS
+					document.title=""
+				//#endif
 		},
 		methods: {
 			clearInput: function() {

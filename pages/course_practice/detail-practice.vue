@@ -358,6 +358,11 @@
 				document.title=""
 			//#endif
 		},
+		onShow(){
+				//#ifndef APP-PLUS
+					document.title=""
+				//#endif
+		},
 		onUnload(){
 			if(JSON.stringify(this.answer_list)!=JSON.stringify(this.online_answer_list)){
 				this.setAnswers(this.answer_list)

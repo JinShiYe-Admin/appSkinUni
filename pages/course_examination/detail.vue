@@ -416,6 +416,11 @@
 				document.title=""
 			//#endif
 		},
+		onShow(){
+				//#ifndef APP-PLUS
+					document.title=""
+				//#endif
+		},
 		onUnload(){
 			this.clearInterval(this.interval)
 			console.log("this.answer_list: " + JSON.stringify(this.answer_list));

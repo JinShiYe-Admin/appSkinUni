@@ -57,7 +57,12 @@
 			this.tabbar = util.getMenu();
 			this.tabarMore = util.getMenuMore();
 			console.log('this.tabarMore:' + JSON.stringify(this.tabarMore));
-		}
+		},
+		onShow(){
+				//#ifndef APP-PLUS
+					document.title=""
+				//#endif
+		},
 	}
 </script>
 

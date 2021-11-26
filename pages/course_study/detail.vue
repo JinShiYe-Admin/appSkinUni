@@ -459,6 +459,11 @@
 				document.title=""
 			//#endif
 		},
+		onShow(){
+				//#ifndef APP-PLUS
+					document.title=""
+				//#endif
+		},
 		onReady: function(res) {
 		        // #ifndef MP-ALIPAY
 		        this.videoContext = uni.createVideoContext('myVideo')

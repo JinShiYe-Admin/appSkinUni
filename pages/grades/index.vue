@@ -144,6 +144,11 @@
 				this.getGradeList();
 			},350)
 		},
+		onShow(){
+				//#ifndef APP-PLUS
+					document.title=""
+				//#endif
+		},
 		onPullDownRefresh() {
 			this.showLoading()
 			this.getGradeList()

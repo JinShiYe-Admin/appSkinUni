@@ -34,6 +34,11 @@
 				document.title=""
 			//#endif
 		},
+		onShow(){
+				//#ifndef APP-PLUS
+					document.title=""
+				//#endif
+		},
 		methods: {
 			yinsi: function() {
 				util.openwithData('/pages/more/privace');

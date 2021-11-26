@@ -57,6 +57,11 @@
 				document.title=""
 			//#endif
 		},
+		onShow(){
+				//#ifndef APP-PLUS
+					document.title=""
+				//#endif
+		},
 		methods: {
 			submit: function() {
 				if (this.oldPassword == '') {
