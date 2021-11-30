@@ -7,7 +7,7 @@ import moment from 'moment'
 Vue.use(uView);
 //配置项开始
 const GLOBALDATA = {};//参数对象 用于存全局公共参数
-const EnvKey = 4; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
+const EnvKey = 5; //1:山东开发 2:广西开发 3:联测 4:云测 5:正式 6性能测试   
 switch (EnvKey) {
 	case 1:
 		GLOBALDATA.EnvKey = EnvKey ;
@@ -68,13 +68,13 @@ switch (EnvKey) {
 		GLOBALDATA.APPCODE ='schappWxUni#' ;//应用系统代码
 		GLOBALDATA.UNITCODE ='-1' ;//单位代码，如应用系统需限制本单位用户才允许登录，则传入单位代码，否则传“-1”
 		
-		GLOBALDATA.INTERFACE_SSO_SKIN = 'http://sso.108800.com:8080/ssotoskin/api/skin/'; // 单点对登录框接口
-		GLOBALDATA.INTERFACE_SSO_HR = 'http://sso.108800.com:8080/ssotohr/api/hr/'; // 单点对人事接口 (gu )
-		GLOBALDATA.INTERFACE_SUP_HR = 'http://sso.108800.com/suptohr/api/hr/'; //单点对人事及登录皮肤接口  (zeng)
-		GLOBALDATA.INTERFACE_SSO_SUB = 'http://sso.108800.com:8080/ssotosub/api/sub/'; // 单点对子系统接口
-		GLOBALDATA.INTERFACE_HR_SUB = 'http://apps.108800.com/hrunvtosub/api/sub/'; //人事接口,供子系统用 				     人事对子系统接口
-		GLOBALDATA.INTERFACE_HR_SKIN = 'http://apps.108800.com/hrunvtosup/api/skin/'; //人事接口,供APP或PC注册及外皮用        人事对单点及登录皮肤接口
-		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='http://unvapps.108800.com/unvedusubapi/api/';//继续教育接口文档 供展示前台
+		GLOBALDATA.INTERFACE_SSO_SKIN = 'https://sso.108800.com:8443/ssotoskin/api/skin/'; // 单点对登录框接口
+		GLOBALDATA.INTERFACE_SSO_HR = 'https://sso.108800.com:8443/ssotohr/api/hr/'; // 单点对人事接口 (gu )
+		GLOBALDATA.INTERFACE_SUP_HR = 'https://sso.108800.com/suptohr/api/hr/'; //单点对人事及登录皮肤接口  (zeng)
+		GLOBALDATA.INTERFACE_SSO_SUB = 'https://sso.108800.com:8443/ssotosub/api/sub/'; // 单点对子系统接口
+		GLOBALDATA.INTERFACE_HR_SUB = 'https://unvapps.108800.com/hrunvtosub/api/sub/'; //人事接口,供子系统用 				     人事对子系统接口
+		GLOBALDATA.INTERFACE_HR_SKIN = 'https://unvapps.108800.com/hrunvtosup/api/skin/'; //人事接口,供APP或PC注册及外皮用        人事对单点及登录皮肤接口
+		GLOBALDATA.INTERFACE_UNVEDUSUBAPI ='https://unvapps.108800.com/unvedusubapi/api/';//继续教育接口文档 供展示前台
 		
 		GLOBALDATA.QN_APPID =17;//七牛appid
 		GLOBALDATA.QN_APPKEY ='oafor1010'; //七牛appkey
@@ -89,7 +89,7 @@ switch (EnvKey) {
 		GLOBALDATA.QN_APPKEY ='oatest1010'; //七牛appkey
 		break;
 }
-Vue.prototype.APPORWECHAT =1;//app为1，微信里面是2
+Vue.prototype.APPORWECHAT =2;//app为1，微信里面是2
 Vue.prototype.PRIVACE = 'https://jbsch-pb.zhuxue101.net/formal/privacy/jbxyPrivacy.html'; //用户隐私政策地址
 Vue.prototype.QN_PV_NAME ='jbsch-pv';//七牛私有空间名
 Vue.prototype.QN_PB_NAME ='jbsch-pb';//七牛公有空间名

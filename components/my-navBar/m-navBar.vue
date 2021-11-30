@@ -11,12 +11,12 @@
 				<view style="text-align: center;margin-top: 10px;">{{personInfo.user_name}}</view>
 				<view style="height: 15px;background-color: #DCDFE6;margin-top: 30px;"></view>
 				<uni-list>
-					<uni-list-item @click="gotoMyData()" title="我的资料" link to=''></uni-list-item>
-					<uni-list-item @click="gotoGrades()" title="学习成绩" link to=''></uni-list-item>
-					<uni-list-item @click="gotoModifyPswd()" title="修改密码" link to=''></uni-list-item>
-					<uni-list-item @click="zhuxiao()" title="注销账号" link to=''></uni-list-item>
-					<uni-list-item @click="yinsi()" title="用户隐私政策" link to=''></uni-list-item>
-					<uni-list-item @click="about()" title="关于" link to=''></uni-list-item>
+					<uni-list-item @click="gotoMyData()" title="我的资料" link to='' style="height: 45px;align-items: center;"></uni-list-item>
+					<uni-list-item @click="gotoGrades()" title="学习成绩" link to='' style="height: 45px;align-items: center;"></uni-list-item>
+					<uni-list-item @click="gotoModifyPswd()" title="修改密码" link to='' style="height: 45px;align-items: center;"></uni-list-item>
+					<uni-list-item @click="zhuxiao()" title="注销账号" link to='' style="height: 45px;align-items: center;"></uni-list-item>
+					<uni-list-item @click="yinsi()" title="用户隐私政策" link to='' style="height: 45px;align-items: center;"></uni-list-item>
+					<uni-list-item @click="about()" title="关于大学校园" link to='' style="height: 45px;align-items: center;"></uni-list-item>
 				</uni-list>
 				<view class="uni-padding-wrap uni-common-mt">
 					<button @click="tuichu()" type="warn">退出登录</button>
