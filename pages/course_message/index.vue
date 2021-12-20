@@ -10,6 +10,7 @@
 				<uni-card-message title="通知公告"  :note="pagedata0.notice.create_time?pagedata0.notice.create_time:''" isShadow @click="clickCard(pagedata0.notice,0)"><text class="content-box-text">{{pagedata0.notice.name?pagedata0.notice.name:'暂无内容'}} <text v-show="pagedata0.notice.name" class="detail-c" >详情</text></text></uni-card-message>
 				<uni-card-message title="考试"     :note="pagedata0.exam.create_time?pagedata0.exam.create_time:''"  isShadow><text class="content-box-text">{{pagedata0.exam.name?`【${pagedata0.exam.name}】 已经布置，请及时完成`:'暂无内容'}}</text></uni-card-message>
 				<uni-card-message title="作业"     :note="pagedata0.work.create_time?pagedata0.work.create_time:''"  isShadow><text class="content-box-text">{{pagedata0.work.name?`【${pagedata0.work.name}】 已经布置，请及时完成`:'暂无内容'}}</text></uni-card-message>
+				<uni-card-message title="补考" v-if="pagedata0.supexam&&pagedata0.supexam.type"    :note="pagedata0.supexam.create_time?pagedata0.supexam.create_time:''"  isShadow><text class="content-box-text">{{pagedata0.supexam.name?`【${pagedata0.supexam.name}】 已经布置，请及时完成`:'暂无内容'}}</text></uni-card-message>
 			</view>
 			<view v-if="current === 1">
 				<uni-easyinput suffixIcon="search" style="padding:10px 15px 2px;width: auto;" v-model="pageobj1.keyword" placeholder='请输入 "标题" 关键字' @iconClick="iconClick"></uni-easyinput>

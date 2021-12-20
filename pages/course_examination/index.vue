@@ -18,7 +18,9 @@
 								<uni-tag v-else-if="item.test_status==3" text="已评" size="small" type="primary" class="tag-right"/>
 								<uni-tag v-else-if="item.test_status==4 || item.test_status==5" text="考试结束" size="small" type="primary" class="tag-right"/>
 								
-								<view ><text class="text">{{ item.test_name }}</text></view>
+								<view >
+									<text class="leaveType" v-if="item.mode=='3'">补考</text>
+									<text class="text">{{ item.test_name }}</text></view> <!--1考试 2作业 3 补考-->
 								<view style="margin-top: 10px;color: #4f4f4f;"><text class="text-mini">满分：{{parseInt(item.score)}} 分</text></view>
 								<view style="margin-top: 5px; color: #4f4f4f;"><text class="text-mini">学期：{{item.grd_name}}{{item.term_name}}</text></view>
 								<view style="margin-top: 5px; color: #4f4f4f;"><text class="text-mini">时间：{{item.start_time.substring(0, 16)}} - {{item.end_time.substring(0, 16)}}</text></view>
@@ -209,4 +211,15 @@
 		  margin-top: -15px;
 		  /* #endif */
 	 }
+	 
+	.leaveType {
+			 font-size:12px ;
+		width: auto;
+		background-color: #fd7f2a;
+		color: #FFFFFF;
+		padding:0px 3px;
+		border-radius: 4px;
+			margin-right: 3px;
+		border: 1px solid #fd7f2a;
+	}
 </style>
