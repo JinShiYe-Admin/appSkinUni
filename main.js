@@ -107,10 +107,15 @@ Vue.prototype.SECRETKEY ='jsy309';//sign签名时需要的盐
 
 //以下内容不需要修改
 Vue.prototype.globaData=GLOBALDATA; //参数对象 用于存全局公共参数
-Vue.prototype.requestTask=new Map();//用于储存页面请求栈
+Vue.prototype.requestTask=[];//用于储存页面请求栈
 Vue.prototype.showLoading=(requestTitle='加载中...')=>uni.showLoading({title:String(requestTitle),mask:true})//显示加载框
-Vue.prototype.hideLoading=()=>{setTimeout(()=>{if(Vue.prototype.requestTask.size===0){uni.hideLoading()}},100)}//关闭加载框
-
+// Vue.prototype.hideLoading=()=>{setTimeout(()=>{if(Vue.prototype.requestTask.size===0){uni.hideLoading()}},100)}//关闭加载框
+Vue.prototype.hideLoading = () => {
+	setTimeout(() => {
+		if (Vue.prototype.requestTask.length === 0) {uni.hideLoading()}
+		setTimeout(() => {uni.hideLoading()}, 15000)
+	}, 100)
+} //关闭加载框
  //#ifdef H5
  if (process.env.NODE_ENV === 'development') {//如果是H5的开发环境，自动加载vconsole
     const vconsole = require('vconsole')
