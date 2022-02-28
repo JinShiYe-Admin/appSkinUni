@@ -63,7 +63,7 @@ exports.main = async (event, context) => {
 	}
 
 	//禁止前台用户传递角色
-	if (action.slice(0,7) == "loginBy") {
+	if (action.slice(0, 7) == "loginBy") {
 		if (params.role) {
 			return {
 				code: 403,
@@ -72,31 +72,23 @@ exports.main = async (event, context) => {
 		}
 	}
 
-	//3.注册成功后创建新用户的积分表方法
+	// 3.注册成功后触发。
 	async function registerSuccess(uid) {
 		//用户接受邀请
-		if(inviteCode){
-			await uniID.acceptInvite({inviteCode,uid});
+		if (inviteCode) {
+			await uniID.acceptInvite({
+				inviteCode,
+				uid
+			});
 		}
 		//添加当前用户设备信息
 		await db.collection('uni-id-device').add({
 			...deviceInfo,
 			user_id: uid
 		})
-		await db.collection('uni-id-scores').add({
-			user_id: uid,
-			score: 1,
-			type: 1,
-			balance: 1,
-			comment: "",
-			create_date: Date.now()
-		})
 	}
 	//4.记录成功登录的日志方法
 	const loginLog = async (res = {}) => {
-		if(res.code != 0){
-			return false
-		}
 		const now = Date.now()
 		const uniIdLogCollection = db.collection('uni-id-log')
 		let logData = {
@@ -107,29 +99,70 @@ exports.main = async (event, context) => {
 			create_date: now
 		};
 
-		Object.assign(logData,
-			res.code === 0 ? {
-				user_id: res.uid,
-				state: 1
-			} : {
-				state: 0
-			})
-		if (res.type == 'register') {
-			await registerSuccess(res.uid)
-		} else {
-			if (Object.keys(deviceInfo).length) {
-				console.log(979797,{deviceInfo,user_id: res});
-				//更新当前用户设备信息
-				await db.collection('uni-id-device').where({
-					user_id: res.uid
-				}).update(deviceInfo)
+		if(res.code === 0){
+			logData.user_id = res.uid
+			logData.state = 1
+			if(res.userInfo&&res.userInfo.password){
+				delete res.userInfo.password
 			}
+			if (res.type == 'register') {
+				await registerSuccess(res.uid)
+			} else {
+				if (Object.keys(deviceInfo).length) {
+					// console.log(979797, {
+					// 	deviceInfo,
+					// 	user_id: res
+					// });
+					//更新当前用户设备信息
+					await db.collection('uni-id-device').where({
+						user_id: res.uid
+					}).update(deviceInfo)
+				}
+			}
+		}else{
+			logData.state = 0
 		}
 		return await uniIdLogCollection.add(logData)
 	}
 
 	let res = {}
 	switch (action) { //根据action的值执行对应的操作
+		case 'refreshSessionKey':
+			let getSessionKey = await uniID.code2SessionWeixin({code:params.code});
+			if(getSessionKey.code){
+				return getSessionKey
+			}
+			res =  await uniID.updateUser({
+				uid: params.uid,
+				sessionKey:getSessionKey.sessionKey
+			})
+			console.log(res);
+			break;
+		case 'bindMobileByMpWeixin':
+			console.log(params);
+			let getSessionKeyRes = await uniID.getUserInfo({
+				uid: params.uid,
+				field: ['sessionKey']
+			})
+			if(getSessionKeyRes.code){
+				return getSessionKeyRes
+			}
+			let sessionKey = getSessionKeyRes.userInfo.sessionKey
+			console.log(getSessionKeyRes);
+			res = await uniID.wxBizDataCrypt({
+				...params,
+				sessionKey
+			})
+			console.log(res);
+			if(res.code){
+				return res
+			}
+			res = await uniID.bindMobile({
+				uid: params.uid,
+				mobile: res.purePhoneNumber
+			})
+			console.log(res);
+			break;
 		case 'bindMobileByUniverify':
 			let {
 				appid, apiKey, apiSecret
@@ -164,7 +197,9 @@ exports.main = async (event, context) => {
 			// console.log(res);
 			break;
 		case 'register':
-			var {username, password, nickname} = params
+			var {
+				username, password, nickname
+			} = params
 			if (/^1\d{10}$/.test(username)) {
 				return {
 					code: 401,
@@ -177,7 +212,12 @@ exports.main = async (event, context) => {
 					msg: '用户名不能是邮箱'
 				}
 			}
-			res = await uniID.register({username, password, nickname,inviteCode});
+			res = await uniID.register({
+				username,
+				password,
+				nickname,
+				inviteCode
+			});
 			if (res.code === 0) {
 				await registerSuccess(res.uid)
 			}
@@ -217,6 +257,7 @@ exports.main = async (event, context) => {
 					...params,
 					queryField: ['username', 'email', 'mobile']
 				});
+				res.type = 'login'
 				await loginLog(res);
 				needCaptcha = await getNeedCaptcha();
 			}
@@ -224,13 +265,60 @@ exports.main = async (event, context) => {
 			res.needCaptcha = needCaptcha;
 			break;
 		case 'loginByWeixin':
-			res = await uniID.loginByWeixin(params);
-			await uniID.updateUser({
-				uid: res.uid,
-				username: "微信用户"
-			});
-			res.userInfo.username = "微信用户"
-			await loginLog(res)
+			let loginRes = await uniID.loginByWeixin(params);
+			if(loginRes.code===0){
+				//用户完善资料（昵称、头像）
+				if(context.PLATFORM == "app-plus" && !loginRes.userInfo.nickname){
+					let {accessToken:access_token,openid} = loginRes,
+						{appid,appsecret:secret} = uniIdConfig['app-plus'].oauth.weixin;
+					let wxRes = await uniCloud.httpclient.request(
+						`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&scope=snsapi_userinfo&appid=${appid}&secret=${secret}`, {
+							method: 'POST',
+							contentType: 'json', // 指定以application/json发送data内的数据
+							dataType: 'json' // 指定返回值为json格式，自动进行parse
+						})
+					if(wxRes.status == 200){
+						let {nickname,headimgurl} = wxRes.data;
+						let headimgurlFile = {},cloudPath = loginRes.uid+'/'+Date.now()+"headimgurl.jpg";
+						let getImgBuffer = await uniCloud.httpclient.request(headimgurl)
+						if(getImgBuffer.status == 200){
+							let {fileID} = await uniCloud.uploadFile({
+							    cloudPath,
+							    fileContent: getImgBuffer.data
+							});
+							headimgurlFile = {
+								name:cloudPath,
+								extname:"jpg",
+								url:fileID
+							}
+						}else{
+							return getImgBuffer
+						}
+						await uniID.updateUser({
+							uid: loginRes.uid,
+							nickname,
+							avatar_file:headimgurlFile
+						})
+						loginRes.userInfo.nickname = nickname;
+						loginRes.userInfo.avatar_file = headimgurlFile;
+					}else{
+						return wxRes
+					}
+				}
+				if(context.PLATFORM == "mp-weixin"){
+					let resUpdateUser =  await uniID.updateUser({
+						uid: loginRes.uid,
+						sessionKey:loginRes.sessionKey
+					})
+					console.log(resUpdateUser);
+				}
+				delete loginRes.openid
+				delete loginRes.sessionKey
+				delete loginRes.accessToken
+				delete loginRes.refreshToken
+			}
+			await loginLog(loginRes)
+			return loginRes
 			break;
 		case 'loginByUniverify':
 			res = await uniID.loginByUniverify(params)
@@ -248,11 +336,11 @@ exports.main = async (event, context) => {
 			break;
 		case 'sendSmsCode':
 			/* -开始- 测试期间，为节约资源。统一虚拟短信验证码为： 123456；开启以下代码块即可  */
-				// return uniID.setVerifyCode({
-				// 	mobile: params.mobile,
-				// 	code: '123456',
-				// 	type: params.type
-				// })
+			return uniID.setVerifyCode({
+				mobile: params.mobile,
+				code: '123456',
+				type: params.type
+			})
 			/* -结束- */
 
 			// 简单限制一下客户端调用频率
@@ -357,10 +445,11 @@ exports.main = async (event, context) => {
 			}
 			break;
 
-			// -----------  admin api  -----------
-		case 'registerAdmin':
+			// =========================== admin api start =========================
+		case 'registerAdmin': {
 			var {
-				username, password
+				username,
+				password
 			} = params
 			let {
 				total
@@ -373,45 +462,118 @@ exports.main = async (event, context) => {
 					message: '超级管理员已存在，请登录...'
 				}
 			}
-			return uniID.register({
+			const appid = params.appid
+			const appName = params.appName
+			delete params.appid
+			delete params.appName
+			res = await uniID.register({
 				username,
 				password,
 				role: ["admin"]
 			})
-			break;
-		case 'registerUser':
-			const {
-				userInfo
-			} = await uniID.getUserInfo({
-				uid: params.uid
-			})
-			if (userInfo.role.indexOf('admin') === -1) {
-				res = {
-					code: 403,
-					message: '非法访问, 无权限注册超级管理员',
+			if (res.code === 0) {
+				const app = await db.collection('opendb-app-list').where({
+					appid
+				}).count()
+				if (!app.total) {
+					await db.collection('opendb-app-list').add({
+						appid,
+						name: appName,
+						description: "admin 管理后台",
+						create_date: Date.now()
+					})
 				}
-			} else {
-				res = await uniID.register({
-					...params
-				})
-				if (res.code === 0) {
-					delete res.token
-					delete res.tokenExpired
-				}
+
 			}
-			break;
-		case 'getCurrentUserInfo':
-			res = uniID.getUserInfo({
-				uid: params.uid,
-				...params
-			})
-			break;
-		default:
+		}
+		break;
+	case 'registerUser':
+		const {
+			userInfo
+		} = await uniID.getUserInfo({
+			uid: params.uid
+		})
+		if (userInfo.role.indexOf('admin') === -1) {
 			res = {
 				code: 403,
-				msg: '非法访问'
+				message: '非法访问, 无权限注册超级管理员',
 			}
-			break;
+		} else {
+			// 过滤 dcloud_appid，注册用户成功后再提交
+			const dcloudAppidList = params.dcloud_appid
+			delete params.dcloud_appid
+			res = await uniID.register({
+				autoSetDcloudAppid: false,
+				...params
+			})
+			if (res.code === 0) {
+				delete res.token
+				delete res.tokenExpired
+				await uniID.setAuthorizedAppLogin({
+					uid: res.uid,
+					dcloudAppidList
+				})
+			}
+		}
+		break;
+	case 'updateUser': {
+		const {
+			userInfo
+		} = await uniID.getUserInfo({
+			uid: params.uid
+		})
+		if (userInfo.role.indexOf('admin') === -1) {
+			res = {
+				code: 403,
+				message: '非法访问, 无权限注册超级管理员',
+			}
+		} else {
+			// 过滤 dcloud_appid，注册用户成功后再提交
+			const dcloudAppidList = params.dcloud_appid
+			delete params.dcloud_appid
+
+			// 过滤 password，注册用户成功后再提交
+			const password = params.password
+			delete params.password
+
+			// 过滤 uid、id
+			const id = params.id
+			delete params.id
+			delete params.uid
+
+
+			res = await uniID.updateUser({
+				uid: id,
+				...params
+			})
+			if (res.code === 0) {
+				if (password) {
+					await uniID.resetPwd({
+						uid: id,
+						password
+					})
+				}
+				await uniID.setAuthorizedAppLogin({
+					uid: id,
+					dcloudAppidList
+				})
+			}
+		}
+		break;
+	}
+	case 'getCurrentUserInfo':
+		res = await uniID.getUserInfo({
+			uid: params.uid,
+			...params
+		})
+		break;
+		// =========================== admin api end =========================
+	default:
+		res = {
+			code: 403,
+			msg: '非法访问'
+		}
+		break;
 	}
 	//返回数据给客户端
 	return res

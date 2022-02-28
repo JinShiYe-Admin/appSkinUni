@@ -1,3 +1,10 @@
+## 1.2.0（2021-11-19）
+- 优化 组件UI，并提供设计资源，详见:[https://uniapp.dcloud.io/component/uniui/resource](https://uniapp.dcloud.io/component/uniui/resource)
+- 文档迁移，详见:[https://uniapp.dcloud.io/component/uniui/uni-table](https://uniapp.dcloud.io/component/uniui/uni-table)
+## 1.1.0（2021-07-30）
+- 组件兼容 vue3，如何创建vue3项目，详见 [uni-app 项目支持 vue3 介绍](https://ask.dcloud.net.cn/article/37834)
+## 1.0.7（2021-07-08）
+- 新增 uni-th 支持 date 日期筛选范围
 ## 1.0.6（2021-07-05）
 - 新增 uni-th 支持 range 筛选范围
 ## 1.0.5（2021-06-28）

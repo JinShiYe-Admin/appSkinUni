@@ -4,9 +4,10 @@
 			<view class="uni-forms-item__inner" :class="['is-direction-' + labelPos]">
 				<view class="uni-forms-item__label" :style="{ width: labelWid , justifyContent: justifyContent }">
 					<slot name="left">
+						<text v-if="required" class="is-required">*</text>
 						<uni-icons v-if="leftIcon" class="label-icon" size="16" :type="leftIcon" :color="iconColor" />
 						<text class="label-text">{{ label }}</text>
-						<text v-if="required" class="is-required">*</text>
+
 						<view v-if="label" class="label-seat"></view>
 					</slot>
 				</view>
@@ -152,7 +153,7 @@ export default {
 			if (this.labelAli === 'right') return 'flex-end';
 		},
 		labelLeft(){
-			return (this.labelPos === 'left' ? parseInt(this.labelWid) + 5 : 5) + 'px'
+			return (this.labelPos === 'left' ? parseInt(this.labelWid) : 0) + 'px'
 		}
 	},
 	watch: {
@@ -166,31 +167,31 @@ export default {
 		this.formRules = [];
 		this.formTrigger = this.validateTrigger;
 		// 处理 name，是否数组
-		if (this.name.indexOf('[') !== -1 && this.name.indexOf(']') !== -1) {
+		if (this.name && this.name.indexOf('[') !== -1 && this.name.indexOf(']') !== -1) {
 			this.isArray = true;
-			// const fieldData = this.name.split('[');
-			// const fieldName = fieldData[0];
-			// const fieldValue = fieldData[1].replace(']', '');
-			// this.arrayField = `${fieldName}_${fieldValue}`;
 			this.arrayField = this.name
+			// fix by mehaotian 修改不修改的情况，动态值不检验的问题
+			this.form.formData[this.name] = this.form._getValue(this.name, '')
 		}
-
+	},
+	mounted() {
 		if (this.form) {
 			this.form.childrens.push(this);
 		}
 		this.init();
 	},
+	// #ifndef VUE3
 	destroyed() {
-		if (this.form) {
-			this.form.childrens.forEach((item, index) => {
-				if (item === this) {
-					this.form.childrens.splice(index, 1);
-					let name = item.isArray ? item.arrayField : item.name;
-					delete this.form.formData[name];
-				}
-			});
-		}
+		if(this.__isUnmounted) return
+		this.unInit()
 	},
+	// #endif
+	// #ifdef VUE3
+	unmounted(){
+		this.__isUnmounted = true
+		this.unInit()
+	},
+	// #endif
 	methods: {
 		init() {
 			if (this.form) {
@@ -198,15 +199,13 @@ export default {
 				this.labelPos = this.labelPosition ? this.labelPosition : labelPosition;
 
 				if(this.label){
-					this.labelWid = (this.labelWidth ? this.labelWidth : (labelWidth||65))
+					this.labelWid = (this.labelWidth ? this.labelWidth : (labelWidth||70))
 				}else{
 					this.labelWid =( this.labelWidth ? this.labelWidth : (labelWidth||'auto'))
 				}
 				if(this.labelWid && this.labelWid !=='auto') {
 					this.labelWid +='px'
 				}
-				// this.labelWid = (this.labelWidth ? this.labelWidth : labelWidth) + 'px'
-				// this.labelWid = this.label ? (this.labelWidth ? this.labelWidth : labelWidth) : 0;
 				this.labelAli = this.labelAlign ? this.labelAlign : labelAlign;
 
 				// 判断第一个 item
@@ -226,25 +225,31 @@ export default {
 				this.border = this.form.border;
 				this.showMsg = errShowType;
 				let name = this.isArray ? this.arrayField : this.name;
-				if (formRules) {
+				if(!name) return
+				if (formRules && this.rules.length > 0) {
 					if (!formRules[name]) {
 						formRules[name] = {
 							rules: this.rules
 						}
 					}
-					this.formRules = formRules[name];
-				}
-				if (this.rules.length > 0) {
 					validator.updateSchema(formRules);
 				}
-				// if (name) {
-				// 	this.form.formData[name] = this.form._getValue(name, '');
-				// }
+				this.formRules = formRules[name] || {};
 				this.validator = validator;
 			} else {
 				this.labelPos = this.labelPosition || 'left';
 				this.labelWid = this.labelWidth || 65;
 				this.labelAli = this.labelAlign || 'left';
+			}
+		},
+		unInit(){
+			if (this.form) {
+				this.form.childrens.forEach((item, index) => {
+					if (item === this) {
+						this.form.childrens.splice(index, 1)
+						delete this.form.formData[item.name]
+					}
+				})
 			}
 		},
 		/**
@@ -289,7 +294,8 @@ export default {
 		async triggerCheck(value,formTrigger) {
 			let promise = null;
 			this.errMsg = '';
-			if (!this.validator) return;
+			// fix by mehaotian 解决没有检验规则的情况下，抛出错误的问题
+			if (!this.validator || Object.keys(this.formRules).length === 0) return;
 			const isNoField = this.isRequired(this.formRules.rules || []);
 			let isTrigger = this.isTrigger(this.formRules.validateTrigger, this.validateTrigger, this.form.validateTrigger);
 			let result = null;
@@ -421,8 +427,8 @@ export default {
 	// margin-right: 5px;
 
 	.label-text {
-		font-size: 14px;
-		color: #333;
+		font-size: 13px;
+		color: #666666;
 	}
 	.label-seat {
 		margin-right: 5px;
@@ -445,7 +451,9 @@ export default {
 
 // 必填
 .is-required {
-	color: $uni-color-error;
+	// color: $uni-color-error;
+	color: #dd524d;
+	font-weight: bold;
 }
 
 .uni-error-message {
@@ -457,7 +465,7 @@ export default {
 
 .uni-error-message-text {
 	line-height: 22px;
-	color: $uni-color-error;
+	color: #dd524d;
 	font-size: 12px;
 }
 
@@ -468,7 +476,7 @@ export default {
 }
 
 .is-input-error-border {
-	border-color: $uni-color-error;
+	border-color: #dd524d;
 }
 
 .uni-forms-item--border {

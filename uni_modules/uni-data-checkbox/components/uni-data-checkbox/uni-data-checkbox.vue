@@ -1,5 +1,5 @@
 <template>
-	<view class="uni-data-checklist">
+	<view class="uni-data-checklist" :style="{'margin-top':isTop+'px'}">
 		<template v-if="!isLocal">
 			<view class="uni-data-loading">
 				<uni-load-more v-if="!mixinDatacomErrorMessage" status="loading" iconType="snow" :iconSize="18" :content-text="contentText"></uni-load-more>
@@ -65,16 +65,16 @@
 	 * @event {Function} change  选中发生变化触发
 	 */
 
-	// import clientdb from './clientdb.js'
 	export default {
 		name: 'uniDataChecklist',
-		// mixins: [clientdb],
 		mixins: [uniCloud.mixinDatacom || {}],
+		emits:['input','update:modelValue','change'],
 		props: {
 			mode: {
 				type: String,
 				default: 'default'
 			},
+
 			multiple: {
 				type: Boolean,
 				default: false
@@ -83,6 +83,13 @@
 				type: [Array, String, Number],
 				default () {
 					return ''
+				}
+			},
+			// TODO vue3
+			modelValue: {
+				type: [Array, String, Number],
+				default() {
+					return '';
 				}
 			},
 			localdata: {
@@ -147,7 +154,18 @@
 			},
 			value(newVal) {
 				this.dataList = this.getDataList(newVal)
-				this.formItem && this.formItem.setValue(newVal)
+				// fix by mehaotian is_reset 在 uni-forms 中定义
+				if(!this.is_reset){
+					this.is_reset = false
+					this.formItem && this.formItem.setValue(newVal)
+				}
+			},
+			modelValue(newVal) {
+				this.dataList = this.getDataList(newVal);
+				if(!this.is_reset){
+					this.is_reset = false
+					this.formItem && this.formItem.setValue(newVal)
+				}
 			}
 		},
 		data() {
@@ -161,10 +179,18 @@
 				},
 				isLocal:true,
 				styles: {
-					selectedColor: '#007aff',
-					selectedTextColor: '#333',
-				}
+					selectedColor: '#2979ff',
+					selectedTextColor: '#666',
+				},
+				isTop:0
 			};
+		},
+		computed:{
+			dataValue(){
+				if(this.value === '')return this.modelValue
+				if(this.modelValue === '') return this.value
+				return this.value
+			}
 		},
 		created() {
 			this.form = this.getForm('uniForms')
@@ -172,7 +198,13 @@
 			// this.formItem && this.formItem.setValue(this.value)
 
 			if (this.formItem) {
+				this.isTop = 6
 				if (this.formItem.name) {
+					// 如果存在name添加默认值,否则formData 中不存在这个字段不校验
+					if(!this.is_reset){
+						this.is_reset = false
+						this.formItem.setValue(this.dataValue)
+					}
 					this.rename = this.formItem.name
 					this.form.inputChildrens.push(this)
 				}
@@ -226,7 +258,7 @@
 
 				if (this.multiple) {
 					this.range.forEach(item => {
-						
+
 						if (values.includes(item[this.map.value] + '')) {
 							detail.value.push(item[this.map.value])
 							detail.data.push(item)
@@ -242,7 +274,10 @@
 					}
 				}
 				this.formItem && this.formItem.setValue(detail.value)
-				this.$emit('input', detail.value)
+				// TODO 兼容 vue2
+				this.$emit('input', detail.value);
+				// // TOTO 兼容 vue3
+				this.$emit('update:modelValue', detail.value);
 				this.$emit('change', {
 					detail
 				})
@@ -310,7 +345,7 @@
 							}
 						}
 					}
-					this.setStyles(item, index)  
+					this.setStyles(item, index)
 					list[index] = item
 				})
 				return list
@@ -333,14 +368,14 @@
 			 * @param {Object} range
 			 */
 			getSelectedValue(range) {
-				if (!this.multiple) return this.value
+				if (!this.multiple) return this.dataValue
 				let selectedArr = []
 				range.forEach((item) => {
 					if (item.selected) {
 						selectedArr.push(item[this.map.value])
 					}
 				})
-				return this.value.length > 0 ? this.value : selectedArr
+				return this.dataValue.length > 0 ? this.dataValue : selectedArr
 			},
 
 			/**
@@ -348,7 +383,7 @@
 			 */
 			setStyleBackgroud(item) {
 				let styles = {}
-				let selectedColor = this.selectedColor?this.selectedColor:'#007aff'
+				let selectedColor = this.selectedColor?this.selectedColor:'#2979ff'
 				if (this.mode !== 'list') {
 					styles['border-color'] = item.selected?selectedColor:'#DCDFE6'
 				}
@@ -364,7 +399,7 @@
 			setStyleIcon(item) {
 				let styles = {}
 				let classles = ''
-				let selectedColor = this.selectedColor?this.selectedColor:'#007aff' 
+				let selectedColor = this.selectedColor?this.selectedColor:'#2979ff'
 				styles['background-color'] = item.selected?selectedColor:'#fff'
 				styles['border-color'] = item.selected?selectedColor:'#DCDFE6'
 
@@ -381,16 +416,16 @@
 			setStyleIconText(item) {
 				let styles = {}
 				let classles = ''
-				let selectedColor = this.selectedColor?this.selectedColor:'#007aff'
+				let selectedColor = this.selectedColor?this.selectedColor:'#2979ff'
 				if (this.mode === 'tag') {
-					styles.color = item.selected?(this.selectedTextColor?this.selectedTextColor:'#fff'):'#333'
+					styles.color = item.selected?(this.selectedTextColor?this.selectedTextColor:'#fff'):'#666'
 				} else {
-					styles.color = item.selected?(this.selectedTextColor?this.selectedTextColor:selectedColor):'#333'
+					styles.color = item.selected?(this.selectedTextColor?this.selectedTextColor:selectedColor):'#666'
 				}
 				if(!item.selected && item.disabled){
 					styles.color = '#999'
 				}
-				
+
 				for (let i in styles) {
 					classles += `${i}:${styles[i]};`
 				}
@@ -413,7 +448,7 @@
 </script>
 
 <style lang="scss">
-	$checked-color: #007aff;
+	$checked-color: #2979ff;
 	$border-color: #DCDFE6;
 	$disable:0.4;
 
@@ -436,7 +471,7 @@
 	.uni-data-checklist {
 		position: relative;
 		z-index: 0;
-
+		flex: 1;
 		// 多选样式
 		.checklist-group {
 			@include flex;
@@ -469,7 +504,7 @@
 					justify-content: space-between;
 					.checklist-text {
 						font-size: 14px;
-						color: #333;
+						color: #666;
 						margin-left: 5px;
 						line-height: 14px;
 					}
@@ -479,9 +514,9 @@
 						border-right-color: #007aff;
 						border-right-style: solid;
 						border-bottom-width:1px;
-						border-bottom-color: #007aff; 
+						border-bottom-color: #007aff;
 						border-bottom-style: solid;
-						height: 12px; 
+						height: 12px;
 						width: 6px;
 						left: -5px;
 						transform-origin: center;
@@ -500,7 +535,7 @@
 					width: 16px;
 					height: 16px;
 					border: 1px solid $border-color;
-					border-radius: 2px;
+					border-radius: 4px;
 					background-color: #fff;
 					z-index: 1;
 					.checkbox__inner-icon {
@@ -598,7 +633,7 @@
 							color: $checked-color;
 						}
 						// 选中禁用
-						&.is-disable { 
+						&.is-disable {
 							.checkbox__inner {
 								opacity: $disable;
 							}
@@ -616,7 +651,7 @@
 				// 按钮样式
 				&.is--button {
 					margin-right: 10px;
-					padding: 5px 15px;
+					padding: 5px 10px;
 					border: 1px $border-color solid;
 					border-radius: 3px;
 					transition: border-color 0.2s;
@@ -688,7 +723,7 @@
 
 					.checklist-text {
 						margin: 0;
-						color: #333;
+						color: #666;
 					}
 
 					// 禁用
@@ -748,7 +783,11 @@
 								transform: rotate(45deg);
 							}
 						}
-
+						.radio__inner {
+							.radio__inner-icon {
+								opacity: 1;
+							}
+						}
 						.checklist-text {
 							color: $checked-color;
 						}
